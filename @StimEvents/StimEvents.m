@@ -7,13 +7,13 @@ classdef StimEvents < handle
     properties
         
         Data = cell(0)
-        Header = {''}
+        Header = {''} % Description of each columns
         Columns = 0
-        Description = ''
+        Description = mfilename
         NumberOfEvents = 0
         EventCount = 0
         
-    end
+    end % properties
     
     %% Methods
     
@@ -42,8 +42,8 @@ classdef StimEvents < handle
                 
                 % --- numberofevents ---
                 if isnumeric(numberofevents) && ...
-                    numberofevents == round(numberofevents) && ...
-                    numberofevents > 0 % Check input argument
+                        numberofevents == round(numberofevents) && ...
+                        numberofevents > 0 % Check input argument
                     obj.NumberOfEvents = numberofevents;
                 else
                     error('NumberOfEvents must be a positive integer')
@@ -59,7 +59,7 @@ classdef StimEvents < handle
         end
         
         % -----------------------------------------------------------------
-        %                          Add start time
+        %                          Add Start Time
         % -----------------------------------------------------------------
         function AddStartTime(obj)
             IncreaseEventCount(obj)
@@ -67,20 +67,21 @@ classdef StimEvents < handle
         end
         
         % -----------------------------------------------------------------
-        %                          Add stop time
+        %                          Add Stop Time
         % -----------------------------------------------------------------
-        function AddStopTime(obj,StopTime)
-            if isnumeric(StopTime)
+        function AddStopTime(obj,stoptime)
+            if isnumeric(stoptime)
                 IncreaseEventCount(obj)
-                obj.Data(obj.EventCount,1:2) = {'T_stop' StopTime}; % Add T_stop below the last line
+                obj.Data(obj.EventCount,1:2) = {'T_stop' stoptime}; % Add T_stop below the last line
             else
                 error('StopTime must be numeric')
             end
         end
         
         % -----------------------------------------------------------------
-        %                          Add Event
+        %                            Add Event
         % -----------------------------------------------------------------
+        % obj.AddEvent( {'eventName' data1 date2 ...} )
         function AddEvent(obj,varargin)
             
             if length(varargin{:}) == obj.Columns % Check input arguments
@@ -93,20 +94,23 @@ classdef StimEvents < handle
         end
         
         % -----------------------------------------------------------------
-        %                      IncreaseEventCount
+        %                        IncreaseEventCount
         % -----------------------------------------------------------------
         function IncreaseEventCount(obj)
             obj.EventCount = obj.EventCount + 1;
         end
         
         % -----------------------------------------------------------------
-        %                      ClearEmptyEvents
+        %                         ClearEmptyEvents
         % -----------------------------------------------------------------
+        % Delete empty rows. Useful when NumberOfEvents is not known
+        % precisey but set to a great value (better for prealocating
+        % memory).
         function ClearEmptyEvents(obj)
             empty_idx = cellfun(@isempty, obj.Data(:,1));
             obj.Data(empty_idx,:) = [];
         end
         
-    end
+    end % methods
     
-end
+end % class
