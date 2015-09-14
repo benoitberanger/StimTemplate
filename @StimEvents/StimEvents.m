@@ -69,7 +69,7 @@ classdef StimEvents < handle
         % -----------------------------------------------------------------
         %                          Add stop time
         % -----------------------------------------------------------------
-        function obj = AddStopTime(obj,StopTime)
+        function AddStopTime(obj,StopTime)
             if isnumeric(StopTime)
                 IncreaseEventCount(obj)
                 obj.Data(obj.EventCount,1:2) = {'T_stop' StopTime}; % Add T_stop below the last line
@@ -81,7 +81,7 @@ classdef StimEvents < handle
         % -----------------------------------------------------------------
         %                          Add Event
         % -----------------------------------------------------------------
-        function obj = AddEvent(obj,varargin)
+        function AddEvent(obj,varargin)
             
             if length(varargin{:}) == obj.Columns % Check input arguments
                 IncreaseEventCount(obj)
@@ -97,6 +97,14 @@ classdef StimEvents < handle
         % -----------------------------------------------------------------
         function IncreaseEventCount(obj)
             obj.EventCount = obj.EventCount + 1;
+        end
+        
+        % -----------------------------------------------------------------
+        %                      ClearEmptyEvents
+        % -----------------------------------------------------------------
+        function ClearEmptyEvents(obj)
+            empty_idx = cellfun(@isempty, obj.Data(:,1));
+            obj.Data(empty_idx,:) = [];
         end
         
     end
