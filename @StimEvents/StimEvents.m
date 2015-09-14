@@ -10,6 +10,8 @@ classdef StimEvents < handle
         Header = {''}
         Columns = 0
         Description = ''
+        NumberOfEvents = 0
+        EventCount = 0
         
     end
     
@@ -20,8 +22,14 @@ classdef StimEvents < handle
         % -----------------------------------------------------------------
         %                           Constructor
         % -----------------------------------------------------------------
-        function obj = StimEvents( header )
-            if nargin > 0 % arguments ?
+        function obj = StimEvents( header , numberofevents )
+            
+            % ================ Check input argument =======================
+            
+            % Arguments ?
+            if nargin > 0
+                
+                % --- header ----
                 if iscell(header) && size(header,1) == 1 && size(header,2) > 0 % Check input argument
                     if all(cellfun(@isstr,header))
                         obj.Header = header;
@@ -31,8 +39,22 @@ classdef StimEvents < handle
                 else
                     error('Header should be a line cell of strings')
                 end
+                
+                % --- numberofevents ---
+                if isnumeric(numberofevents) && ...
+                    numberofevents == round(numberofevents) && ...
+                    numberofevents > 0 % Check input argument
+                    obj.NumberOfEvents = numberofevents;
+                else
+                    error('NumberOfEvents must be a positive integer')
+                end
+                
+                % ================== Callback =============================
+                
                 obj.Columns = size(header,2);
-                obj.Data    = cell(1,obj.Columns);
+                obj.Data    = cell(numberofevents,obj.Columns);
+            else
+                % Create empty StimEvents
             end
         end
         
@@ -40,7 +62,8 @@ classdef StimEvents < handle
         %                          Add start time
         % -----------------------------------------------------------------
         function AddStartTime(obj)
-            obj.Data(1,1:2) = {'T_start' 0}; % Add T_start = 0 on the first line
+            IncreaseEventCount(obj)
+            obj.Data(obj.EventCount,1:2) = {'T_start' 0}; % Add T_start = 0 on the first line
         end
         
         % -----------------------------------------------------------------
@@ -48,7 +71,8 @@ classdef StimEvents < handle
         % -----------------------------------------------------------------
         function obj = AddStopTime(obj,StopTime)
             if isnumeric(StopTime)
-                obj.Data(end+1,1:2) = {'T_stop' StopTime}; % Add T_stop below the last line
+                IncreaseEventCount(obj)
+                obj.Data(obj.EventCount,1:2) = {'T_stop' StopTime}; % Add T_stop below the last line
             else
                 error('StopTime must be numeric')
             end
@@ -58,11 +82,21 @@ classdef StimEvents < handle
         %                          Add Event
         % -----------------------------------------------------------------
         function obj = AddEvent(obj,varargin)
+            
             if length(varargin{:}) == obj.Columns % Check input arguments
-                obj.Data(end+1,:) = varargin{:};
+                IncreaseEventCount(obj)
+                obj.Data(obj.EventCount,:) = varargin{:};
             else
                 error('Wrong number of arguments')
             end
+            
+        end
+        
+        % -----------------------------------------------------------------
+        %                      IncreaseEventCount
+        % -----------------------------------------------------------------
+        function IncreaseEventCount(obj)
+            obj.EventCount = obj.EventCount + 1;
         end
         
     end
