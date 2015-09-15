@@ -7,10 +7,10 @@ classdef KbQueueLogger < StimEvents
     
     properties
         
-        KbList  = []      % double = [ KbName('space') KbName('5%') ]
-        TR      = 0       % double(positive)
-        Volumes = 0       % double(positive integer)
-        KbEventss = cell(0) % cell(Columns,2)
+        KbList   = []      % double = [ KbName('space') KbName('5%') ]
+        TR       = 0       % double(positive)
+        Volumes  = 0       % double(positive integer)
+        KbEvents = cell(0) % cell(Columns,2)
         
     end % properties
     
@@ -58,7 +58,7 @@ classdef KbQueueLogger < StimEvents
             % ================== Callback =============================
             
             obj.Data     = cell(obj.NumberOfEvents,obj.Columns);
-            obj.KbEventss = cell(obj.Columns,2);
+            obj.KbEvents = cell(obj.Columns,2);
             
         end
         
@@ -86,8 +86,8 @@ classdef KbQueueLogger < StimEvents
             % Fetch the queue and use AddEvent method to fill obj.Data
             % according to the KbList
             
-            while KbEventsAvail
-                [evt, ~] = KbEventsGet; % Get all queued keys
+            while KbEventAvail
+                [evt, ~] = KbEventGet; % Get all queued keys
                 if any( evt.Keycode == obj.KbList )
                     key_idx = evt.Keycode == obj.KbList;
                     obj.AddEvent( { obj.Header{key_idx} evt.Time evt.Pressed } )
