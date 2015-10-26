@@ -1,6 +1,6 @@
-classdef StimEvents < handle
+classdef EventRecorder < handle
     
-    %STIMCELL Class to handle the stimulation events
+    %STIMEVENTS Class to handle the stimulation events
     
     %% Properties
     
@@ -23,7 +23,7 @@ classdef StimEvents < handle
         % -----------------------------------------------------------------
         %                           Constructor
         % -----------------------------------------------------------------
-        function obj = StimEvents( header , numberofevents )
+        function obj = EventRecorder( header , numberofevents )
             % obj = StimEvents( Header = cell(1,Columns) , NumberOfEvents =
             % double(positive integer) )
             
@@ -33,7 +33,9 @@ classdef StimEvents < handle
             if nargin > 0
                 
                 % --- header ----
-                if iscell(header) && size(header,1) == 1 && size(header,2) > 0 % Check input argument
+                if isvector(header) && ...
+                        iscell(header) && ...
+                        ~isempty(header) % Check input argument
                     if all(cellfun(@isstr,header))
                         obj.Header = header;
                     else
@@ -65,11 +67,15 @@ classdef StimEvents < handle
         % -----------------------------------------------------------------
         %                          Add Start Time
         % -----------------------------------------------------------------
-        function AddStartTime(obj)
-            % obj.AddStartTime()
+        function AddStartTime(obj,starttime)
+            % obj.AddStartTime( StartTime = double )
             
-            IncreaseEventCount(obj)
-            obj.Data(obj.EventCount,1:2) = {'T_start' 0}; % Add T_start = 0 on the first line
+            if isnumeric(starttime)
+                IncreaseEventCount(obj)
+                obj.Data(obj.EventCount,1:2) = {'T_start' starttime}; % Add T_start = 0 on the first line
+            else
+                error('StartTime must be numeric')
+            end
             
         end
         

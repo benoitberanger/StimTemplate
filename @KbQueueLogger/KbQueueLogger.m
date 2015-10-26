@@ -1,15 +1,15 @@
-classdef KbQueueLogger < StimEvents
+classdef KbQueueLogger < EventRecorder
     
-    %KBQUEUELOGGER Class to handle the the Keybinds queue (ex : record MRI
-    %triggers while other code is executing)
+    %KBQUEUELOGGER Class to handle the the Keybinds Queue from Psychtoolbox
+    %(ex : record MRI triggers while other code is executing)
     
     %% Properties
     
     properties
         
         KbList   = []      % double = [ KbName('space') KbName('5%') ]
-        TR       = 0       % double(positive)
-        Volumes  = 0       % double(positive integer)
+        %         TR       = 0       % double(positive) Volumes  = 0
+        %         % double(positive integer)
         KbEvents = cell(0) % cell(Columns,2)
         
     end % properties
@@ -38,14 +38,16 @@ classdef KbQueueLogger < StimEvents
                 end
                 
                 % --- header ----
-                if iscell(header) && size(header,1) == 1 && size(header,2) > 0 % Check input argument
+                if isvector(header) && ...
+                        iscell(header) && ...
+                        length(kblist) == length(header) % Check input argument
                     if all(cellfun(@isstr,header))
                         obj.Header = header;
                     else
                         error('Header should be a line cell of strings')
                     end
                 else
-                    error('Header should be a line cell of strings')
+                    error('Header should be a line cell of strings and same size as KbList')
                 end
                 
             else
@@ -54,26 +56,12 @@ classdef KbQueueLogger < StimEvents
             
             % ======================= Callback ============================
             
-            obj.Description = mfilename('fullpath');
-            obj.TimeStamp   = datestr(now);
-            obj.Columns     = 3;
-            obj.Data        = cell(obj.NumberOfEvents,obj.Columns);
-            obj.KbEvents    = cell(obj.Columns,2);
-            
-        end
-        
-        % -----------------------------------------------------------------
-        %                          Add Start Time
-        % -----------------------------------------------------------------
-        function AddStartTime(obj,starttime)
-            % obj.AddStartTime( StartTime = double )
-            
-            if isnumeric(starttime)
-                IncreaseEventCount(obj)
-                obj.Data(obj.EventCount,1:2) = {'T_start' starttime}; % Add T_start = 0 on the first line
-            else
-                error('StartTime must be numeric')
-            end
+            obj.Description    = mfilename('fullpath');
+            obj.TimeStamp      = datestr(now);
+            obj.Columns        = 3;
+            obj.Data           = cell(obj.NumberOfEvents,obj.Columns);
+            obj.KbEvents       = cell(obj.Columns,2);
+            obj.NumberOfEvents = NaN;
             
         end
         
@@ -121,7 +109,7 @@ classdef KbQueueLogger < StimEvents
             % obj.ComputeDurations()
             %
             % Compute durations for each keybinds
-
+            
             kbevents = cell(length(obj.Header),2);
             
             % Take out T_start and T_stop from Data
@@ -173,25 +161,30 @@ classdef KbQueueLogger < StimEvents
             
             % ================== Build rectangles =========================
             
-            for k = 1:size(obj.KbEvents,1)
+            for k = 1:size(obj.KbEvents,1) % For each KeyBinds
                 
-                if ~isempty(obj.KbEvents{k,2})
+                if ~isempty(obj.KbEvents{k,2}) % Except for null (usually the last one)
                     
-                    data = cell2mat(obj.KbEvents{k,2}(:,1:2));
+                    data = cell2mat(obj.KbEvents{k,2}(:,1:2)); % Catch data for this Keybind
                     
-                    N  = size(data,1);
+                    N  = size(data,1); % Number of data = UP(0) + DOWN(1)
                     
+                    % Here we need to build a curve that looks like
+                    % recangles
                     for n = N:-1:1
                         
-                        dataUP = data(1:n-1,:);
-                        dataDOWN = data(n:end,:);
+                        % % Split data above & under the point
+                        dataABOVE = data(1:n-1,:);
+                        dataUNDER = data(n:end,:);
                         
-                        if data(n,2) == 0
-                            data  = [ dataUP ; dataDOWN(1,1) 1 ; dataDOWN ] ;
-                        elseif data(n,2) == 1
-                            data  = [ dataUP ; dataDOWN(1,1) 0 ; dataDOWN ] ;
-                        else
-                            disp('bug')
+                        % Add a point ine curve to build a rectangle
+                        switch data(n,2)
+                            case 0
+                                data  = [ dataABOVE ; dataUNDER(1,1) 1 ; dataUNDER ] ;
+                            case 1
+                                data  = [ dataABOVE ; dataUNDER(1,1) 0 ; dataUNDER ] ;
+                            otherwise
+                                disp('bug')
                         end
                         
                     end
