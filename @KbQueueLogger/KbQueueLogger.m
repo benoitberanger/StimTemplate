@@ -54,10 +54,11 @@ classdef KbQueueLogger < StimEvents
             
             % ======================= Callback ============================
             
-            obj.Description = mfilename;
-            obj.Columns = 3;
-            obj.Data     = cell(obj.NumberOfEvents,obj.Columns);
-            obj.KbEvents = cell(obj.Columns,2);
+            obj.Description = mfilename('fullpath');
+            obj.TimeStamp   = datestr(now);
+            obj.Columns     = 3;
+            obj.Data        = cell(obj.NumberOfEvents,obj.Columns);
+            obj.KbEvents    = cell(obj.Columns,2);
             
         end
         
@@ -120,12 +121,19 @@ classdef KbQueueLogger < StimEvents
             % obj.ComputeDurations()
             %
             % Compute durations for each keybinds
-            
+
             kbevents = cell(length(obj.Header),2);
+            
+            % Take out T_start and T_stop from Data
+            
+            T_start_idx = strcmp(obj.Data(:,1),'T_start');
+            T_stop_idx = strcmp(obj.Data(:,1),'T_stop');
+            
+            data = obj.Data( ~(T_start_idx + T_stop_idx) ,:);
             
             % Create list for each KeyBind
             
-            [C,~,ic] = unique(obj.Data(:,1),'first'); % Filter each Kb
+            [C,~,ic] = unique(data(:,1),'first'); % Filter each Kb
             
             [~,ia_,~] = intersect(obj.Header,C,'stable');
             
@@ -137,7 +145,7 @@ classdef KbQueueLogger < StimEvents
                 
                 count = count + 1;
                 
-                kbevents{ia_(count),2}= obj.Data(ic == c,2:3); % Time & Up/Down of Keybind
+                kbevents{ia_(count),2}= data(ic == c,2:3); % Time & Up/Down of Keybind
                 
             end
             

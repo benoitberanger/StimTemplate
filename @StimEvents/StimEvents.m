@@ -6,12 +6,13 @@ classdef StimEvents < handle
     
     properties
         
-        Data           = cell(0)   % cell(NumberOfEvents,Columns)
-        Header         = {''}      % str : Description of each columns
-        Columns        = 0         % double(positive integer)
-        Description    = mfilename % str
-        NumberOfEvents = 0         % double(positive integer)
-        EventCount     = 0         % double(positive integer)
+        Data           = cell(0)                % cell(NumberOfEvents,Columns)
+        Header         = {''}                   % str : Description of each columns
+        Columns        = 0                      % double(positive integer)
+        Description    = mfilename('fullpath'); % str : Fullpath of the file
+        TimeStamp      = datestr(now);          % str : Time stamp for the creation of object
+        NumberOfEvents = 0                      % double(positive integer)
+        EventCount     = 0                      % double(positive integer)
         
     end % properties
     
