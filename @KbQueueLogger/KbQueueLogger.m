@@ -8,8 +8,6 @@ classdef KbQueueLogger < EventRecorder
     properties
         
         KbList   = []      % double = [ KbName('space') KbName('5%') ]
-        %         TR       = 0       % double(positive) Volumes  = 0
-        %         % double(positive integer)
         KbEvents = cell(0) % cell(Columns,2)
         
     end % properties
@@ -158,6 +156,10 @@ classdef KbQueueLogger < EventRecorder
         % -----------------------------------------------------------------
         function PlotKbEvents(obj)
             % obj.PlotKbEvents()
+            %
+            % Plot KeyBinds Events ( DOWN = 0 or UP > 0 ) over the time.
+            % Each KeyBinds has it's own Up value {1, 2, 3 , ...} and its
+            % own color for reading comfort.
             
             % ================== Build rectangles =========================
             
@@ -246,6 +248,8 @@ classdef KbQueueLogger < EventRecorder
         % -----------------------------------------------------------------
         function Init
             % obj.Init()
+            %
+            % Initialise the KeyBind Queue and start collecting the inputs
             
             KbQueueCreate
             KbQueueStart
@@ -264,7 +268,7 @@ classdef KbQueueLogger < EventRecorder
             KbQueueRelease
             
         end
-
+        
     end % methods ( Static )
     
 end % class

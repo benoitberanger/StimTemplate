@@ -1,6 +1,6 @@
 classdef EventRecorder < handle
     
-    %STIMEVENTS Class to handle the stimulation events
+    %EVENTRECORDER Class to handle the stimulation events
     
     %% Properties
     
@@ -69,6 +69,8 @@ classdef EventRecorder < handle
         % -----------------------------------------------------------------
         function AddStartTime(obj,starttime)
             % obj.AddStartTime( StartTime = double )
+            %
+            % Add special event {'T_start' starttime}
             
             if isnumeric(starttime)
                 IncreaseEventCount(obj)
@@ -84,6 +86,8 @@ classdef EventRecorder < handle
         % -----------------------------------------------------------------
         function AddStopTime(obj,stoptime)
             % obj.AddStopTime( StopTime = double )
+            %
+            % Add special event {'T_stop' stoptime}
             
             if isnumeric(stoptime)
                 IncreaseEventCount(obj)
@@ -99,6 +103,8 @@ classdef EventRecorder < handle
         % -----------------------------------------------------------------
         function AddEvent(obj,varargin)
             % obj.AddEvent( cell(1,n) = {'eventName' data1 date2 ...} )
+            %
+            % Add event, according to the dimensions given by the Header
             
             if length(varargin{:}) == obj.Columns % Check input arguments
                 IncreaseEventCount(obj)
@@ -114,6 +120,9 @@ classdef EventRecorder < handle
         % -----------------------------------------------------------------
         function IncreaseEventCount(obj)
             % obj.IncreaseEventCount()
+            %
+            % Method used by other methods of the class. Usually, it's not
+            % used from outside of the class.
             
             obj.EventCount = obj.EventCount + 1;
             
