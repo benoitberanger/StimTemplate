@@ -97,7 +97,7 @@ classdef KbQueueLogger < EventRecorder
             if ~isempty(time)
                 obj.Data(:,2) = num2cell(time - time(1));
             else
-                warning('KbQueueLogger:ScaleTime','No data in obj.Data')
+                warning('KbQueueLogger:ScaleTime','No data in %s.Data',inputname(1))
             end
             
         end
@@ -200,6 +200,7 @@ classdef KbQueueLogger < EventRecorder
             figure('Name',[ mfilename ' : ' inputname(1)],'NumberTitle','off')
             hold all
             
+            % For each KeyBind, plot the curve
             for k = 1:size(obj.KbEvents,1)
                 
                 if ~isempty(obj.KbEvents{k,2})
@@ -216,6 +217,9 @@ classdef KbQueueLogger < EventRecorder
             
             legend(obj.Header{:})
             
+            % Change the limit of the graph so we can clearly see the
+            % rectangles.
+            
             old_xlim = xlim;
             range_x = old_xlim(2)-old_xlim(1);
             center_x = mean(old_xlim);
@@ -231,7 +235,9 @@ classdef KbQueueLogger < EventRecorder
             
         end
         
+        
     end % methods
+    
     
     methods ( Static )
         
@@ -247,19 +253,18 @@ classdef KbQueueLogger < EventRecorder
         end
         
         % -----------------------------------------------------------------
-        %                           Destructor
+        %                              Stop
         % -----------------------------------------------------------------
-        function delete
-            % obj.delete()
+        function Stop
+            % obj.Stop()
             %
-            % Delete methods are always called before a object of the class
-            % is destroyed
+            % Stop collecting KeyBinds and Release the device
             
             KbQueueStop
             KbQueueRelease
             
         end
-        
-    end % methods
+
+    end % methods ( Static )
     
 end % class
