@@ -6,13 +6,13 @@ classdef EventRecorder < handle
     
     properties
         
-        Data           = cell(0)                % cell(NumberOfEvents,Columns)
-        Header         = {''}                   % str : Description of each columns
-        Columns        = 0                      % double(positive integer)
-        Description    = mfilename('fullpath'); % str : Fullpath of the file
-        TimeStamp      = datestr(now);          % str : Time stamp for the creation of object
-        NumberOfEvents = 0                      % double(positive integer)
-        EventCount     = 0                      % double(positive integer)
+        Data           = cell(0)                  % cell( NumberOfEvents , Columns )
+        Header         = {''}                     % str : Description of each columns
+        Columns        = 0                        % double(positive integer)
+        Description    = mfilename( 'fullpath' ); % str : Fullpath of the file
+        TimeStamp      = datestr( now );          % str : Time stamp for the creation of object
+        NumberOfEvents = 0                        % double(positive integer)
+        EventCount     = 0                        % double(positive integer)
         
     end % properties
     
@@ -24,8 +24,8 @@ classdef EventRecorder < handle
         %                           Constructor
         % -----------------------------------------------------------------
         function obj = EventRecorder( header , numberofevents )
-            % obj = StimEvents( Header = cell(1,Columns) , NumberOfEvents =
-            % double(positive integer) )
+            % obj = StimEvents( Header = cell( 1 , Columns ) ,
+            % NumberOfEvents = double(positive integer) )
             
             % ================ Check input argument =======================
             
@@ -33,31 +33,31 @@ classdef EventRecorder < handle
             if nargin > 0
                 
                 % --- header ----
-                if isvector(header) && ...
-                        iscell(header) && ...
-                        ~isempty(header) % Check input argument
-                    if all(cellfun(@isstr,header))
-                        obj.Header = header;
+                if isvector( header ) && ...
+                        iscell( header ) && ...
+                        ~isempty( header ) % Check input argument
+                    if all( cellfun( @isstr , header ) )
+                        obj.Header =  header ;
                     else
-                        error('Header should be a line cell of strings')
+                        error( 'Header should be a line cell of strings' )
                     end
                 else
-                    error('Header should be a line cell of strings')
+                    error( 'Header should be a line cell of strings' )
                 end
                 
                 % --- numberofevents ---
-                if isnumeric(numberofevents) && ...
-                        numberofevents == round(numberofevents) && ...
+                if isnumeric( numberofevents ) && ...
+                        numberofevents == round( numberofevents ) && ...
                         numberofevents > 0 % Check input argument
                     obj.NumberOfEvents = numberofevents;
                 else
-                    error('NumberOfEvents must be a positive integer')
+                    error( 'NumberOfEvents must be a positive integer' )
                 end
                 
                 % ================== Callback =============================
                 
-                obj.Columns = length(header);
-                obj.Data    = cell(numberofevents,obj.Columns);
+                obj.Columns = length( header );
+                obj.Data    = cell( numberofevents , obj.Columns );
                 
             else
                 % Create empty StimEvents
@@ -68,16 +68,16 @@ classdef EventRecorder < handle
         % -----------------------------------------------------------------
         %                          Add Start Time
         % -----------------------------------------------------------------
-        function AddStartTime(obj,starttime)
+        function AddStartTime( obj,starttime )
             % obj.AddStartTime( StartTime = double )
             %
-            % Add special event {'T_start' starttime}
+            % Add special event { 'T_start' starttime }
             
-            if isnumeric(starttime)
-                IncreaseEventCount(obj)
-                obj.Data(obj.EventCount,1:2) = {'T_start' starttime}; % Add T_start = 0 on the first line
+            if isnumeric( starttime )
+                IncreaseEventCount( obj )
+                obj.Data( obj.EventCount , 1:2 ) = { 'T_start' starttime }; % Add T_start = 0 on the first line
             else
-                error('StartTime must be numeric')
+                error( 'StartTime must be numeric' )
             end
             
         end
@@ -85,16 +85,16 @@ classdef EventRecorder < handle
         % -----------------------------------------------------------------
         %                          Add Stop Time
         % -----------------------------------------------------------------
-        function AddStopTime(obj,stoptime)
+        function AddStopTime( obj , stoptime )
             % obj.AddStopTime( StopTime = double )
             %
-            % Add special event {'T_stop' stoptime}
+            % Add special event { 'T_stop' stoptime }
             
-            if isnumeric(stoptime)
-                IncreaseEventCount(obj)
-                obj.Data(obj.EventCount,1:2) = {'T_stop' stoptime}; % Add T_stop below the last line
+            if isnumeric( stoptime )
+                IncreaseEventCount( obj )
+                obj.Data( obj.EventCount , 1:2 ) = { 'T_stop' stoptime }; % Add T_stop below the last line
             else
-                error('StopTime must be numeric')
+                error( 'StopTime must be numeric' )
             end
             
         end
@@ -102,19 +102,19 @@ classdef EventRecorder < handle
         % -----------------------------------------------------------------
         %                            Add Event
         % -----------------------------------------------------------------
-        function AddEvent(obj,varargin)
-            % obj.AddEvent( cell(1,n) = {'eventName' data1 date2 ...} )
+        function AddEvent( obj , varargin )
+            % obj.AddEvent( cell(1,n) = { 'eventName' data1 date2 ... } )
             %
             % Add event, according to the dimensions given by the Header
             
-            if length(varargin{:}) == obj.Columns % Check input arguments
-                if iscolumn(varargin)
+            if length( varargin{:} ) == obj.Columns % Check input arguments
+                if iscolumn( varargin )
                     varargin = varargin';
                 end
-                IncreaseEventCount(obj)
-                obj.Data(obj.EventCount,:) = varargin{:};
+                IncreaseEventCount( obj )
+                obj.Data( obj.EventCount , : ) = varargin{:};
             else
-                error('Wrong number of arguments')
+                error( 'Wrong number of arguments' )
             end
             
         end
@@ -122,7 +122,7 @@ classdef EventRecorder < handle
         % -----------------------------------------------------------------
         %                        IncreaseEventCount
         % -----------------------------------------------------------------
-        function IncreaseEventCount(obj)
+        function IncreaseEventCount( obj )
             % obj.IncreaseEventCount()
             %
             % Method used by other methods of the class. Usually, it's not
@@ -135,15 +135,15 @@ classdef EventRecorder < handle
         % -----------------------------------------------------------------
         %                         ClearEmptyEvents
         % -----------------------------------------------------------------
-        function ClearEmptyEvents(obj)
+        function ClearEmptyEvents( obj )
             % obj.ClearEmptyEvents()
             %
             % Delete empty rows. Useful when NumberOfEvents is not known
             % precisey but set to a great value (better for prealocating
             % memory).
             
-            empty_idx = cellfun(@isempty, obj.Data(:,1));
-            obj.Data(empty_idx,:) = [];
+            empty_idx = cellfun( @isempty , obj.Data(:,1) );
+            obj.Data( empty_idx , : ) = [];
         end
         
     end % methods
