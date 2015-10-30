@@ -244,10 +244,10 @@ classdef KbQueueLogger < EventRecorder
     methods ( Static )
         
         % -----------------------------------------------------------------
-        %                              Init
+        %                              Start
         % -----------------------------------------------------------------
-        function Init
-            % obj.Init()
+        function Start
+            % obj.Start()
             %
             % Initialise the KeyBind Queue and start collecting the inputs
             

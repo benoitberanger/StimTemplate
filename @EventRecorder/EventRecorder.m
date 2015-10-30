@@ -1,6 +1,6 @@
 classdef EventRecorder < handle
     
-    %EVENTRECORDER Class to handle the stimulation events
+    %EVENTRECORDER Class to record any stimulation events
     
     %% Properties
     
@@ -56,8 +56,9 @@ classdef EventRecorder < handle
                 
                 % ================== Callback =============================
                 
-                obj.Columns = size(header,2);
+                obj.Columns = length(header);
                 obj.Data    = cell(numberofevents,obj.Columns);
+                
             else
                 % Create empty StimEvents
             end
@@ -107,6 +108,9 @@ classdef EventRecorder < handle
             % Add event, according to the dimensions given by the Header
             
             if length(varargin{:}) == obj.Columns % Check input arguments
+                if iscolumn(varargin)
+                    varargin = varargin';
+                end
                 IncreaseEventCount(obj)
                 obj.Data(obj.EventCount,:) = varargin{:};
             else
