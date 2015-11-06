@@ -160,8 +160,8 @@ classdef KbQueueLogger < EventRecorder
             % Plot KeyBinds Events ( DOWN = 0 or UP > 0 ) over the time.
             % Each KeyBinds has it's own Up value {1, 2, 3 , ...} and its
             % own color for reading comfort.
-            
-            % ================== Build rectangles =========================
+
+            % ================= Build curves for each Kb ==================
             
             for k = 1:size( obj.KbEvents , 1 ) % For each KeyBinds
                 
@@ -175,7 +175,7 @@ classdef KbQueueLogger < EventRecorder
                     % recangles
                     for n = N:-1:1
                         
-                        % % Split data above & under the point
+                        % Split data above & under the point
                         dataABOVE = data( 1:n-1 ,: );
                         dataUNDER = data( n:end , : );
                         
@@ -188,6 +188,27 @@ classdef KbQueueLogger < EventRecorder
                             otherwise
                                 disp( 'bug' )
                         end
+                        
+                    end
+                    
+                    % Now we have a continuous curve that draws rectangles.
+                    % The objective now is to 'split' each rectangle, to
+                    % have a more convinient display
+                    
+                    % To find where are two consecutive 0, REGEXP is used
+                    data_str  = num2str(num2str(data(:,2)')); % Convert to text
+                    data_str  = regexprep(data_str,' ','');   % Delete white spaces
+                    idx_data_str = regexp(data_str,'00');     % Find two consecutive zeros
+                    
+                    % Add NaN between two consecutive zeros
+                    for n = length(idx_data_str):-1:1
+                        
+                        % Split data above & under the point
+                        dataABOVE = data( 1:idx_data_str(n) , : );
+                        dataUNDER = data( idx_data_str(n)+1:end , : );
+                        
+                        % Add a point in curve to build a rectangle
+                        data  = [ dataABOVE ; dataUNDER(1,1) NaN ; dataUNDER ] ;
                         
                     end
                     
@@ -206,13 +227,9 @@ classdef KbQueueLogger < EventRecorder
             for k = 1 : size( obj.KbEvents , 1 )
                 
                 if ~isempty( obj.KbEvents{k,2} )
-                    
                     plot( obj.KbEvents{k,3}(:,1) , obj.KbEvents{k,3}(:,2) * k )
-                    
                 else
-                    
                     plot(0,0)
-                    
                 end
                 
             end
@@ -234,6 +251,8 @@ classdef KbQueueLogger < EventRecorder
             
             xlim( new_xlim )
             ylim( new_ylim )
+            
+            
             
         end
         
