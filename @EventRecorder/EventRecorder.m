@@ -74,7 +74,7 @@ classdef EventRecorder < handle
             % Add special event { 'T_start' starttime }
             
             if isnumeric( starttime )
-                IncreaseEventCount( obj )
+                obj.IncreaseEventCount;
                 obj.Data( obj.EventCount , 1:2 ) = { 'T_start' starttime }; % Add T_start = 0 on the first line
             else
                 error( 'StartTime must be numeric' )
@@ -91,7 +91,7 @@ classdef EventRecorder < handle
             % Add special event { 'T_stop' stoptime }
             
             if isnumeric( stoptime )
-                IncreaseEventCount( obj )
+                obj.IncreaseEventCount;
                 obj.Data( obj.EventCount , 1:2 ) = { 'T_stop' stoptime }; % Add T_stop below the last line
             else
                 error( 'StopTime must be numeric' )
@@ -100,19 +100,19 @@ classdef EventRecorder < handle
         end
         
         % -----------------------------------------------------------------
-        %                            Add Event
+        %                            AddEvent
         % -----------------------------------------------------------------
-        function AddEvent( obj , varargin )
+        function AddEvent( obj , event )
             % obj.AddEvent( cell(1,n) = { 'eventName' data1 date2 ... } )
             %
             % Add event, according to the dimensions given by the Header
             
-            if length( varargin{:} ) == obj.Columns % Check input arguments
-                if iscolumn( varargin )
-                    varargin = varargin';
+            if length( event ) == obj.Columns % Check input arguments
+                if iscolumn( event )
+                    event = event';
                 end
-                IncreaseEventCount( obj )
-                obj.Data( obj.EventCount , : ) = varargin{:};
+                obj.IncreaseEventCount;
+                obj.Data( obj.EventCount , : ) = event;
             else
                 error( 'Wrong number of arguments' )
             end
@@ -144,6 +144,16 @@ classdef EventRecorder < handle
             
             empty_idx = cellfun( @isempty , obj.Data(:,1) );
             obj.Data( empty_idx , : ) = [];
+        end
+        
+        % -----------------------------------------------------------------
+        %                            saveobj
+        % -----------------------------------------------------------------
+        function savestruct = ExportToStructure( obj )
+            ListProperties = properties(obj);
+            for prop_number = 1:length(ListProperties)
+                savestruct.(ListProperties{prop_number}) = obj.(ListProperties{prop_number});
+            end
         end
         
     end % methods

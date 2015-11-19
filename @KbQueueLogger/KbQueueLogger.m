@@ -251,18 +251,17 @@ classdef KbQueueLogger < EventRecorder
             
             xlim( new_xlim )
             ylim( new_ylim )
-            
-            
-            
+
         end
-        
-        
+
     end % methods
     
     
     methods ( Static )
         
-        
+        % -----------------------------------------------------------------
+        %                              Start
+        % -----------------------------------------------------------------
         function Start
             % obj.Start()
             %
