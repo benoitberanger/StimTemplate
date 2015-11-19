@@ -24,7 +24,7 @@ classdef EventRecorder < handle
         %                           Constructor
         % -----------------------------------------------------------------
         function obj = EventRecorder( header , numberofevents )
-            % obj = StimEvents( Header = cell( 1 , Columns ) ,
+            % obj = EventRecorder( Header = cell( 1 , Columns ) ,
             % NumberOfEvents = double(positive integer) )
             
             % ================ Check input argument =======================
