@@ -160,7 +160,7 @@ classdef KbQueueLogger < EventRecorder
             % Plot KeyBinds Events ( DOWN = 0 or UP > 0 ) over the time.
             % Each KeyBinds has it's own Up value {1, 2, 3 , ...} and its
             % own color for reading comfort.
-
+            
             % ================= Build curves for each Kb ==================
             
             for k = 1:size( obj.KbEvents , 1 ) % For each KeyBinds
@@ -182,9 +182,10 @@ classdef KbQueueLogger < EventRecorder
                         % Add a point ine curve to build a rectangle
                         switch data(n,2)
                             case 0
-                                data  = [ dataABOVE ; dataUNDER(1,1) 1 ; dataUNDER ] ;
+                                data  = [ dataABOVE ; dataUNDER(1,1) 1  ; dataUNDER ] ;
                             case 1
                                 data  = [ dataABOVE ; dataUNDER(1,1) 0 ; dataUNDER ] ;
+                                
                             otherwise
                                 disp( 'bug' )
                         end
@@ -219,7 +220,7 @@ classdef KbQueueLogger < EventRecorder
             end
             
             % ======================== Plot ===============================
-            
+
             figure( 'Name' , [ mfilename ' : ' inputname(1) ] , 'NumberTitle' , 'off' )
             hold all
             
@@ -251,9 +252,9 @@ classdef KbQueueLogger < EventRecorder
             
             xlim( new_xlim )
             ylim( new_ylim )
-
+            
         end
-
+        
     end % methods
     
     

@@ -27,6 +27,9 @@ classdef EventRecorder < handle
             % obj = EventRecorder( Header = cell( 1 , Columns ) ,
             % NumberOfEvents = double(positive integer) )
             
+            % Usually, first column is the event name, and second column is
+            % it's onset
+            
             % ================ Check input argument =======================
             
             % Arguments ?
@@ -147,13 +150,99 @@ classdef EventRecorder < handle
         end
         
         % -----------------------------------------------------------------
-        %                            saveobj
+        %                          ExportToStructure
         % -----------------------------------------------------------------
         function savestruct = ExportToStructure( obj )
+            % StructureToSave = obj.ExportToStructure()
+            %
+            % Export all proporties of the object into a structure, so it
+            % can be saved. WARNING : it does not save the methods, just
+            % transform the object into a common structure.
             ListProperties = properties(obj);
             for prop_number = 1:length(ListProperties)
                 savestruct.(ListProperties{prop_number}) = obj.(ListProperties{prop_number});
             end
+        end
+        
+        % -----------------------------------------------------------------
+        %                             PlotEvents
+        % -----------------------------------------------------------------
+        function PlotEvents( obj )
+            % obj.PlotEvents()
+            %
+            % Plot events over the time. Regroup each event name from the
+            % first column and plot it's onset from the second column
+
+            % ===================== Regroup each event ====================
+
+            [event_name,~,idx_event2data] = unique(obj.Data(:,1),'stable');
+            
+            % Col 1 : event_name
+            % Col 2 : obj.Data(event_name)
+            % Col 3 ~ obj.Data(event_name), adapted for plot
+            events = cell(length(event_name),3);
+            
+            for e = 1:length(event_name)
+                events{e,1} = event_name{e};
+                events{e,2} = cell2mat ( obj.Data( idx_event2data == e , 2 ) );
+            end
+            
+            % ================= Build curves for each Event ===============
+            
+            for e = 1 : size( events , 1 ) % For each Event
+
+                    data = [ events{e,2} ones(size(events{e,2},1),1)*e ]; % Catch data for this Event
+                    
+                    N  = size( data , 1 ); % Number of data = UP(0) + DOWN(1)
+                    
+                    % Here we need to build a curve that looks like
+                    % recangles
+                    for n = N:-1:1
+
+                        % Split data above & under the point
+                        dataABOVE = data( 1:n ,: );
+                        dataUNDER = data( n+1:end , : );
+                        
+                        % Add a point in curve to build a rectangle
+                        data  = [ dataABOVE ; dataABOVE(end,1) e+1 ; dataABOVE(end,1) NaN ; dataUNDER ] ;
+                        
+                    end
+                    
+                    events{e,3} = data;
+
+            end
+
+            % ======================== Plot ===============================
+            
+            figure( 'Name' , [ mfilename ' : ' inputname(1) ] , 'NumberTitle' , 'off' )
+            hold all
+            
+            % For each Event, plot the curve
+            for e = 1 : size( events , 1 )
+
+                plot( events{e,3}(:,1) , events{e,3}(:,2) )
+                
+            end
+            
+            lgd = legend( events(:,1) );
+            set(lgd,'Interpreter','none')
+            
+            % Change the limit of the graph so we can clearly see the
+            % rectangles.
+            
+            old_xlim = xlim;
+            range_x  = old_xlim(2) - old_xlim(1);
+            center_x = mean( old_xlim );
+            new_xlim = [ (center_x - range_x*1.1/2 ) center_x + range_x*1.1/2 ];
+            
+            old_ylim = ylim;
+            range_y  = old_ylim(2) - old_ylim(1);
+            center_y = mean( old_ylim );
+            new_ylim = [ ( center_y - range_y*1.1/2 ) center_y + range_y*1.1/2 ];
+            
+            xlim( new_xlim )
+            ylim( new_ylim )
+
         end
         
     end % methods
