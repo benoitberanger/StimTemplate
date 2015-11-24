@@ -13,6 +13,7 @@ classdef EventRecorder < handle
         TimeStamp      = datestr( now );          % str : Time stamp for the creation of object
         NumberOfEvents = 0                        % double(positive integer)
         EventCount     = 0                        % double(positive integer)
+        GraphData      = cell(0)                  % cell( 'ev1' curve1 ; 'ev2' curve2 ; ... )
         
     end % properties
     
@@ -165,6 +166,59 @@ classdef EventRecorder < handle
         end
         
         % -----------------------------------------------------------------
+        %                             BuildGraph
+        % -----------------------------------------------------------------
+        function BuildGraph( obj )
+            % obj.BuildGraph()
+            %
+            % Build curves for each events, ready to be plotted.
+
+            % ===================== Regroup each event ====================
+            
+            [event_name,~,idx_event2data] = unique(obj.Data(:,1),'stable');
+            
+            % Col 1 : event_name Col 2 : obj.Data(event_name) Col 3 ~
+            % obj.Data(event_name), adapted for plot
+            obj.GraphData = cell(length(event_name),3);
+            
+            for e = 1:length(event_name)
+                obj.GraphData{e,1} = event_name{e};
+                obj.GraphData{e,2} = cell2mat ( obj.Data( idx_event2data == e , 2 ) );
+            end
+            
+            % ================= Build curves for each Event ===============
+            
+            for e = 1 : size( obj.GraphData , 1 ) % For each Event
+                
+                data = [ obj.GraphData{e,2} ones(size(obj.GraphData{e,2},1),1) ]; % Catch data for this Event
+                
+                N  = size( data , 1 ); % Number of data = UP(0) + DOWN(1)
+                
+                % Here we need to build a curve that looks like recangles
+                for n = N:-1:1
+                    
+                    % Split data above & under the point
+                    dataABOVE = data( 1:n ,: );
+                    dataUNDER = data( n+1:end , : );
+                    
+                    % Add a point in curve to build a rectangle
+                    data  = [ ...
+                        dataABOVE ; ...
+                        dataABOVE(end,1) 0 ; ...
+                        dataABOVE(end,1) NaN ; ...
+                        dataUNDER ...
+                        ] ;
+                    
+                end
+                
+                % Store curves
+                obj.GraphData{e,3} = data;
+                
+            end
+            
+        end
+        
+        % -----------------------------------------------------------------
         %                             PlotEvents
         % -----------------------------------------------------------------
         function PlotEvents( obj )
@@ -172,59 +226,24 @@ classdef EventRecorder < handle
             %
             % Plot events over the time. Regroup each event name from the
             % first column and plot it's onset from the second column
-
-            % ===================== Regroup each event ====================
-
-            [event_name,~,idx_event2data] = unique(obj.Data(:,1),'stable');
             
-            % Col 1 : event_name
-            % Col 2 : obj.Data(event_name)
-            % Col 3 ~ obj.Data(event_name), adapted for plot
-            events = cell(length(event_name),3);
+            if isempty(obj.GraphData)
             
-            for e = 1:length(event_name)
-                events{e,1} = event_name{e};
-                events{e,2} = cell2mat ( obj.Data( idx_event2data == e , 2 ) );
+                obj.BuildGraph;
+                
             end
-            
-            % ================= Build curves for each Event ===============
-            
-            for e = 1 : size( events , 1 ) % For each Event
-
-                    data = [ events{e,2} ones(size(events{e,2},1),1)*e ]; % Catch data for this Event
-                    
-                    N  = size( data , 1 ); % Number of data = UP(0) + DOWN(1)
-                    
-                    % Here we need to build a curve that looks like
-                    % recangles
-                    for n = N:-1:1
-
-                        % Split data above & under the point
-                        dataABOVE = data( 1:n ,: );
-                        dataUNDER = data( n+1:end , : );
-                        
-                        % Add a point in curve to build a rectangle
-                        data  = [ dataABOVE ; dataABOVE(end,1) e+1 ; dataABOVE(end,1) NaN ; dataUNDER ] ;
-                        
-                    end
-                    
-                    events{e,3} = data;
-
-            end
-
-            % ======================== Plot ===============================
             
             figure( 'Name' , [ mfilename ' : ' inputname(1) ] , 'NumberTitle' , 'off' )
             hold all
             
             % For each Event, plot the curve
-            for e = 1 : size( events , 1 )
-
-                plot( events{e,3}(:,1) , events{e,3}(:,2) )
+            for e = 1 : size( obj.GraphData , 1 )
+                
+                plot( obj.GraphData{e,3}(:,1) , obj.GraphData{e,3}(:,2) + e )
                 
             end
             
-            lgd = legend( events(:,1) );
+            lgd = legend( obj.GraphData(:,1) );
             set(lgd,'Interpreter','none')
             
             % Change the limit of the graph so we can clearly see the
@@ -242,7 +261,7 @@ classdef EventRecorder < handle
             
             xlim( new_xlim )
             ylim( new_ylim )
-
+            
         end
         
     end % methods

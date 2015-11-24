@@ -2,6 +2,8 @@ clc
 close all
 clear
 
+%% Load an already prepared keybind logger
+
 load kl.mat
 
 kl.PlotKbEvents
@@ -31,7 +33,7 @@ EP.PlotPlanning
 
 ER = EventRecorder({'event_name','onset(s)'},100);
 ER.AddStartTime(0);
-for k = 0:8
+for k = 1:9
     switch mod(k,3)
         case 2
         ev = 'C1';

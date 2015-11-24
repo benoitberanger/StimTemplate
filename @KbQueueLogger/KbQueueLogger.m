@@ -152,14 +152,12 @@ classdef KbQueueLogger < EventRecorder
         end
         
         % -----------------------------------------------------------------
-        %                          PlotKbEvents
+        %                             BuildGraph
         % -----------------------------------------------------------------
-        function PlotKbEvents( obj )
-            % obj.PlotKbEvents()
+        function BuildGraph( obj )
+            % obj.BuildGraph()
             %
-            % Plot KeyBinds Events ( DOWN = 0 or UP > 0 ) over the time.
-            % Each KeyBinds has it's own Up value {1, 2, 3 , ...} and its
-            % own color for reading comfort.
+            % Build curves for each events, ready to be plotted.
             
             % ================= Build curves for each Kb ==================
             
@@ -209,18 +207,43 @@ classdef KbQueueLogger < EventRecorder
                         dataUNDER = data( idx_data_str(n)+1:end , : );
                         
                         % Add a point in curve to build a rectangle
-                        data  = [ dataABOVE ; dataUNDER(1,1) NaN ; dataUNDER ] ;
+                        data  = [ ...
+                            dataABOVE ; ...
+                            dataUNDER(1,1) NaN ; ...
+                            dataUNDER ...
+                            ] ;
                         
                     end
                     
+                    % Store curves
                     obj.KbEvents{k,3} = data;
                     
                 end
                 
             end
             
-            % ======================== Plot ===============================
+            obj.GraphData = obj.KbEvents;
+            
+        end
+        
+        % -----------------------------------------------------------------
+        %                          PlotKbEvents
+        % -----------------------------------------------------------------
+        function PlotKbEvents( obj )
+            % obj.PlotKbEvents()
+            %
+            % Plot KeyBinds Events ( DOWN = 0 or UP > 0 ) over the time.
+            % Each KeyBinds has it's own Up value {1, 2, 3 , ...} and its
+            % own color for reading comfort.
+            
+            if isempty(obj.GraphData)
+            
+                obj.BuildGraph;
+                
+            end
 
+            % ======================== Plot ===============================
+            
             figure( 'Name' , [ mfilename ' : ' inputname(1) ] , 'NumberTitle' , 'off' )
             hold all
             
