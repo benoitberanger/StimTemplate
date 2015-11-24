@@ -25,7 +25,7 @@ EP.AddPlanning({...
     'Cross' 16 2
     });
 
-EP.PlotEvents
+EP.PlotPlanning
 
 %% Prepare an event recorder
 

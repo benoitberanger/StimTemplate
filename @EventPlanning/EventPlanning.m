@@ -92,10 +92,11 @@ classdef EventPlanning < EventRecorder
             end
             
             % ================= Build curves for each Event ===============
-            
-            for e = 4 : size( events , 1 ) % For each Event
+
+            for e = 1 : size( events , 1 ) % For each Event
 
                     data = [ events{e,2} ones(size(events{e,2},1),1) ]; % Catch data for this Event
+
                     
                     N  = size( data , 1 ); % Number of data = UP(0) + DOWN(1)
                     
@@ -103,26 +104,50 @@ classdef EventPlanning < EventRecorder
                     % recangles
                     for n = N:-1:1
 
-                        % Split data above & under the point
-                        dataABOVE = data( 1:n ,: );
-                        dataUNDER = data( n+1:end , : );
-                        
-                        % Add a point ine curve to build a rectangle
-                        switch data(n,2)
-                            case 0
-                                data  = [ dataABOVE ; dataUNDER(1,1) 1  ; dataUNDER ] ;
+                        switch n
+                            
+                            case N
+                                
+                                % Split data above & under the point
+                                dataABOVE  = data( 1:n-1 ,: );
+                                dataMIDDLE = data( n ,: );
+                                dataUNDER  = NaN( 1 , size(data,2) );
+                                
                             case 1
-                                data  = [ dataABOVE ; dataUNDER(1,1) 0 ; dataUNDER ] ;
+                                
+                                % Split data above & under the point
+                                dataABOVE  = data( 1:n-1 ,: );
+                                dataMIDDLE = data( n ,: );
+                                dataUNDER  = data( n+1:end , : );
                                 
                             otherwise
-                                disp( 'bug' )
+                                
+                                % Split data above & under the point
+                                dataABOVE  = data( 1:n-1 ,: );
+                                dataMIDDLE = data( n ,: );
+                                dataUNDER  = data( n+1:end , : );
+                                
                         end
+                        
+                        % Add a point ine curve to build a rectangle
+                                data  = [ ...
+                                    dataABOVE ;...
+                                    
+                                    dataMIDDLE(1,1) NaN NaN ;...
+                                    dataMIDDLE(1,1) NaN 0 ;...
+                                    dataMIDDLE(1,:) ;...
+                                    dataMIDDLE(1,1)+dataMIDDLE(1,2) NaN 1 ;...
+                                    dataMIDDLE(1,1)+dataMIDDLE(1,2) NaN 0 ;...
+                                    
+                                    dataUNDER ...
+                                    ] ;
+                        
                     end
                     
-                    events{e,3} = data
-
+                    events{e,3} = data;
+                    
             end
-%%
+
             % ======================== Plot ===============================
             
             figure( 'Name' , [ mfilename ' : ' inputname(1) ] , 'NumberTitle' , 'off' )
@@ -131,7 +156,7 @@ classdef EventPlanning < EventRecorder
             % For each Event, plot the curve
             for e = 1 : size( events , 1 )
 
-                plot( events{e,3}(:,1) , events{e,3}(:,2) )
+                plot( events{e,3}(:,1) , events{e,3}(:,3)+e )
                 
             end
             
