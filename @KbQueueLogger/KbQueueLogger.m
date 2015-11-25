@@ -20,8 +20,7 @@ classdef KbQueueLogger < EventRecorder
         %                           Constructor
         % -----------------------------------------------------------------
         function obj = KbQueueLogger( kblist , header )
-            % obj = KbQueueLogger( KbList = [ KbName( 'space' ) KbName(
-            % '5%' ) ] , Header = cell( 1 , Columns ) )
+            % obj = KbQueueLogger( KbList = [ KbName( 'space' ) KbName( '5%' ) ] , Header = cell( 1 , Columns ) )
             
             % ================ Check input argument =======================
             
@@ -222,59 +221,8 @@ classdef KbQueueLogger < EventRecorder
                 
             end
             
+            % Store curves
             obj.GraphData = obj.KbEvents;
-            
-        end
-        
-        % -----------------------------------------------------------------
-        %                          PlotKbEvents
-        % -----------------------------------------------------------------
-        function PlotKbEvents( obj )
-            % obj.PlotKbEvents()
-            %
-            % Plot KeyBinds Events ( DOWN = 0 or UP > 0 ) over the time.
-            % Each KeyBinds has it's own Up value {1, 2, 3 , ...} and its
-            % own color for reading comfort.
-            
-            if isempty(obj.GraphData)
-            
-                obj.BuildGraph;
-                
-            end
-
-            % ======================== Plot ===============================
-            
-            figure( 'Name' , [ mfilename ' : ' inputname(1) ] , 'NumberTitle' , 'off' )
-            hold all
-            
-            % For each KeyBind, plot the curve
-            for k = 1 : size( obj.KbEvents , 1 )
-                
-                if ~isempty( obj.KbEvents{k,2} )
-                    plot( obj.KbEvents{k,3}(:,1) , obj.KbEvents{k,3}(:,2) * k )
-                else
-                    plot(0,0)
-                end
-                
-            end
-            
-            legend( obj.Header{:} )
-            
-            % Change the limit of the graph so we can clearly see the
-            % rectangles.
-            
-            old_xlim = xlim;
-            range_x  = old_xlim(2) - old_xlim(1);
-            center_x = mean( old_xlim );
-            new_xlim = [ (center_x - range_x*1.1/2 ) center_x + range_x*1.1/2 ];
-            
-            old_ylim = ylim;
-            range_y  = old_ylim(2) - old_ylim(1);
-            center_y = mean( old_ylim );
-            new_ylim = [ ( center_y - range_y*1.1/2 ) center_y + range_y*1.1/2 ];
-            
-            xlim( new_xlim )
-            ylim( new_ylim )
             
         end
         

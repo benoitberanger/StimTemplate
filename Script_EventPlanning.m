@@ -4,9 +4,9 @@ clear
 
 %% Load an already prepared keybind logger
 
-load kl.mat
+load KL.mat
 
-kl.PlotKbEvents
+KL.Plot
 
 %% Prepare a planning
 
@@ -27,7 +27,7 @@ EP.AddPlanning({...
     'Cross' 16 2
     });
 
-EP.PlotPlanning
+EP.Plot
 
 %% Prepare an event recorder
 
@@ -36,14 +36,14 @@ ER.AddStartTime(0);
 for k = 1:9
     switch mod(k,3)
         case 2
-        ev = 'C1';
+            ev = 'C1';
         case 1
-        ev = 'C0';
+            ev = 'C0';
         case 0
-        ev = 'Cross';
+            ev = 'Cross';
     end
     ER.AddEvent({ev (2*k+rand)});
 end
 ER.ClearEmptyEvents;
 
-ER.PlotEvents
+ER.Plot

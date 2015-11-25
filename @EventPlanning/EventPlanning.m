@@ -16,8 +16,7 @@ classdef EventPlanning < EventRecorder
         %                           Constructor
         % -----------------------------------------------------------------
         function obj = EventPlanning( header )
-            % obj = EventRecorder( Header = cell( 1 , Columns ) ,
-            % NumberOfEvents = double(positive integer) )
+            % obj = EventRecorder( Header = cell( 1 , Columns ) , NumberOfEvents = double(positive integer) )
             
             % ================ Check input argument =======================
             
@@ -142,58 +141,13 @@ classdef EventPlanning < EventRecorder
                 
                 end
                 
+                % Delete second column
+                data(:,2) = [];
+                
                 % Store curves
                 obj.GraphData{e,3} = data;
                 
             end
-            
-        end
-        
-        % -----------------------------------------------------------------
-        %                           PlotPlanning
-        % -----------------------------------------------------------------
-        function PlotPlanning( obj )
-            % obj.PlotPlanning()
-            %
-            % Plot Planning Events ( DOWN = n or UP = n+1 ) over the time.
-            % Each Event has it's own Up value {1, 2, 3 , ...} and its own
-            % color for reading comfort.
-            
-            if isempty(obj.GraphData)
-            
-                obj.BuildGraph;
-                
-            end
-            
-            
-            figure( 'Name' , [ mfilename ' : ' inputname(1) ] , 'NumberTitle' , 'off' )
-            hold all
-            
-            % For each Event, plot the curve
-            for e = 1 : size( obj.GraphData , 1 )
-                
-                plot( obj.GraphData{e,3}(:,1) , obj.GraphData{e,3}(:,3) + e ) % curve1 from 0 to 1, curve2 from 1 to 2, ...
-                
-            end
-            
-            lgd = legend( obj.GraphData(:,1) );
-            set(lgd,'Interpreter','none')
-            
-            % Change the limit of the graph so we can clearly see the
-            % rectangles.
-            
-            old_xlim = xlim;
-            range_x  = old_xlim(2) - old_xlim(1);
-            center_x = mean( old_xlim );
-            new_xlim = [ (center_x - range_x*1.1/2 ) center_x + range_x*1.1/2 ];
-            
-            old_ylim = ylim;
-            range_y  = old_ylim(2) - old_ylim(1);
-            center_y = mean( old_ylim );
-            new_ylim = [ ( center_y - range_y*1.1/2 ) center_y + range_y*1.1/2 ];
-            
-            xlim( new_xlim )
-            ylim( new_ylim )
             
         end
         

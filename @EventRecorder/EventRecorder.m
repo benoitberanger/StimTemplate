@@ -25,11 +25,10 @@ classdef EventRecorder < handle
         %                           Constructor
         % -----------------------------------------------------------------
         function obj = EventRecorder( header , numberofevents )
-            % obj = EventRecorder( Header = cell( 1 , Columns ) ,
-            % NumberOfEvents = double(positive integer) )
+            % obj = EventRecorder( Header = cell( 1 , Columns ) , NumberOfEvents = double(positive integer) )
             
             % Usually, first column is the event name, and second column is
-            % it's onset
+            % it's onset.
             
             % ================ Check input argument =======================
             
@@ -157,8 +156,9 @@ classdef EventRecorder < handle
             % StructureToSave = obj.ExportToStructure()
             %
             % Export all proporties of the object into a structure, so it
-            % can be saved. WARNING : it does not save the methods, just
-            % transform the object into a common structure.
+            % can be saved.
+            % WARNING : it does not save the methods, just transform the
+            % object into a common structure.
             ListProperties = properties(obj);
             for prop_number = 1:length(ListProperties)
                 savestruct.(ListProperties{prop_number}) = obj.(ListProperties{prop_number});
@@ -172,13 +172,14 @@ classdef EventRecorder < handle
             % obj.BuildGraph()
             %
             % Build curves for each events, ready to be plotted.
-
+            
             % ===================== Regroup each event ====================
             
             [event_name,~,idx_event2data] = unique(obj.Data(:,1),'stable');
             
-            % Col 1 : event_name Col 2 : obj.Data(event_name) Col 3 ~
-            % obj.Data(event_name), adapted for plot
+            % Col 1 : event_name
+            % Col 2 : obj.Data(event_name)
+            % Col 3 ~= obj.Data(event_name), adapted for plot
             obj.GraphData = cell(length(event_name),3);
             
             for e = 1:length(event_name)
@@ -218,47 +219,92 @@ classdef EventRecorder < handle
             
         end
         
+        
         % -----------------------------------------------------------------
-        %                             PlotEvents
+        %                               Plot
         % -----------------------------------------------------------------
-        function PlotEvents( obj )
-            % obj.PlotEvents()
+        function Plot( obj )
+            % obj.Plot( display_method = '+' OR '*' )
             %
-            % Plot events over the time. Regroup each event name from the
-            % first column and plot it's onset from the second column
+            % Plot events over the time.
+            
+            % =============== BuildGraph if necessary =====================
+            
+            % Each subclass has its own BuildGraph method because Data
+            % properties are different. But each BuildGraph subclass method
+            % converge to a uniform GraphData.
             
             if isempty(obj.GraphData)
-            
+                
                 obj.BuildGraph;
                 
             end
             
-            figure( 'Name' , [ mfilename ' : ' inputname(1) ] , 'NumberTitle' , 'off' )
+            % ======================== Plot ===============================
+            
+            % Catch caller object
+            [~, name, ~] = fileparts(obj.Description);
+            
+            % Depending on the object calling the method, the display changes.
+            switch name
+                
+                case 'EventRecorder'
+                    display_method = '+';
+                    
+                case 'KbQueueLogger'
+                    display_method = '*';
+                    
+                case 'EventPlanning'
+                    display_method = '+';
+                    
+                otherwise
+                    error('Unknown object caller')
+                    
+            end
+            
+            % Figure
+            figure( 'Name' , [ inputname(1) ' : ' name ] , 'NumberTitle' , 'off' )
             hold all
             
             % For each Event, plot the curve
             for e = 1 : size( obj.GraphData , 1 )
                 
-                plot( obj.GraphData{e,3}(:,1) , obj.GraphData{e,3}(:,2) + e )
+                switch display_method
+                    
+                    case '+'
+                        plot( obj.GraphData{e,3}(:,1) , obj.GraphData{e,3}(:,2) + e )
+                        
+                    case '*'
+                        plot( obj.GraphData{e,3}(:,1) , obj.GraphData{e,3}(:,2) * e )
+                        
+                    otherwise
+                        error('Unknown display_method')
+                end
                 
             end
             
+            % Legend
             lgd = legend( obj.GraphData(:,1) );
             set(lgd,'Interpreter','none')
+            
+            % ================ Adapt the graph axes limits ================
             
             % Change the limit of the graph so we can clearly see the
             % rectangles.
             
+            scale = 1.1;
+            
             old_xlim = xlim;
             range_x  = old_xlim(2) - old_xlim(1);
             center_x = mean( old_xlim );
-            new_xlim = [ (center_x - range_x*1.1/2 ) center_x + range_x*1.1/2 ];
+            new_xlim = [ (center_x - range_x*scale/2 ) center_x + range_x*scale/2 ];
             
             old_ylim = ylim;
             range_y  = old_ylim(2) - old_ylim(1);
             center_y = mean( old_ylim );
-            new_ylim = [ ( center_y - range_y*1.1/2 ) center_y + range_y*1.1/2 ];
+            new_ylim = [ ( center_y - range_y*scale/2 ) center_y + range_y*scale/2 ];
             
+            % Set new limits
             xlim( new_xlim )
             ylim( new_ylim )
             
