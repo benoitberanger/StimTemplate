@@ -8,24 +8,24 @@ clear
 
 KbName('UnifyKeyNames');
 
-keys = {'space' '5%' 'escape'};
+keys = {'space' '5%' 'escape' 'A' 'Z' 'E' 'R' 'T' 'Y' 'J' 'K' 'L' 'X' 'C' 'B' 'N'};
 
-kl = KbQueueLogger(KbName(keys) , keys);
+KL = KbLogger(KbName(keys) , keys);
 
-kl.Start;
+KL.Start;
 
 %% Stop logger and display results
 
-kl.GetQueue;
+KL.GetQueue;
 
-kl.Stop;
+KL.Stop;
 
-kl.ScaleTime;
+KL.ScaleTime;
 
-kl.ComputeDurations;
+KL.ComputeDurations;
 
-kl.PlotKbEvents;
+KL.Plot;
 
-disp(kl)
-disp(kl.Data)
-disp(kl.KbEvents)
+disp(KL)
+disp(KL.Data)
+disp(KL.KbEvents)

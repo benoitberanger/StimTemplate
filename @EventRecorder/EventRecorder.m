@@ -251,7 +251,7 @@ classdef EventRecorder < handle
                 case 'EventRecorder'
                     display_method = '+';
                     
-                case 'KbQueueLogger'
+                case 'KbLogger'
                     display_method = '*';
                     
                 case 'EventPlanning'
@@ -269,16 +269,24 @@ classdef EventRecorder < handle
             % For each Event, plot the curve
             for e = 1 : size( obj.GraphData , 1 )
                 
-                switch display_method
+                if ~isempty(obj.GraphData{e,3})
                     
-                    case '+'
-                        plot( obj.GraphData{e,3}(:,1) , obj.GraphData{e,3}(:,2) + e )
+                    switch display_method
                         
-                    case '*'
-                        plot( obj.GraphData{e,3}(:,1) , obj.GraphData{e,3}(:,2) * e )
-                        
-                    otherwise
-                        error('Unknown display_method')
+                        case '+'
+                            plot( obj.GraphData{e,3}(:,1) , obj.GraphData{e,3}(:,2) + e )
+                            
+                        case '*'
+                            plot( obj.GraphData{e,3}(:,1) , obj.GraphData{e,3}(:,2) * e )
+                            
+                        otherwise
+                            error('Unknown display_method')
+                    end
+                    
+                else
+                    
+                    plot(0,NaN)
+                    
                 end
                 
             end

@@ -1,6 +1,6 @@
-classdef KbQueueLogger < EventRecorder
+classdef KbLogger < EventRecorder
     
-    %KBQUEUELOGGER Class to handle the the Keybinds Queue from Psychtoolbox
+    %KBLOGGER Class to handle the the Keybinds Queue from Psychtoolbox
     %(ex : record MRI triggers while other code is executing)
     
     %% Properties
@@ -19,8 +19,8 @@ classdef KbQueueLogger < EventRecorder
         % -----------------------------------------------------------------
         %                           Constructor
         % -----------------------------------------------------------------
-        function obj = KbQueueLogger( kblist , header )
-            % obj = KbQueueLogger( KbList = [ KbName( 'space' ) KbName( '5%' ) ] , Header = cell( 1 , Columns ) )
+        function obj = KbLogger( kblist , header )
+            % obj = KbLogger( KbList = [ KbName( 'space' ) KbName( '5%' ) ] , Header = cell( 1 , Columns ) )
             
             % ================ Check input argument =======================
             
