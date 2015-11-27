@@ -24,6 +24,8 @@ KL.ScaleTime;
 
 KL.ComputeDurations;
 
+KL.BuildGraph;
+
 KL.Plot;
 
 disp(KL)

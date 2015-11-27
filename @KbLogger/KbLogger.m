@@ -55,7 +55,7 @@ classdef KbLogger < EventRecorder
             
             obj.Description    = mfilename( 'fullpath' );
             obj.TimeStamp      = datestr( now );
-            obj.Columns        = 3;
+            obj.Columns        = 4;
             obj.Data           = cell( obj.NumberOfEvents , obj.Columns );
             obj.KbEvents       = cell( obj.Columns , 2 );
             obj.NumberOfEvents = NaN;
@@ -75,7 +75,7 @@ classdef KbLogger < EventRecorder
                 [evt, ~] = KbEventGet; % Get all queued keys
                 if any( evt.Keycode == obj.KbList )
                     key_idx = evt.Keycode == obj.KbList;
-                    obj.AddEvent( { obj.Header{ key_idx } evt.Time evt.Pressed } )
+                    obj.AddEvent( { obj.Header{ key_idx } evt.Time evt.Pressed NaN } )
                 end
             end
             
@@ -92,7 +92,7 @@ classdef KbLogger < EventRecorder
             time = cell2mat( obj.Data( : , 2 ) );
             
             if ~isempty( time )
-                obj.Data( : , 2 ) = num2cell( time - time(1) );
+                obj.Data( : , 4 ) = num2cell( time - time(1) );
             else
                 warning( 'KbQueueLogger:ScaleTime' , 'No data in %s.Data' , inputname(1) )
             end
@@ -118,7 +118,7 @@ classdef KbLogger < EventRecorder
             
             % Create list for each KeyBind
             
-            [ C , ~ , ic ] = unique( data(:,1) , 'first' ); % Filter each Kb
+            [ C , ~ , ic ] = unique( data(:,1) , 'stable' ); % Filter each Kb
             
             [ ~ , ia_ , ~ ] = intersect( obj.Header , C , 'stable' );
             
@@ -130,7 +130,7 @@ classdef KbLogger < EventRecorder
                 
                 count = count + 1;
                 
-                kbevents{ ia_(count) , 2 } = data( ic == c , 2:3 ); % Time & Up/Down of Keybind
+                kbevents{ ia_(count) , 2 } = data( ic == c , [4 3] ); % Time & Up/Down of Keybind
                 
             end
             
