@@ -25,6 +25,7 @@ EP.AddPlanning({...
     'C0' 12 2
     'C1' 14 2
     'Cross' 16 2
+    'T_stop' 18 0
     });
 
 EP.Plot
@@ -33,17 +34,18 @@ EP.Plot
 
 ER = EventRecorder({'event_name','onset(s)'},100);
 ER.AddStartTime(0);
-for k = 1:9
+for k = 0:8
     switch mod(k,3)
-        case 2
-            ev = 'C1';
         case 1
-            ev = 'C0';
+            ev = 'C1';
         case 0
+            ev = 'C0';
+        case 2
             ev = 'Cross';
     end
     ER.AddEvent({ev (2*k+rand)});
 end
+ER.AddStopTime((2*(k+1)+rand));
 ER.ClearEmptyEvents;
 
 ER.Plot

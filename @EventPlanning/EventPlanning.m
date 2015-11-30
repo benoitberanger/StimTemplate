@@ -53,7 +53,7 @@ classdef EventPlanning < EventRecorder
         %                            AddPlanning
         % -----------------------------------------------------------------
         function AddPlanning( obj , planning )
-            % obj.AddPlanning( cell(1,n) = { 'eventName' onset date ... } )
+            % obj.AddPlanning( cell(1,n) = { 'eventName' onset duration ... } )
             %
             % Add planning, according to the dimensions given by the Header
             

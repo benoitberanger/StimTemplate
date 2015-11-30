@@ -6,14 +6,14 @@ classdef EventRecorder < handle
     
     properties
         
-        Data           = cell(0)                  % cell( NumberOfEvents , Columns )
-        Header         = {''}                     % str : Description of each columns
-        Columns        = 0                        % double(positive integer)
-        Description    = mfilename( 'fullpath' ); % str : Fullpath of the file
-        TimeStamp      = datestr( now );          % str : Time stamp for the creation of object
-        NumberOfEvents = 0                        % double(positive integer)
-        EventCount     = 0                        % double(positive integer)
-        GraphData      = cell(0)                  % cell( 'ev1' curve1 ; 'ev2' curve2 ; ... )
+        Data           = cell(0)                 % cell( NumberOfEvents , Columns )
+        Header         = {''}                    % str : Description of each columns
+        Columns        = 0                       % double(positive integer)
+        Description    = mfilename( 'fullpath' ) % str : Fullpath of the file
+        TimeStamp      = datestr( now )          % str : Time stamp for the creation of object
+        NumberOfEvents = 0                       % double(positive integer)
+        EventCount     = 0                       % double(positive integer)
+        GraphData      = cell(0)                 % cell( 'ev1' curve1 ; 'ev2' curve2 ; ... )
         
     end % properties
     

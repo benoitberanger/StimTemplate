@@ -8,7 +8,7 @@ clear
 
 KbName('UnifyKeyNames');
 
-keys = {'space' '5%' 'escape' 'A' 'Z' 'E' 'R' 'T' 'Y' 'J' 'K' 'L' 'X' 'C' 'B' 'N'};
+keys = {'space' '5%' 'escape'};
 
 KL = KbLogger(KbName(keys) , keys);
 

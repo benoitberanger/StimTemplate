@@ -120,7 +120,17 @@ classdef KbLogger < EventRecorder
             
             [ C , ~ , ic ] = unique( data(:,1) , 'stable' ); % Filter each Kb
             
-            [ ~ , ia_ , ~ ] = intersect( obj.Header , C , 'stable' );
+            % Re-order each input to be coherent with Header order
+            input_found = nan(size(C));
+            for c = 1:length(C)
+            
+                input_idx  = regexp(obj.Header,C(c));
+                input_idx  = ~cellfun(@isempty,input_idx);
+                input_idx  = find(input_idx);
+                
+                input_found(c) = input_idx;
+                
+            end
             
             kbevents(:,1) = obj.Header; % Name of KeyBind
             
@@ -130,7 +140,7 @@ classdef KbLogger < EventRecorder
                 
                 count = count + 1;
                 
-                kbevents{ ia_(count) , 2 } = data( ic == c , [4 3] ); % Time & Up/Down of Keybind
+                kbevents{ input_found(count) , 2 } = data( ic == c , [4 3] ); % Time & Up/Down of Keybind
                 
             end
             
