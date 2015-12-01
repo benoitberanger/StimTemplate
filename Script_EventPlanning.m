@@ -53,4 +53,4 @@ ER.BuildGraph;
 
 %% Fusion
 
-Fusion(EP,ER,KL)
+plotStim(EP,ER,KL)
