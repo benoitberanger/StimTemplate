@@ -6,7 +6,7 @@ clear
 
 load KL.mat
 
-KL.Plot
+% KL.Plot
 
 %% Prepare a planning
 
@@ -27,8 +27,8 @@ EP.AddPlanning({...
     'Cross' 16 2
     'T_stop' 18 0
     });
-
-EP.Plot
+EP.BuildGraph;
+% EP.Plot
 
 %% Prepare an event recorder
 
@@ -47,5 +47,10 @@ for k = 0:8
 end
 ER.AddStopTime((2*(k+1)+rand));
 ER.ClearEmptyEvents;
+ER.BuildGraph;
+% ER.Plot
 
-ER.Plot
+
+%% Fusion
+
+Fusion(EP,ER,KL)
