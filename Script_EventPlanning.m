@@ -33,7 +33,7 @@ EP.BuildGraph;
 %% Prepare an event recorder
 
 ER = EventRecorder({'event_name','onset(s)'},100);
-ER.AddStartTime(0);
+ER.AddStartTime('T_start',0);
 for k = 0:8
     switch mod(k,3)
         case 1
@@ -45,7 +45,7 @@ for k = 0:8
     end
     ER.AddEvent({ev (2*k+rand)});
 end
-ER.AddStopTime((2*(k+1)+rand));
+ER.AddStopTime('T_stop',(2*(k+1)+rand));
 ER.ClearEmptyEvents;
 ER.BuildGraph;
 % ER.Plot

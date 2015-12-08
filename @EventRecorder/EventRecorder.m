@@ -71,34 +71,44 @@ classdef EventRecorder < handle
         % -----------------------------------------------------------------
         %                          Add Start Time
         % -----------------------------------------------------------------
-        function AddStartTime( obj,starttime )
-            % obj.AddStartTime( StartTime = double )
+        function AddStartTime( obj, starttime_name , starttime )
+            % obj.AddStartTime( StartTime_name = str , StartTime = double )
             %
-            % Add special event { 'T_start' starttime }
+            % Add special event { StartTime_name starttime }
             
-            if isnumeric( starttime )
-                obj.IncreaseEventCount;
-                obj.Data( obj.EventCount , 1:2 ) = { 'T_start' starttime }; % Add T_start = 0 on the first line
-            else
+            if ~ischar( starttime_name )
+                error( 'StartTime_name must be string' )
+            end
+            
+            if ~isnumeric( starttime )
                 error( 'StartTime must be numeric' )
             end
+           
+            obj.IncreaseEventCount;
+            obj.Data( obj.EventCount , 1:2 ) = { starttime_name starttime };
+            % ex : Add T_start = 0 on the next line (usually first line)
             
         end
         
         % -----------------------------------------------------------------
         %                          Add Stop Time
         % -----------------------------------------------------------------
-        function AddStopTime( obj , stoptime )
-            % obj.AddStopTime( StopTime = double )
+        function AddStopTime( obj, stoptime_name , starttime )
+            % obj.AddStartTime( StopTime_name = str , StartTime = double )
             %
-            % Add special event { 'T_stop' stoptime }
+            % Add special event { StopTime_name starttime }
             
-            if isnumeric( stoptime )
-                obj.IncreaseEventCount;
-                obj.Data( obj.EventCount , 1:2 ) = { 'T_stop' stoptime }; % Add T_stop below the last line
-            else
+            if ~ischar( stoptime_name )
+                error( 'StopTime_name must be string' )
+            end
+            
+            if ~isnumeric( starttime )
                 error( 'StopTime must be numeric' )
             end
+           
+            obj.IncreaseEventCount;
+            obj.Data( obj.EventCount , 1:2 ) = { stoptime_name starttime };
+            % ex : Add T_stop = 0 on the next line (usually last line)
             
         end
         
