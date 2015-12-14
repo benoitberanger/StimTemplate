@@ -22,8 +22,44 @@ function plotStim( eventplanning , eventrecorder , kblogger )
 
 %% Check input data
 
-% Must be 3 input arguments
-narginchk(2,3)
+% % Must be 3 input arguments
+% narginchk(2,3)
+
+% Must be 3 input arguments, or try with the base workspace
+if nargin > 0
+    
+    narginchk(2,3)
+    
+else
+    
+    % Import variables from base workspace
+    vars = evalin('base','whos');
+    
+    % Check each variable from base workspace
+    for v = 1 : length(vars)
+        
+        % EventPlanning ?
+        if strcmp ( vars(v).name , 'EP' ) && strcmp ( vars(v).class , 'EventPlanning' )
+            eventplanning = evalin('base','EP');
+        end
+        % EventRecorder ?
+        if strcmp ( vars(v).name , 'ER' ) && strcmp ( vars(v).class , 'EventRecorder' )
+            eventrecorder = evalin('base','ER');
+        end
+        % KbLogger ?
+        if strcmp ( vars(v).name , 'KL' ) && strcmp ( vars(v).class , 'KbLogger' )
+            kblogger = evalin('base','KL');
+        end
+        
+    end
+    
+    % Check if all vairables have been found in the base workspace
+    if ~ ( exist('eventplanning','var') && exist('eventrecorder','var') && exist('kblogger','var') )
+        error('Even without input arguments, the function tries to use the base workspace variables, but failed.')
+    end
+
+end
+
 
 if ~ isa ( eventplanning , 'EventPlanning' )
     error( 'First argument eventplanning must be an object of class EventPlanning ' )
@@ -33,25 +69,30 @@ if ~ isa ( eventrecorder , 'EventRecorder' )
     error( 'First argument eventrecorder must be an object of class EventRecorder ' )
 end
 
-if ~isprop(eventplanning,'GraphData') || isempty(eventplanning.GraphData)
-    error('eventplanning must have a non-empty GraphData property')
+if ~isprop( eventplanning , 'GraphData' ) || isempty( eventplanning.GraphData )
+    error( 'eventplanning must have a non-empty GraphData property' )
 end
 
-if ~isprop(eventrecorder,'GraphData') || isempty(eventrecorder.GraphData)
-    error('eventrecorder must have a non-empty GraphData property')
+if ~isprop( eventrecorder , 'GraphData' ) || isempty( eventrecorder.GraphData )
+    error( 'eventrecorder must have a non-empty GraphData property' )
 end
 
-if nargin > 2
+if exist('kblogger','var')
     
     if ~ isa ( kblogger , 'KbLogger' )
         error( 'First argument kblogger must be an object of class KbLogger ' )
     end
     
-    if ~isprop(kblogger,'GraphData') || isempty(kblogger.GraphData)
-        error('kblogger must have a non-empty GraphData property')
+    if ~isprop( kblogger , 'GraphData' ) || isempty( kblogger.GraphData )
+        error( 'kblogger must have a non-empty GraphData property' )
     end
     
 end
+
+if size( eventplanning.Data , 1 ) ~= size( eventrecorder.Data , 1 )
+    error( 'EventPlanning.Data and EventRecorder.Data must have the same number of lines' )
+end
+
 
 %% Preparation of curves
 
@@ -85,7 +126,7 @@ for er = 1: size(eventrecorder.GraphData,1)
     
 end
 
-if nargin > 2
+if exist('kblogger','var')
     
     % Prepare MRI trigger curve
     MRI_trigger_kb_input = '5%'; % fORP in USB mode
@@ -105,14 +146,23 @@ end
 
 % Input names
 all_ipn = '';
-for ipn = 1 : nargin
-   
-    if ipn == 1
-        all_ipn = [ all_ipn inputname(ipn) ];
-    else
-        all_ipn = [ all_ipn ' + ' inputname(ipn) ];
-    end
 
+if nargin ~= 0 % real function input
+    
+    for ipn = 1 : nargin
+        
+        if ipn == 1
+            all_ipn = [ all_ipn inputname(ipn) ];
+        else
+            all_ipn = [ all_ipn ' + ' inputname(ipn) ];
+        end
+        
+    end
+    
+else % import from base workspace
+    
+    all_ipn = 'EP + ER + KL';
+    
 end
 
 % Figure
@@ -122,7 +172,7 @@ hold all
 % Prepare the loop to plot each curves
 PlotData.EP = EP;
 PlotData.ER = ER;
-if nargin > 2
+if exist('kblogger','var')
     PlotData.KL = KL;
 end
 PlotDataFields = fieldnames(PlotData);
