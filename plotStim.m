@@ -19,10 +19,11 @@ function plotStim( eventplanning , eventrecorder , kblogger )
 % benoit.beranger@icm-institute.org
 % CENIR-ICM , 2015
 
+
 %% Check input data
 
 % Must be 3 input arguments
-narginchk(3,3)
+narginchk(2,3)
 
 if ~ isa ( eventplanning , 'EventPlanning' )
     error( 'First argument eventplanning must be an object of class EventPlanning ' )
@@ -30,10 +31,6 @@ end
 
 if ~ isa ( eventrecorder , 'EventRecorder' )
     error( 'First argument eventrecorder must be an object of class EventRecorder ' )
-end
-
-if ~ isa ( kblogger , 'KbLogger' )
-    error( 'First argument kblogger must be an object of class KbLogger ' )
 end
 
 if ~isprop(eventplanning,'GraphData') || isempty(eventplanning.GraphData)
@@ -44,10 +41,17 @@ if ~isprop(eventrecorder,'GraphData') || isempty(eventrecorder.GraphData)
     error('eventrecorder must have a non-empty GraphData property')
 end
 
-if ~isprop(kblogger,'GraphData') || isempty(kblogger.GraphData)
-    error('kblogger must have a non-empty GraphData property')
+if nargin > 2
+    
+    if ~ isa ( kblogger , 'KbLogger' )
+        error( 'First argument kblogger must be an object of class KbLogger ' )
+    end
+    
+    if ~isprop(kblogger,'GraphData') || isempty(kblogger.GraphData)
+        error('kblogger must have a non-empty GraphData property')
+    end
+    
 end
-
 
 %% Preparation of curves
 
@@ -57,53 +61,70 @@ color_count = 0;
 
 % Link between curves
 
-for pp = 1 : size(eventplanning.GraphData,1)
+for ep = 1 : size(eventplanning.GraphData,1)
     color_count = color_count + 1;
-    EP(pp).object = 'EP'; %#ok<*AGROW>
-    EP(pp).index = pp;
-    EP(pp).color = Colors(pp,:);
-    EP(pp).linestyle = '-';
+    EP(ep).object = 'EP'; %#ok<*AGROW>
+    EP(ep).index = ep;
+    EP(ep).color = Colors(ep,:);
+    EP(ep).linestyle = '-';
 end
 
 % Is EventRecorder entry in EventPlanning ?
-for pe = 1: size(eventrecorder.GraphData,1)
-    idx_ep_in_er = regexp( eventrecorder.GraphData(:,1) , eventplanning.GraphData{pe,1} );
+for er = 1: size(eventrecorder.GraphData,1)
+    idx_ep_in_er = regexp( eventrecorder.GraphData(:,1) , eventplanning.GraphData{er,1} );
     idx_ep_in_er = ~cellfun( @isempty , idx_ep_in_er );
     idx_ep_in_er = find(idx_ep_in_er);
     
     % Yes, so add it into PlotData
     if idx_ep_in_er
-        ER(pe).object = 'ER';
-        ER(pe).index = idx_ep_in_er;
-        ER(pe).color = EP(pe).color;
-        ER(pe).linestyle = '-.';
+        ER(er).object = 'ER';
+        ER(er).index = idx_ep_in_er;
+        ER(er).color = EP(er).color;
+        ER(er).linestyle = '-.';
     end
     
 end
 
-% Prepare MRI trigger curve
-MRI_trigger_kb_input = '5%'; % fORP in USB mode
-MRI_trigger_reference = regexp(kblogger.GraphData(:,1),MRI_trigger_kb_input);
-MRI_trigger_reference = ~cellfun(@isempty,MRI_trigger_reference);
-MRI_trigger_reference = find(MRI_trigger_reference);
-
-color_count = color_count + 1;
-KL.object = 'KL';
-KL.index = MRI_trigger_reference;
-KL.color = Colors(color_count,:);
-KL.linestyle = '-';
-
+if nargin > 2
+    
+    % Prepare MRI trigger curve
+    MRI_trigger_kb_input = '5%'; % fORP in USB mode
+    MRI_trigger_reference = regexp(kblogger.GraphData(:,1),MRI_trigger_kb_input);
+    MRI_trigger_reference = ~cellfun(@isempty,MRI_trigger_reference);
+    MRI_trigger_reference = find(MRI_trigger_reference);
+    
+    color_count = color_count + 1;
+    KL.object = 'KL';
+    KL.index = MRI_trigger_reference;
+    KL.color = Colors(color_count,:);
+    KL.linestyle = '-';
+    
+end
 
 %% Plot
 
+% Input names
+all_ipn = '';
+for ipn = 1 : nargin
+   
+    if ipn == 1
+        all_ipn = [ all_ipn inputname(ipn) ];
+    else
+        all_ipn = [ all_ipn ' + ' inputname(ipn) ];
+    end
+
+end
+
 % Figure
-figure( 'Name' , [ mfilename ' : ' inputname(1) ' + ' inputname(2) ' + ' inputname(3) ] , 'NumberTitle' , 'off' )
+figure( 'Name' , [ mfilename ' : ' all_ipn ] , 'NumberTitle' , 'off' )
 hold all
 
 % Prepare the loop to plot each curves
 PlotData.EP = EP;
 PlotData.ER = ER;
-PlotData.KL = KL;
+if nargin > 2
+    PlotData.KL = KL;
+end
 PlotDataFields = fieldnames(PlotData);
 
 % How many curves ?
