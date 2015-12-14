@@ -4,8 +4,20 @@ clear
 
 %% Load an already prepared keybind logger
 
-load KL.mat
+% load KL.mat
 
+KbName('UnifyKeyNames');
+
+keys = {'space' '5%' 'escape'};
+
+KL = KbLogger(KbName(keys) , keys);
+
+KL.GenerateMRITrigger(2.140,10);
+
+KL.ScaleTime;
+KL.ComputeDurations;
+
+KL.BuildGraph;
 % KL.Plot
 
 %% Prepare a planning
