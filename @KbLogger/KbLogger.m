@@ -82,24 +82,6 @@ classdef KbLogger < EventRecorder
         end
         
         % -----------------------------------------------------------------
-        %                           Scale Time
-        % -----------------------------------------------------------------
-        function ScaleTime( obj )
-            % obj.ScaleTime()
-            %
-            % Scale the time origin to the first entry in obj.Data
-            
-            time = cell2mat( obj.Data( : , 2 ) );
-            
-            if ~isempty( time )
-                obj.Data( : , 4 ) = num2cell( time - time(1) );
-            else
-                warning( 'KbQueueLogger:ScaleTime' , 'No data in %s.Data' , inputname(1) )
-            end
-            
-        end
-        
-        % -----------------------------------------------------------------
         %                        ComputeDurations
         % -----------------------------------------------------------------
         function ComputeDurations( obj )

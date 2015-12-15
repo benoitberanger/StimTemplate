@@ -176,6 +176,57 @@ classdef EventRecorder < handle
         end
         
         % -----------------------------------------------------------------
+        %                             Scale Time
+        % -----------------------------------------------------------------
+        function ScaleTime( obj )
+            % obj.ScaleTime()
+            %
+            % Scale the time origin to the first entry in obj.Data
+            
+            % Catch caller object
+            [~, name, ~] = fileparts(obj.Description);
+            
+            % Depending on the object calling the method, the display changes.
+            switch name
+                
+                case 'EventRecorder'
+                    
+                    time = cell2mat( obj.Data( : , 2 ) );
+                    
+                    if ~isempty( time )
+                        obj.Data( : , 2 ) = num2cell( time - time(1) );
+                    else
+                        warning( 'EventRecorder:ScaleTime' , 'No data in %s.Data' , inputname(1) )
+                    end
+                    
+                case 'KbLogger'
+                    
+                    time = cell2mat( obj.Data( : , 2 ) );
+                    
+                    if ~isempty( time )
+                        obj.Data( : , 4 ) = num2cell( time - time(1) );
+                    else
+                        warning( 'EventRecorder:ScaleTime' , 'No data in %s.Data' , inputname(1) )
+                    end
+                    
+                case 'EventPlanning'
+                    
+                    time = cell2mat( obj.Data( : , 2 ) );
+                    
+                    if ~isempty( time )
+                        obj.Data( : , 2 ) = num2cell( time - time(1) );
+                    else
+                        warning( 'EventRecorder:ScaleTime' , 'No data in %s.Data' , inputname(1) )
+                    end
+                    
+                otherwise
+                    error('Unknown object caller')
+                    
+            end
+
+        end
+        
+        % -----------------------------------------------------------------
         %                             BuildGraph
         % -----------------------------------------------------------------
         function BuildGraph( obj )
