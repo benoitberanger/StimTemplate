@@ -79,7 +79,7 @@ end
 
 [event_name,idx_event2data] = unique_stable( eventrecorder.Data(1:range,1) );
 
-Colors = lines( length(event_name) + 1  );
+Colors = lines( length(event_name) );
 
 
 %% Prepare curves
@@ -102,7 +102,9 @@ end
 %% Plot
 
 % Command window display
-disp( [ eventrecorder.Data(1:range,1) num2cell(planned_onset) num2cell(recorded_onset) num2cell(delay) ] )
+hdr = { 'event_name' 'planned_onset (s)' 'recorded_onset (s)' 'delay (ms)' };
+dsp = vertcat ( hdr ,  [ eventrecorder.Data(1:range,1) num2cell(planned_onset) num2cell(recorded_onset) num2cell(delay) ] );
+disp(dsp)
 
 % Input names
 if nargin ~= 0 % real function input
