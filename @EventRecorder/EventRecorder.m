@@ -183,47 +183,37 @@ classdef EventRecorder < handle
             %
             % Scale the time origin to the first entry in obj.Data
             
-            % Catch caller object
+            % Fetch caller object
             [~, name, ~] = fileparts(obj.Description);
+            
+            % Onsets of events
+            time = cell2mat( obj.Data( : , 2 ) );
             
             % Depending on the object calling the method, the display changes.
             switch name
                 
                 case 'EventRecorder'
-                    
-                    time = cell2mat( obj.Data( : , 2 ) );
-                    
-                    if ~isempty( time )
-                        obj.Data( : , 2 ) = num2cell( time - time(1) );
-                    else
-                        warning( 'EventRecorder:ScaleTime' , 'No data in %s.Data' , inputname(1) )
-                    end
+                    column_to_write_scaled_onsets = 2;
                     
                 case 'KbLogger'
-                    
-                    time = cell2mat( obj.Data( : , 2 ) );
-                    
-                    if ~isempty( time )
-                        obj.Data( : , 4 ) = num2cell( time - time(1) );
-                    else
-                        warning( 'EventRecorder:ScaleTime' , 'No data in %s.Data' , inputname(1) )
-                    end
+                    column_to_write_scaled_onsets = 4;
                     
                 case 'EventPlanning'
-                    
-                    time = cell2mat( obj.Data( : , 2 ) );
-                    
-                    if ~isempty( time )
-                        obj.Data( : , 2 ) = num2cell( time - time(1) );
-                    else
-                        warning( 'EventRecorder:ScaleTime' , 'No data in %s.Data' , inputname(1) )
-                    end
+                    column_to_write_scaled_onsets = 2;
                     
                 otherwise
                     error('Unknown object caller')
                     
             end
-
+            
+            % Write scaled time
+            if ~isempty( time )
+                obj.Data( : , column_to_write_scaled_onsets ) = num2cell( time - time(1) );
+            else
+                warning( 'EventRecorder:ScaleTime' , 'No data in %s.Data' , inputname(1) )
+            end
+            
+            
         end
         
         % -----------------------------------------------------------------
@@ -235,8 +225,8 @@ classdef EventRecorder < handle
             % Build curves for each events, ready to be plotted.
             
             % ===================== Regroup each event ====================
-            
-            [event_name,~,idx_event2data] = unique(obj.Data(:,1),'stable');
+
+            [event_name,idx_event2data] = unique_stable(obj.Data(:,1));
             
             % Col 1 : event_name
             % Col 2 : obj.Data(event_name)
@@ -285,7 +275,7 @@ classdef EventRecorder < handle
         %                               Plot
         % -----------------------------------------------------------------
         function Plot( obj )
-            % obj.Plot( display_method = '+' OR '*' )
+            % obj.Plot()
             %
             % Plot events over the time.
             

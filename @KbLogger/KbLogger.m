@@ -100,13 +100,13 @@ classdef KbLogger < EventRecorder
             
             % Create list for each KeyBind
             
-            [ C , ~ , ic ] = unique( data(:,1) , 'stable' ); % Filter each Kb
+            [ unique_kb , idx ] = unique_stable(obj.Data(:,1)); % Filter each Kb
             
             % Re-order each input to be coherent with Header order
-            input_found = nan(size(C));
-            for c = 1:length(C)
+            input_found = nan(size(unique_kb));
+            for c = 1:length(unique_kb)
             
-                input_idx  = regexp(obj.Header,C(c));
+                input_idx  = regexp(obj.Header,unique_kb(c));
                 input_idx  = ~cellfun(@isempty,input_idx);
                 input_idx  = find(input_idx);
                 
@@ -118,11 +118,11 @@ classdef KbLogger < EventRecorder
             
             count = 0;
             
-            for c = 1:length(C)
+            for c = 1:length(unique_kb)
                 
                 count = count + 1;
                 
-                kbevents{ input_found(count) , 2 } = data( ic == c , [4 3] ); % Time & Up/Down of Keybind
+                kbevents{ input_found(count) , 2 } = data( idx == c , [4 3] ); % Time & Up/Down of Keybind
                 
             end
             

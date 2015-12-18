@@ -76,7 +76,7 @@ classdef EventPlanning < EventRecorder
             
             % ===================== Regroup each event ====================
             
-            [event_name,~,idx_event2data] = unique(obj.Data(:,1),'stable');
+            [event_name,idx_event2data] = unique_stable(obj.Data(:,1));
             
             % Col 1 : event_name Col 2 : obj.Data(event_name) Col 3 ~
             % obj.Data(event_name), adapted for plot
