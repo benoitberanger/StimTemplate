@@ -22,9 +22,6 @@ function plotStim( eventplanning , eventrecorder , kblogger )
 
 %% Check input data
 
-% % Must be 3 input arguments
-% narginchk(2,3)
-
 % Must be 3 input arguments, or try with the base workspace
 if nargin > 0
     
@@ -250,21 +247,7 @@ set(lgd,'interpreter','none')
 % Change the limit of the graph so we can clearly see the
 % rectangles.
 
-scale = 1.1;
-
-old_xlim = xlim;
-range_x  = old_xlim(2) - old_xlim(1);
-center_x = mean( old_xlim );
-new_xlim = [ (center_x - range_x*scale/2 ) center_x + range_x*scale/2 ];
-
-old_ylim = ylim;
-range_y  = old_ylim(2) - old_ylim(1);
-center_y = mean( old_ylim );
-new_ylim = [ ( center_y - range_y*scale/2 ) center_y + range_y*scale/2 ];
-
-% Set new limits
-xlim( new_xlim )
-ylim( new_ylim )
+ScaleAxisLimits( gca , 1.1 )
 
 
 end

@@ -1,8 +1,17 @@
 function [ uniqueValues , idx_uniqueValues2cellColumns ] = unique_stable( cellColumn )
 % 'stable' flag of "unique" matlab function appeared after R2012. So here
 % we use a part of this R2012 code, for cross-version compatibility.
-% Real syntax should be :
+% Real syntax ( matlab version >= R2012 ) should be :
 % [uniqueValues,~,idx_uniqueValues2cellColumns] = unique(cellColumn,'stable')
+
+%% Check input arguments
+
+narginchk(1,1)
+
+validateattributes(cellColumn,{'cell'},{'column'},mfilename,'cellColumn',1)
+
+
+%% Filter
 
 % Sort C and get indices.
 [sortC,indSortC] = sort(cellColumn);
@@ -30,5 +39,5 @@ for evn = 1 : length(uniqueValues)
     
 end
 
-end
 
+end
