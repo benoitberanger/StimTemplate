@@ -83,7 +83,7 @@ classdef EventRecorder < handle
             if ~isnumeric( starttime )
                 error( 'StartTime must be numeric' )
             end
-           
+            
             obj.IncreaseEventCount;
             obj.Data( obj.EventCount , 1:2 ) = { starttime_name starttime };
             % ex : Add T_start = 0 on the next line (usually first line)
@@ -105,7 +105,7 @@ classdef EventRecorder < handle
             if ~isnumeric( starttime )
                 error( 'StopTime must be numeric' )
             end
-           
+            
             obj.IncreaseEventCount;
             obj.Data( obj.EventCount , 1:2 ) = { stoptime_name starttime };
             % ex : Add T_stop = 0 on the next line (usually last line)
@@ -225,7 +225,7 @@ classdef EventRecorder < handle
             % Build curves for each events, ready to be plotted.
             
             % ===================== Regroup each event ====================
-
+            
             [event_name,idx_event2data] = unique_stable(obj.Data(:,1));
             
             % Col 1 : event_name

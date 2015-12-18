@@ -4,6 +4,7 @@ function plotStim( eventplanning , eventrecorder , kblogger )
 %
 %  SYNTAX
 %  plotStim( eventplanning , eventrecorder , kblogger )
+%  plotStim
 %
 %  INPUTS
 %  1. eventplanning is an EventPlanning object
@@ -12,9 +13,11 @@ function plotStim( eventplanning , eventrecorder , kblogger )
 %
 %  NOTES
 %  1. All objects must have a non-empty GraphData property
+%  2. Without input arguments, the function will try to use ER, EP, KL from
+%  the base workspace
 %
 %
-% See also EventRecorder, EventPlanning, KbLogger
+% See also EventRecorder, EventPlanning, KbLogger, plotDelay
 
 % benoit.beranger@icm-institute.org
 % CENIR-ICM , 2015
@@ -54,7 +57,7 @@ else
     if ~ ( exist('eventplanning','var') && exist('eventrecorder','var') && exist('kblogger','var') )
         error('Even without input arguments, the function tries to use the base workspace variables, but failed.')
     end
-
+    
 end
 
 
@@ -86,9 +89,9 @@ if exist('kblogger','var')
     
 end
 
-if size( eventplanning.Data , 1 ) ~= size( eventrecorder.Data , 1 )
-    error( 'EventPlanning.Data and EventRecorder.Data must have the same number of lines' )
-end
+% if size( eventplanning.Data , 1 ) ~= size( eventrecorder.Data , 1 )
+%     error( 'EventPlanning.Data and EventRecorder.Data must have the same number of lines' )
+% end
 
 
 %% Preparation of curves
@@ -109,16 +112,16 @@ end
 
 % Is EventRecorder entry in EventPlanning ?
 for er = 1: size(eventrecorder.GraphData,1)
-    idx_ep_in_er = regexp( eventrecorder.GraphData(:,1) , eventplanning.GraphData{er,1} );
+    idx_ep_in_er = regexp( eventrecorder.GraphData(:,1) , [ '^' eventplanning.GraphData{er,1} '$' ] );
     idx_ep_in_er = ~cellfun( @isempty , idx_ep_in_er );
-    idx_ep_in_er = find(idx_ep_in_er);
+    idx_ep_in_er = find( idx_ep_in_er );
     
     % Yes, so add it into PlotData
     if idx_ep_in_er
         ER(er).object = 'ER';
         ER(er).index = idx_ep_in_er;
         ER(er).color = EP(er).color;
-        ER(er).linestyle = '-.';
+        ER(er).linestyle = ':';
     end
     
 end
@@ -127,9 +130,9 @@ if exist('kblogger','var')
     
     % Prepare MRI trigger curve
     MRI_trigger_kb_input = '5%'; % fORP in USB mode
-    MRI_trigger_reference = regexp(kblogger.GraphData(:,1),MRI_trigger_kb_input);
-    MRI_trigger_reference = ~cellfun(@isempty,MRI_trigger_reference);
-    MRI_trigger_reference = find(MRI_trigger_reference);
+    MRI_trigger_reference = regexp( kblogger.GraphData(:,1) , [ '^' MRI_trigger_kb_input '$' ] );
+    MRI_trigger_reference = ~cellfun( @isempty , MRI_trigger_reference );
+    MRI_trigger_reference = find( MRI_trigger_reference );
     
     color_count = color_count + 1;
     KL.object = 'KL';
