@@ -66,3 +66,4 @@ ER.BuildGraph;
 %% Fusion
 
 plotStim(EP,ER,KL)
+plotDelay(EP,ER)

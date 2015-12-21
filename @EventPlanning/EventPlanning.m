@@ -16,7 +16,7 @@ classdef EventPlanning < EventRecorder
         %                           Constructor
         % -----------------------------------------------------------------
         function obj = EventPlanning( header )
-            % obj = EventRecorder( Header = cell( 1 , Columns ) , NumberOfEvents = double(positive integer) )
+            % obj = EventRecorder( Header = cell( 1 , Columns ) )
             
             % ================ Check input argument =======================
             
