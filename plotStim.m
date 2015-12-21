@@ -93,6 +93,10 @@ end
 %     error( 'EventPlanning.Data and EventRecorder.Data must have the same number of lines' )
 % end
 
+if isempty(kblogger.Data)
+    warning('plotStim:NoDataInKbLogger','kblogger.Data is empty')
+end
+
 
 %% Preparation of curves
 
@@ -126,7 +130,7 @@ for er = 1: size(eventrecorder.GraphData,1)
     
 end
 
-if exist('kblogger','var')
+if exist('kblogger','var') && ~isempty(kblogger.Data)
     
     % Prepare MRI trigger curve
     MRI_trigger_kb_input = '5%'; % fORP in USB mode
@@ -172,7 +176,7 @@ hold all
 % Prepare the loop to plot each curves
 PlotData.EP = EP;
 PlotData.ER = ER;
-if exist('kblogger','var')
+if exist('kblogger','var') && ~isempty(kblogger.Data)
     PlotData.KL = KL;
 end
 PlotDataFields = fieldnames(PlotData);
@@ -220,6 +224,7 @@ for pdf = 1:length(PlotDataFields)
                 current_curve_name = eventrecorder.GraphData{current_curve_data.index,1};
                 
             case 'KL'
+                
                 plot(kblogger.GraphData{current_curve_data.index,3}(:,1) ,...
                     kblogger.GraphData{current_curve_data.index,3}(:,2) * color_count ,...
                     'Color' , current_curve_data.color ,...
