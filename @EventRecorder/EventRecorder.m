@@ -213,6 +213,24 @@ classdef EventRecorder < handle
                 warning( 'EventRecorder:ScaleTime' , 'No data in %s.Data' , inputname(1) )
             end
             
+        end
+        
+        % -----------------------------------------------------------------
+        %                        ComputeDurations
+        % -----------------------------------------------------------------
+        function ComputeDurations( obj )
+            % obj.ComputeDurations()
+            %
+            % Compute durations for each onsets
+            
+            onsets              = cell2mat( obj.Data (:,2) ); % Get the times
+            duration            = diff(onsets);               % Compute the differences
+            obj.Data(1:end-1,3) = num2cell( duration );       % Save durations
+            
+            % For the last event, usually StopTime, we need an exception.
+            if strcmp( obj.Data{end,1} , 'StopTime' )
+                obj.Data{end,3} = 0;
+            end
             
         end
         
@@ -226,16 +244,16 @@ classdef EventRecorder < handle
             
             % ===================== Regroup each event ====================
             
-            [event_name,idx_event2data] = unique_stable(obj.Data(:,1));
+            [ event_name , ~ , idx_event2data ] = unique_stable(obj.Data(:,1));
             
             % Col 1 : event_name
             % Col 2 : obj.Data(event_name)
-            % Col 3 ~= obj.Data(event_name), adapted for plot
+            %Col 3 ~= obj.Data(event_name), adapted for plot
             obj.GraphData = cell(length(event_name),3);
             
             for e = 1:length(event_name)
                 obj.GraphData{e,1} = event_name{e};
-                obj.GraphData{e,2} = cell2mat ( obj.Data( idx_event2data == e , 2 ) );
+                obj.GraphData{e,2} = cell2mat ( obj.Data( idx_event2data == e , 2:3 ) );
             end
             
             % ================= Build curves for each Event ===============
@@ -249,19 +267,51 @@ classdef EventRecorder < handle
                 % Here we need to build a curve that looks like recangles
                 for n = N:-1:1
                     
-                    % Split data above & under the point
-                    dataABOVE = data( 1:n ,: );
-                    dataUNDER = data( n+1:end , : );
+                    switch n
+                        
+                        case N
+                            
+                            % Split data above & under the point
+                            dataABOVE  = data( 1:n-1 ,: );
+                            dataMIDDLE = data( n ,: );
+                            dataUNDER  = NaN( 1 , size(data,2) );
+                            
+                        case 1
+                            
+                            % Split data above & under the point
+                            dataABOVE  = data( 1:n-1 ,: );
+                            dataMIDDLE = data( n ,: );
+                            dataUNDER  = data( n+1:end , : );
+                            
+                        otherwise
+                            
+                            % Split data above & under the point
+                            dataABOVE  = data( 1:n-1 ,: );
+                            dataMIDDLE = data( n ,: );
+                            dataUNDER  = data( n+1:end , : );
+                            
+                    end
                     
-                    % Add a point in curve to build a rectangle
+                    % Add a point ine curve to build a rectangle
                     data  = [ ...
-                        dataABOVE ; ...
-                        dataABOVE(end,1) 0 ; ...
-                        dataABOVE(end,1) NaN ; ...
-                        dataUNDER ...
-                        ] ;
+                        
+                    dataABOVE ;...
                     
+                    % Add points to create a rectangle
+                    dataMIDDLE(1,1) NaN NaN ;...
+                    dataMIDDLE(1,1) NaN 0 ;...
+                    dataMIDDLE(1,:) ;...
+                    dataMIDDLE(1,1)+dataMIDDLE(1,2) NaN 1 ;...
+                    dataMIDDLE(1,1)+dataMIDDLE(1,2) NaN 0 ;...
+                    
+                    dataUNDER ...
+                    
+                    ] ;
+                
                 end
+                
+                % Delete second column
+                data(:,2) = [];
                 
                 % Store curves
                 obj.GraphData{e,3} = data;
@@ -269,7 +319,6 @@ classdef EventRecorder < handle
             end
             
         end
-        
         
         % -----------------------------------------------------------------
         %                               Plot

@@ -22,12 +22,14 @@ KL.BuildGraph;
 
 %% Prepare a planning
 
+header = {'event_name','onset(s)','duration(s)'};
+
 % Create the planning object
-EP = EventPlanning({'event_name','onset(s)','duration(s)'});
+EP = EventPlanning(header);
 
 % Define a planing
 EP.AddPlanning({...
-    'T_start' 0 0
+    'StartTime' 0 0
     'C0' 0 2
     'C1' 2 2
     'Cross' 4 2
@@ -37,15 +39,15 @@ EP.AddPlanning({...
     'C0' 12 2
     'C1' 14 2
     'Cross' 16 2
-    'T_stop' 18 0
+    'StopTime' 18 0
     });
 EP.BuildGraph;
 % EP.Plot
 
 %% Prepare an event recorder
 
-ER = EventRecorder({'event_name','onset(s)'},100);
-ER.AddStartTime('T_start',0);
+ER = EventRecorder(header,100);
+ER.AddStartTime('StartTime',0);
 for k = 0:8
     switch mod(k,3)
         case 1
@@ -55,10 +57,13 @@ for k = 0:8
         case 2
             ev = 'Cross';
     end
-    ER.AddEvent({ev (2*k+rand)});
+    ER.AddEvent({ev (2*k+rand) []});
 end
-ER.AddStopTime('T_stop',(2*(k+1)+rand));
+ER.AddStopTime('StopTime',(2*(k+1)+rand));
 ER.ClearEmptyEvents;
+
+ER.ComputeDurations
+
 ER.BuildGraph;
 % ER.Plot
 

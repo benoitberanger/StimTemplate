@@ -1,43 +1,60 @@
-function [ uniqueValues , idx_uniqueValues2cellColumns ] = unique_stable( cellColumn )
+function [c,indA,indC] = unique_stable( a )
 % 'stable' flag of "unique" matlab function appeared after R2012. So here
 % we use a part of this R2012 code, for cross-version compatibility.
 % Real syntax ( matlab version >= R2012 ) should be :
-% [uniqueValues,~,idx_uniqueValues2cellColumns] = unique(cellColumn,'stable')
+% [c,indA,indC] = unique( a , 'stable' )
 
 %% Check input arguments
 
 narginchk(1,1)
 
-validateattributes(cellColumn,{'cell'},{'column'},mfilename,'cellColumn',1)
+validateattributes(a,{'cell'},{'column'},mfilename,'cellColumn',1)
 
 
 %% Filter
 
-% Sort C and get indices.
-[sortC,indSortC] = sort(cellColumn);
+numelA = numel(a);
 
-% groupsSortC indicates the location of non-matching entries.
-groupsSortC = ~strcmp(sortC(1:end-1),sortC(2:end));
-groupsSortC = groupsSortC(:);
+% Sort A and get indices.
+[sortA,indSortA] = sort(a);
 
-groupsSortC = [true;groupsSortC];       % First element is always a member of unique list.
+% groupsSortA indicates the location of non-matching entries.
+groupsSortA = ~strcmp(sortA(1:end-1),sortA(2:end));
+groupsSortA = groupsSortA(:);
 
-invIndSortC = indSortC;
-invIndSortC(invIndSortC) = 1:numel(cellColumn);    % Find inverse permutation.
-logIndC = groupsSortC(invIndSortC);     % Create new logical by indexing into groupsSortC.
+groupsSortA = [true;groupsSortA];       % First element is always a member of unique list.
 
-indC = logIndC;               % Find the indices of the unsorted logical.
+% Extract unique elements
+invIndSortA = indSortA;
+invIndSortA(invIndSortA) = 1:numelA;    % Find inverse permutation.
+logIndA = groupsSortA(invIndSortA);     % Create new logical by indexing into groupsSortA.
+c = a(logIndA);                         % Create unique list by indexing into unsorted a.
 
-uniqueValues = cellColumn(indC);
+% Find indA.
 
-idx_uniqueValues2cellColumns = zeros(size(uniqueValues));
+indA = find(logIndA);               % Find the indices of the unsorted logical.
 
-for evn = 1 : length(uniqueValues)
-    
-    idx =  ~cellfun( @isempty , regexp(cellColumn,uniqueValues{evn}) ) ;
-    idx_uniqueValues2cellColumns(idx) = evn;
-    
+% Find indC.
+
+[~,indSortC] = sort(c);                         % Sort C to get index.
+
+lengthGroupsSortA = diff(find([groupsSortA; true]));    % Determine how many of each of the above indices there are in IC.
+
+diffIndSortC = diff(indSortC);                          % Get the correct amount of each index.
+diffIndSortC = [indSortC(1); diffIndSortC];
+
+indLengthGroupsSortA = cumsum([1; lengthGroupsSortA]);
+indLengthGroupsSortA(end) = [];
+
+indCOrderedBySortA(indLengthGroupsSortA) = diffIndSortC;        % Since indCOrderedBySortA is not already established as a column,
+indCOrderedBySortA = indCOrderedBySortA.';                      % it becomes a row and that it needs to be transposed.
+
+if sum(lengthGroupsSortA) ~= length(indCOrderedBySortA);
+    indCOrderedBySortA(sum(lengthGroupsSortA)) = 0;
 end
+
+indCOrderedBySortA = cumsum(indCOrderedBySortA);
+indC = indCOrderedBySortA(invIndSortA);                 % Reorder the list of indices to the unsorted order.
 
 
 end

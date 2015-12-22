@@ -77,33 +77,46 @@ if eventplanning.EventCount > eventrecorder.EventCount
     range = range - 1 ;
 end
 
-[event_name,idx_event2data] = unique_stable( eventrecorder.Data(1:range,1) );
+[event_name, idx_data2envent , idx_event2data] = unique_stable( eventrecorder.Data(1:range,1) );
 
 Colors = lines( length(event_name) );
 
 
 %% Prepare curves
 
-planned_onset = cell2mat(eventplanning.Data(1:range,2));
-recorded_onset = cell2mat(eventrecorder.Data(1:range,2));
-delay = (recorded_onset - planned_onset) * 1000;
+planned_onset     = cell2mat(eventplanning.Data(1:range,2));
+recorded_onset    = cell2mat(eventrecorder.Data(1:range,2));
+onset_delay       = (recorded_onset - planned_onset) * 1000;
+
+planned_duration  = cell2mat(eventplanning.Data(1:range,3));
+recorded_duration = cell2mat(eventrecorder.Data(1:range,3));
+duration_delay    = (recorded_duration - planned_duration) * 1000;
 
 % Build a structure to gather all infos ready to be plotted
-Curves = struct;
+CurvesDelay    = struct;
+CurvesDuration = struct;
 for c = 1 : length(event_name)
     
-    Curves(c).name = event_name{c};
-    Curves(c).color = Colors(c,:);
-    Curves(c).X = planned_onset((idx_event2data == c));
-    Curves(c).Y = delay((idx_event2data == c));
+    CurvesDelay(c).name     = event_name{c};
+    CurvesDelay(c).color    = Colors(c,:);
+    CurvesDelay(c).X        = planned_onset((idx_event2data == c));
+    CurvesDelay(c).Y        = onset_delay((idx_event2data == c));
+    
+    CurvesDuration(c).name  = event_name{c};
+    CurvesDuration(c).color = Colors(c,:);
+    CurvesDuration(c).X     = planned_onset((idx_event2data == c));
+    CurvesDuration(c).Y     = duration_delay((idx_event2data == c));
     
 end
 
 %% Plot
 
 % Command window display
-hdr = { 'event_name' 'planned_onset (s)' 'recorded_onset (s)' 'delay (ms)' };
-dsp = vertcat ( hdr ,  [ eventrecorder.Data(1:range,1) num2cell(planned_onset) num2cell(recorded_onset) num2cell(delay) ] );
+hdr = { 'event_name' 'p_ons (s)' 'r_ons (s)' 'd_ons (ms)' 'p_dur (s)' 'r_dur (s)' 'd_dur (ms)' };
+dsp = vertcat ( hdr ,  [...
+    eventrecorder.Data(1:range,1) num2cell(planned_onset) num2cell(recorded_onset) num2cell(onset_delay) ...
+    num2cell(planned_duration) num2cell(recorded_duration) num2cell(duration_delay) ...
+    ] );
 disp(dsp)
 
 % Input names
@@ -119,24 +132,57 @@ end
 
 % Figure
 figure( 'Name' , [ mfilename ' : ' all_ipn ] , 'NumberTitle' , 'off' )
+
+
+% --- First graph ---------------------------------------------------------
+graph_parts(1) = subplot(2,1,1);
 hold all
 
 % Plot each event type
 for c = 1 : length(event_name)
     
-    stem( Curves(c).X , Curves(c).Y , 's' , 'Color' , Curves(c).color )
+    stem( graph_parts(1) , CurvesDelay(c).X , CurvesDelay(c).Y , 's' , 'Color' , CurvesDelay(c).color )
     
 end
 
 % Curve that crosses each point
-plot( planned_onset , delay ,':' , 'Color' , [0 0 0] )
+plot( planned_onset , onset_delay ,':' , 'Color' , [0 0 0] )
 
-xlabel('time (s)')
-ylabel('delay (ms)')
+xlabel('time (s)','interpreter','none')
+ylabel('onset_delay (ms)','interpreter','none')
 
-lgd = legend([ event_name ; 'delay(t)' ]);
+lgd = legend([ event_name ; 'onset_delay(time)' ]);
 set(lgd,'interpreter','none')
 
 ScaleAxisLimits
+
+
+% --- Second graph --------------------------------------------------------
+graph_parts(2) = subplot(2,1,2);
+hold all
+
+% Plot each event type
+for c = 1 : length(event_name)
+    
+    stem( graph_parts(2) , CurvesDuration(c).X , CurvesDuration(c).Y , 's' , 'Color' , CurvesDuration(c).color )
+    
+end
+
+% Curve that crosses each point
+plot( planned_onset , duration_delay ,':' , 'Color' , [0 0 0] )
+
+xlabel('time (s)','interpreter','none')
+ylabel('duration_delay (ms)','interpreter','none')
+
+event_dur1 = num2str( planned_duration(idx_data2envent) );
+event_dur2 = cellstr( event_dur1 );
+event_dur3 = regexprep( event_dur2 , ' ' , '' );
+event_dur4 = strcat(event_dur3, ' (s)');
+
+lgd = legend([ event_dur4 ; 'duration_delay(time)' ]);
+set(lgd,'interpreter','none')
+
+ScaleAxisLimits
+
 
 end
