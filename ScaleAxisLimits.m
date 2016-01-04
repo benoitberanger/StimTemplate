@@ -20,7 +20,11 @@ function ScaleAxisLimits( axis_handle , ScaleFactor )
 
 %% Check input arguments
 
-narginchk(0,2)
+% narginchk(0,2)
+% narginchk introduced in R2011b
+if nargin < 0 || nargin > 2
+    error('%s uses 0, 1 or 2 input argument(s)',mfilename)
+end
 
 if nargin < 2
     % 1.1 means +10%, so we can se clearly see horizontal and vertical

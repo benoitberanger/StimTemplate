@@ -6,7 +6,11 @@ function [c,indA,indC] = unique_stable( a )
 
 %% Check input arguments
 
-narginchk(1,1)
+% narginchk(1,1)
+% narginchk introduced in R2011b
+if nargin ~= 1
+    error('%s uses one and only one input argument',mfilename)
+end
 
 validateattributes(a,{'cell'},{'column'},mfilename,'cellColumn',1)
 
