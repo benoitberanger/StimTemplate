@@ -171,7 +171,8 @@ classdef KbLogger < EventRecorder
 
             % ======================= Callback ============================
 
-            MRI_trigger_tag = '5%'; % fORP in USB
+            %             MRI_trigger_tag = '5%'; % fORP in USB
+            MRI_trigger_tag = obj.Header{1};
             pulse_duration = 0.020; % seconds
 
             % Check if TR is compatible with the pulse duration
