@@ -25,17 +25,21 @@ function plotDelay( eventplanning , eventrecorder )
 
 % Must be 2 input arguments, or try with the base workspace
 if nargin > 0
-    
-    narginchk(1,2)
-    
+
+    % narginchk(2,2)
+    % narginchk introduced in R2011b
+    if nargin ~= 2
+        error('%s uses 2 input argument(s)',mfilename)
+    end
+
 else
-    
+
     % Import variables from base workspace
     vars = evalin('base','whos');
-    
+
     % Check each variable from base workspace
     for v = 1 : length(vars)
-        
+
         % EventPlanning ?
         if strcmp ( vars(v).name , 'EP' ) && strcmp ( vars(v).class , 'EventPlanning' )
             eventplanning = evalin('base','EP');
@@ -44,14 +48,14 @@ else
         if strcmp ( vars(v).name , 'ER' ) && strcmp ( vars(v).class , 'EventRecorder' )
             eventrecorder = evalin('base','ER');
         end
-        
+
     end
-    
+
     % Check if all vairables have been found in the base workspace
     if ~ ( exist('eventplanning','var') && exist('eventrecorder','var') )
         error('Even without input arguments, the function tries to use the base workspace variables, but failed.')
     end
-    
+
 end
 
 
@@ -96,17 +100,17 @@ duration_delay    = (recorded_duration - planned_duration) * 1000;
 CurvesDelay    = struct;
 CurvesDuration = struct;
 for c = 1 : length(event_name)
-    
+
     CurvesDelay(c).name     = event_name{c};
     CurvesDelay(c).color    = Colors(c,:);
     CurvesDelay(c).X        = planned_onset((idx_event2data == c));
     CurvesDelay(c).Y        = onset_delay((idx_event2data == c));
-    
+
     CurvesDuration(c).name  = event_name{c};
     CurvesDuration(c).color = Colors(c,:);
     CurvesDuration(c).X     = planned_onset((idx_event2data == c));
     CurvesDuration(c).Y     = duration_delay((idx_event2data == c));
-    
+
 end
 
 %% Plot
@@ -121,13 +125,13 @@ disp(dsp)
 
 % Input names
 if nargin ~= 0 % real function input
-    
+
     all_ipn = [ inputname(1) ' + ' inputname(2) ];
-    
+
 else % import from base workspace
-    
+
     all_ipn = 'EP + ER';
-    
+
 end
 
 % Figure
@@ -144,9 +148,9 @@ hold all
 
 % Plot each event type
 for c = 1 : length(event_name)
-    
+
     stem( graph_parts(1) , CurvesDelay(c).X , CurvesDelay(c).Y , 's' , 'Color' , CurvesDelay(c).color )
-    
+
 end
 
 % Curve that crosses each point
@@ -167,9 +171,9 @@ hold all
 
 % Plot each event type
 for c = 1 : length(event_name)
-    
+
     stem( graph_parts(2) , CurvesDuration(c).X , CurvesDuration(c).Y , 's' , 'Color' , CurvesDuration(c).color )
-    
+
 end
 
 % Curve that crosses each point

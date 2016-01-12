@@ -1,5 +1,5 @@
 function ScaleAxisLimits( axis_handle , ScaleFactor )
-%SCALEAXISLIMITS apply a scaling factor on X and Y axes 
+%SCALEAXISLIMITS apply a scaling factor on X and Y axes
 %
 %  SYNTAX
 %  ScaleAxisLimits( axis_handle , ScaleFactor )
@@ -39,8 +39,8 @@ end
 
 % Validate input arguments
 % validateattributes(axis_handle,{'numeric'},{'scalar';'positive'},mfilename,'axis_handle',1)
-% if or( isnumeric( axis_handle ) && axis_handle > 0 , isa( axis_handle , 'matlab.graphics.axis.Axes' ) ) 
-%    error('axis_handle error') 
+% if or( isnumeric( axis_handle ) && axis_handle > 0 , isa( axis_handle , 'matlab.graphics.axis.Axes' ) )
+%    error('axis_handle error')
 % end
 validateattributes(ScaleFactor,{'numeric'},{'scalar';'positive'},mfilename,'ScaleFactor',2)
 

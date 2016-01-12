@@ -28,7 +28,11 @@ function plotStim( eventplanning , eventrecorder , kblogger )
 % Must be 3 input arguments, or try with the base workspace
 if nargin > 0
     
-    narginchk(2,3)
+    % narginchk(2,3)
+    % narginchk introduced in R2011b
+    if nargin < 2 || nargin > 3
+        error('%s uses 2 or 3 input argument(s)',mfilename)
+    end
     
 else
     
