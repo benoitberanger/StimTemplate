@@ -31,7 +31,7 @@ classdef KbLogger < EventRecorder
                 if isvector( kblist ) && isnumeric( kblist ) % Check input argument
                     obj.KbList = kblist;
                 else
-                    error( 'Header should be a line cell of strings' )
+                    error( 'KbList should be a line vector of positive integers' )
                 end
                 
                 % --- header ----
