@@ -39,26 +39,32 @@ c = a(logIndA);                         % Create unique list by indexing into un
 indA = find(logIndA);               % Find the indices of the unsorted logical.
 
 % Find indC.
-
-[~,indSortC] = sort(c);                         % Sort C to get index.
-
-lengthGroupsSortA = diff(find([groupsSortA; true]));    % Determine how many of each of the above indices there are in IC.
-
-diffIndSortC = diff(indSortC);                          % Get the correct amount of each index.
-diffIndSortC = [indSortC(1); diffIndSortC];
-
-indLengthGroupsSortA = cumsum([1; lengthGroupsSortA]);
-indLengthGroupsSortA(end) = [];
-
-indCOrderedBySortA(indLengthGroupsSortA) = diffIndSortC;        % Since indCOrderedBySortA is not already established as a column,
-indCOrderedBySortA = indCOrderedBySortA.';                      % it becomes a row and that it needs to be transposed.
-
-if sum(lengthGroupsSortA) ~= length(indCOrderedBySortA);
-    indCOrderedBySortA(sum(lengthGroupsSortA)) = 0;
+if isempty(a)
+    
+    indC = zeros(0,1);
+    
+else
+    
+    [~,indSortC] = sort(c);                         % Sort C to get index.
+    
+    lengthGroupsSortA = diff(find([groupsSortA; true]));    % Determine how many of each of the above indices there are in IC.
+    
+    diffIndSortC = diff(indSortC);                          % Get the correct amount of each index.
+    diffIndSortC = [indSortC(1); diffIndSortC];
+    
+    indLengthGroupsSortA = cumsum([1; lengthGroupsSortA]);
+    indLengthGroupsSortA(end) = [];
+    
+    indCOrderedBySortA(indLengthGroupsSortA) = diffIndSortC;        % Since indCOrderedBySortA is not already established as a column,
+    indCOrderedBySortA = indCOrderedBySortA.';                      % it becomes a row and that it needs to be transposed.
+    
+    if sum(lengthGroupsSortA) ~= length(indCOrderedBySortA);
+        indCOrderedBySortA(sum(lengthGroupsSortA)) = 0;
+    end
+    
+    indCOrderedBySortA = cumsum(indCOrderedBySortA);
+    indC = indCOrderedBySortA(invIndSortA);                 % Reorder the list of indices to the unsorted order.
+    
 end
-
-indCOrderedBySortA = cumsum(indCOrderedBySortA);
-indC = indCOrderedBySortA(invIndSortA);                 % Reorder the list of indices to the unsorted order.
-
 
 end
