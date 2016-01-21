@@ -104,7 +104,10 @@ end
 
 %% Preparation of curves
 
-nb_lines = size(eventplanning.GraphData,1) + size(eventrecorder.GraphData,1) + 1;
+nb_lines = size(eventplanning.GraphData,1) + size(eventrecorder.GraphData,1);
+if exist('kblogger','var') && ~isempty(kblogger.Data)
+    nb_lines = nb_lines + size(kblogger.GraphData,1);
+end
 Colors = lines( nb_lines  );
 color_count = 0;
 
@@ -119,7 +122,7 @@ for ep = 1 : size(eventplanning.GraphData,1)
 end
 
 % Is EventRecorder entry in EventPlanning ?
-for er = 1: size(eventrecorder.GraphData,1)
+for er = 1 : size(eventrecorder.GraphData,1)
     idx_ep_in_er = regexp( eventrecorder.GraphData(:,1) , [ '^' eventplanning.GraphData{er,1} '$' ] );
     idx_ep_in_er = ~cellfun( @isempty , idx_ep_in_er );
     idx_ep_in_er = find( idx_ep_in_er );
@@ -136,17 +139,33 @@ end
 
 if exist('kblogger','var') && ~isempty(kblogger.Data)
     
-    % Prepare MRI trigger curve
-    MRI_trigger_kb_input = '5%'; % fORP in USB mode
-    MRI_trigger_reference = regexp( kblogger.GraphData(:,1) , [ '^' MRI_trigger_kb_input '$' ] );
-    MRI_trigger_reference = ~cellfun( @isempty , MRI_trigger_reference );
-    MRI_trigger_reference = find( MRI_trigger_reference );
+    for kb = 1 : size(kblogger.GraphData,1)
     
-    color_count = color_count + 1;
-    KL.object = 'KL';
-    KL.index = MRI_trigger_reference;
-    KL.color = Colors(color_count,:);
-    KL.linestyle = '-';
+        % Prepare MRI trigger curve
+        MRI_trigger_kb_input = '5%'; % fORP in USB mode
+        MRI_trigger_reference = regexp( kblogger.GraphData(:,1) , [ '^' MRI_trigger_kb_input '$' ] );
+        MRI_trigger_reference = ~cellfun( @isempty , MRI_trigger_reference );
+        MRI_trigger_reference = find( MRI_trigger_reference );
+        
+        if kb == MRI_trigger_reference
+            
+            color_count = color_count + 1;
+            KL(kb).object = 'KL';
+            KL(kb).index = MRI_trigger_reference;
+            KL(kb).color = Colors(color_count,:);
+            KL(kb).linestyle = '-';
+            
+        else
+            
+            color_count = color_count + 1;
+            KL(kb).object = 'KL';
+            KL(kb).index = kb;
+            KL(kb).color = Colors(color_count,:);
+            KL(kb).linestyle = ':';
+            
+        end
+        
+    end
     
 end
 
@@ -218,6 +237,7 @@ for pdf = 1:length(PlotDataFields)
         switch current_curve_data.object
             
             case 'EP'
+                
                 plot(eventplanning.GraphData{current_curve_data.index,3}(:,1) ,...
                     eventplanning.GraphData{current_curve_data.index,3}(:,2)*0.9 + current_curve_data.index ,...
                     'Color' , current_curve_data.color ,...
@@ -226,6 +246,7 @@ for pdf = 1:length(PlotDataFields)
                 current_curve_name = eventplanning.GraphData{current_curve_data.index,1};
                 
             case 'ER'
+                
                 plot(eventrecorder.GraphData{current_curve_data.index,3}(:,1) ,...
                     eventrecorder.GraphData{current_curve_data.index,3}(:,2) + current_curve_data.index ,...
                     'Color' , current_curve_data.color ,...
@@ -235,13 +256,27 @@ for pdf = 1:length(PlotDataFields)
                 
             case 'KL'
                 
-                plot(kblogger.GraphData{current_curve_data.index,3}(:,1) ,...
-                    kblogger.GraphData{current_curve_data.index,3}(:,2) * color_count ,...
-                    'Color' , current_curve_data.color ,...
-                    'LineStyle' , current_curve_data.linestyle )
+                if isempty( kblogger.GraphData{current_curve_data.index,3} )
+                    
+                    plot( 0 ,...
+                        0 ,...
+                        'Color' , current_curve_data.color ,...
+                        'LineStyle' , current_curve_data.linestyle )
+                    
+                else
+                    
+                    plot( kblogger.GraphData{current_curve_data.index,3}(:,1) ,...
+                        kblogger.GraphData{current_curve_data.index,3}(:,2) * color_count ,...
+                        'Color' , current_curve_data.color ,...
+                        'LineStyle' , current_curve_data.linestyle )
+                    
+                end
                 
-                % current_curve_name = kblogger.GraphData{current_curve_data.index,1};
-                current_curve_name = 'MRI_trigger';
+                if current_curve_data.index == MRI_trigger_reference
+                    current_curve_name = 'MRI_trigger';
+                else
+                    current_curve_name = kblogger.GraphData{current_curve_data.index,1};
+                end
                 
         end
         

@@ -17,6 +17,9 @@ KL.GenerateMRITrigger(2.140,10);
 KL.ScaleTime;
 KL.ComputeDurations;
 
+% KL.KbEvents{2,2} = KL.KbEvents{1,2};
+% KL.KbEvents{2,2}(:,1) = cellfun( @(x) {x + 0.5} , KL.KbEvents{2,2}(:,1) );
+
 KL.BuildGraph;
 % KL.Plot
 

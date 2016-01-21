@@ -170,14 +170,14 @@ classdef KbLogger < EventRecorder
                 % narginchk(3,3)
                 % narginchk introduced in R2011b
                 if nargin ~=3
-                    error('%s uses 3 input argument(s)',mfilename)
+                    error('%s uses 3 input argument(s)','GenerateMRITrigger')
                 end
                 
             end
             
             % ======================= Callback ============================
             
-            %             MRI_trigger_tag = '5%'; % fORP in USB
+            % MRI_trigger_tag = '5%'; % fORP in USB
             MRI_trigger_tag = obj.Header{1};
             pulse_duration = 0.020; % seconds
             
