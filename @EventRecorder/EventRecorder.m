@@ -402,6 +402,19 @@ classdef EventRecorder < handle
             
             ScaleAxisLimits( gca , 1.1 )
             
+            % ================ Change YTick and YTickLabel ================
+            
+            % Put 1 tick in the middle of each event
+            switch display_method
+                case '+'
+                    set( gca , 'YTick' , (1:size( obj.GraphData , 1 ))+0.5 )
+                case '*'
+                    set( gca , 'YTick' , (1:size( obj.GraphData , 1 )) )
+            end
+            
+            % Set the tick label to the event name
+            set( gca , 'YTickLabel' , obj.GraphData(:,1) )
+            
         end
         
     end % methods
