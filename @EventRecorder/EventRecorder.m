@@ -398,7 +398,6 @@ classdef EventRecorder < handle
             
             % Legend
             lgd = legend( obj.GraphData(:,1) );
-%             set(lgd,'Interpreter','none')
             set(lgd,'Interpreter','none','Location','Best')
             
             % ================ Adapt the graph axes limits ================

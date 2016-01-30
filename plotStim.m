@@ -292,7 +292,7 @@ end
 
 % Legend
 lgd = legend(CurvesNames);
-set(lgd,'interpreter','none')
+set(lgd,'interpreter','none','Location','Best')
 
 
 %%  Adapt the graph axes limits

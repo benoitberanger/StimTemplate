@@ -160,7 +160,7 @@ xlabel('time (s)','interpreter','none')
 ylabel('onset_delay (ms)','interpreter','none')
 
 lgd = legend([ event_name ; 'onset_delay(time)' ]);
-set(lgd,'interpreter','none')
+set(lgd,'interpreter','none','Location','Best')
 
 ScaleAxisLimits
 
@@ -188,7 +188,7 @@ event_dur3 = regexprep( event_dur2 , ' ' , '' );
 event_dur4 = strcat(event_dur3, ' (s)');
 
 lgd = legend([ event_dur4 ; 'duration_delay(time)' ]);
-set(lgd,'interpreter','none')
+set(lgd,'interpreter','none','Location','Best')
 
 ScaleAxisLimits
 
