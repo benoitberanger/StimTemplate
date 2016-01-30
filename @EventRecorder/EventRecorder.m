@@ -363,7 +363,12 @@ classdef EventRecorder < handle
             end
             
             % Figure
-            figure( 'Name' , [ inputname(1) ' : ' name ] , 'NumberTitle' , 'off' )
+            figure( ...
+                'Name'        , [ inputname(1) ' : ' name ] , ...
+                'NumberTitle' , 'off'                       , ...
+                'Units'       , 'Normalized'                , ...
+                'Position'    , [0.05, 0.05, 0.90, 0.80]      ...
+                )
             hold all
             
             % For each Event, plot the curve
@@ -393,7 +398,8 @@ classdef EventRecorder < handle
             
             % Legend
             lgd = legend( obj.GraphData(:,1) );
-            set(lgd,'Interpreter','none')
+%             set(lgd,'Interpreter','none')
+            set(lgd,'Interpreter','none','Location','Best')
             
             % ================ Adapt the graph axes limits ================
             
