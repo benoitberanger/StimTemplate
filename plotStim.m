@@ -140,7 +140,7 @@ end
 if exist('kblogger','var') && ~isempty(kblogger.Data)
     
     for kb = 1 : size(kblogger.GraphData,1)
-    
+        
         % Prepare MRI trigger curve
         MRI_trigger_kb_input = '5%'; % fORP in USB mode
         MRI_trigger_reference = regexp( kblogger.GraphData(:,1) , [ '^' MRI_trigger_kb_input '$' ] );
@@ -301,6 +301,15 @@ set(lgd,'interpreter','none','Location','Best')
 % rectangles.
 
 ScaleAxisLimits( gca , 1.1 )
+
+
+%% Change YTick and YTickLabel
+
+% Put 1 tick in the middle of each event
+set( gca , 'YTick' , (1:size( CurvesNames , 1 ))+0.5 )
+
+% Set the tick label to the event name
+set( gca , 'YTickLabel' , CurvesNames )
 
 
 end
