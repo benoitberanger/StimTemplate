@@ -280,9 +280,6 @@ for pdf = 1:length(PlotDataFields)
                 
         end
         
-        % Prepare curve name
-        current_curve_name = [ current_curve_data.object '.' current_curve_name ];
-        
         % Store curve name
         CurvesNames{curve_count} = current_curve_name;
         
