@@ -97,10 +97,13 @@ end
 %     error( 'EventPlanning.Data and EventRecorder.Data must have the same number of lines' )
 % end
 
-if isempty(kblogger.Data)
-    warning('plotStim:NoDataInKbLogger','kblogger.Data is empty')
+if exist('kblogger','var') && ~isempty(kblogger.Data)
+    
+    if isempty(kblogger.Data)
+        warning('plotStim:NoDataInKbLogger','kblogger.Data is empty')
+    end
+    
 end
-
 
 %% Preparation of curves
 
