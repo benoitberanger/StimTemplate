@@ -5,7 +5,7 @@ function StopRecording( DataStruct )
 if strcmp(DataStruct.EyelinkMode,'On')
     
     % Eyelink toolbox avalable ?
-    if EyelinkToolboxAvailable
+    if DataStruct.EyelinkToolboxAvailable
         
         % Connection initilized ?
         if Eyelink('IsConnected')
