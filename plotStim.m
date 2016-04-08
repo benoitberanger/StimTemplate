@@ -164,7 +164,7 @@ if exist('kblogger','var') && ~isempty(kblogger.Data)
             KL(kb).object = 'KL';
             KL(kb).index = kb;
             KL(kb).color = Colors(color_count,:);
-            KL(kb).linestyle = ':';
+            KL(kb).linestyle = '-.';
             
         end
         
