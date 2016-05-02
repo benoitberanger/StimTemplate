@@ -30,12 +30,12 @@ try
                         end
                         
                         % Check EyelinkFile
-                        if ~ishcar(DataStruct.EyelinkFile) || length(DataStruct.EyelinkFile) > 8
+                        if ~ischar(DataStruct.EyelinkFile) || length(DataStruct.EyelinkFile) > 8
                             error('DataStruct.EyelinkFile must be string : 8 characters maximum')
                         end
                         
                         % Open file
-                        status = Eyelink('OpenFile',EyelinkFile);
+                        status = Eyelink('OpenFile',DataStruct.EyelinkFile);
                         if status ~= 0
                             error('OpenFile error, status : %d ',status)
                         end
