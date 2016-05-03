@@ -71,7 +71,7 @@ try
     
     %% End of 'task'
     
-    TaskData.Display_cell = {};
+    TaskData.ER.Data = {};
     
     TaskData.IsEyelinkRreadyToRecord = 1;
     
