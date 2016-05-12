@@ -14,6 +14,8 @@ classdef EventRecorder < handle
         NumberOfEvents = 0                       % double(positive integer)
         EventCount     = 0                       % double(positive integer)
         GraphData      = cell(0)                 % cell( 'ev1' curve1 ; 'ev2' curve2 ; ... )
+        BlockData      = cell(0)                 % cell( ? , Columns )
+        BlockGraphData = cell(0)                 % cell( ? , Columns )
         
     end % properties
     
@@ -237,30 +239,51 @@ classdef EventRecorder < handle
         % -----------------------------------------------------------------
         %                             BuildGraph
         % -----------------------------------------------------------------
-        function BuildGraph( obj )
-            % obj.BuildGraph()
+        function BuildGraph( obj , method )
+            % obj.BuildGraph( [method] )
             %
             % Build curves for each events, ready to be plotted.
+            % method = 'normal' , 'block'
+            
+            % Arguments ?
+            if nargin < 2
+                method = 'normal';
+            else
+                if ~ischar(method)
+                    error('method must be a char')
+                end
+            end
+            
+            switch lower(method)
+                case 'normal'
+                    input  = 'Data';
+                    output = 'GraphData';
+                case 'block'
+                    input  = 'BlockData';
+                    output = 'BlockGraphData';
+                otherwise
+                    error( 'unknown method : %s' , method )
+            end
             
             % ===================== Regroup each event ====================
             
-            [ event_name , ~ , idx_event2data ] = unique_stable(obj.Data(:,1));
+            [ event_name , ~ , idx_event2data ] = unique_stable(obj.(input)(:,1));
             
             % Col 1 : event_name
             % Col 2 : obj.Data(event_name)
             %Col 3 ~= obj.Data(event_name), adapted for plot
-            obj.GraphData = cell(length(event_name),3);
+            obj.(output) = cell(length(event_name),3);
             
             for e = 1:length(event_name)
-                obj.GraphData{e,1} = event_name{e};
-                obj.GraphData{e,2} = cell2mat ( obj.Data( idx_event2data == e , 2:3 ) );
+                obj.(output){e,1} = event_name{e};
+                obj.(output){e,2} = cell2mat ( obj.(input)( idx_event2data == e , 2:3 ) );
             end
             
             % ================= Build curves for each Event ===============
             
-            for e = 1 : size( obj.GraphData , 1 ) % For each Event
+            for e = 1 : size( obj.(output) , 1 ) % For each Event
                 
-                data = [ obj.GraphData{e,2} ones(size(obj.GraphData{e,2},1),1) ]; % Catch data for this Event
+                data = [ obj.(output){e,2} ones(size(obj.(output){e,2},1),1) ]; % Catch data for this Event
                 
                 N  = size( data , 1 ); % Number of data = UP(0) + DOWN(1)
                 
@@ -314,7 +337,7 @@ classdef EventRecorder < handle
                 data(:,2) = [];
                 
                 % Store curves
-                obj.GraphData{e,3} = data;
+                obj.(output){e,3} = data;
                 
             end
             
@@ -323,10 +346,29 @@ classdef EventRecorder < handle
         % -----------------------------------------------------------------
         %                               Plot
         % -----------------------------------------------------------------
-        function Plot( obj )
-            % obj.Plot()
+        function Plot( obj , method )
+            % obj.Plot( [method] )
             %
             % Plot events over the time.
+            % method = 'normal' , 'block'
+            
+            % Arguments ?
+            if nargin < 2
+                method = 'normal';
+            else
+                if ~ischar(method)
+                    error('method must be a char')
+                end
+            end
+            
+            switch lower(method)
+                case 'normal'
+                    input  = 'GraphData';
+                case 'block'
+                    input  = 'BlockGraphData';
+                otherwise
+                    error( 'unknown method : %s' , method )
+            end
             
             % =============== BuildGraph if necessary =====================
             
@@ -334,9 +376,16 @@ classdef EventRecorder < handle
             % properties are different. But each BuildGraph subclass method
             % converge to a uniform GraphData.
             
-            if isempty(obj.GraphData)
+            if nargin < 2 % no input argument
                 
-                obj.BuildGraph;
+                if ~isempty(obj.BlockData) && isempty(obj.BlockGraphData) % BlockData exists ?
+                    obj.BuildGraph('block')
+                    input  = 'BlockGraphData';
+                    
+                elseif  isempty(obj.GraphData)
+                    obj.BuildGraph;
+                    
+                end
                 
             end
             
@@ -372,17 +421,17 @@ classdef EventRecorder < handle
             hold all
             
             % For each Event, plot the curve
-            for e = 1 : size( obj.GraphData , 1 )
+            for e = 1 : size( obj.(input) , 1 )
                 
-                if ~isempty(obj.GraphData{e,3})
+                if ~isempty(obj.(input){e,3})
                     
                     switch display_method
                         
                         case '+'
-                            plot( obj.GraphData{e,3}(:,1) , obj.GraphData{e,3}(:,2) + e )
+                            plot( obj.(input){e,3}(:,1) , obj.(input){e,3}(:,2) + e )
                             
                         case '*'
-                            plot( obj.GraphData{e,3}(:,1) , obj.GraphData{e,3}(:,2) * e )
+                            plot( obj.(input){e,3}(:,1) , obj.(input){e,3}(:,2) * e )
                             
                         otherwise
                             error('Unknown display_method')
@@ -397,7 +446,7 @@ classdef EventRecorder < handle
             end
             
             % Legend
-            lgd = legend( obj.GraphData(:,1) );
+            lgd = legend( obj.(input)(:,1) );
             set(lgd,'Interpreter','none','Location','Best')
             
             % ================ Adapt the graph axes limits ================
@@ -412,13 +461,49 @@ classdef EventRecorder < handle
             % Put 1 tick in the middle of each event
             switch display_method
                 case '+'
-                    set( gca , 'YTick' , (1:size( obj.GraphData , 1 ))+0.5 )
+                    set( gca , 'YTick' , (1:size( obj.(input) , 1 ))+0.5 )
                 case '*'
-                    set( gca , 'YTick' , (1:size( obj.GraphData , 1 )) )
+                    set( gca , 'YTick' , (1:size( obj.(input) , 1 )) )
             end
             
             % Set the tick label to the event name
-            set( gca , 'YTickLabel' , obj.GraphData(:,1) )
+            set( gca , 'YTickLabel' , obj.(input)(:,1) )
+            
+        end
+        
+        % -----------------------------------------------------------------
+        %                            MakeBlocks
+        % -----------------------------------------------------------------
+        function MakeBlocks( obj )
+            % obj.MakeBlocks()
+            %
+            % Transform obj.Data Events into Block
+            % IMPORTANT : do NOT applay obj.ComputeDurations, you need to
+            % fill the duration column manually
+            
+            % Find the blocks
+            [ ~ , ~ , indC ] = unique_stable( obj.Data(:,1) );
+            
+            % Where do they start ?
+            blockStart     = vertcat( -1 , diff(indC) );
+            blockStart_idx = find(blockStart);
+            
+            % Create a cell, equivalent of obj.Data, but for the blocks
+            blockData = cell(length(blockStart_idx),size(obj.Data,2));
+            for b = 1 : length(blockStart_idx)
+                
+                % Copy line
+                blockData(b,:) = obj.Data(blockStart_idx(b),:);
+                
+                % Change the duration : block duration
+                if b ~= length(blockStart_idx)
+                    blockData{b,3} = sum( cell2mat( obj.Data( blockStart_idx(b) : blockStart_idx(b+1)-1 , 3 ) ) );
+                end
+                
+            end
+            
+            % Store
+            obj.BlockData = blockData;
             
         end
         
