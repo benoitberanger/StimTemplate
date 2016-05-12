@@ -382,6 +382,9 @@ classdef EventRecorder < handle
                     obj.BuildGraph('block')
                     input  = 'BlockGraphData';
                     
+                elseif ~isempty(obj.BlockData)
+                    input  = 'BlockGraphData';
+                    
                 elseif  isempty(obj.GraphData)
                     obj.BuildGraph;
                     
@@ -485,7 +488,15 @@ classdef EventRecorder < handle
             [ ~ , ~ , indC ] = unique_stable( obj.Data(:,1) );
             
             % Where do they start ?
-            blockStart     = vertcat( -1 , diff(indC) );
+            blockStart = vertcat( -1 , diff(indC) );
+            for b = 1 : length(blockStart)
+                if b > 1
+                    if obj.Data{b-1,2} + obj.Data{b-1,3} < obj.Data{b,2} - obj.Data{b-1,3} % if huge gap between two events with the same name
+                        blockStart(b) = 1; % add a start block
+                    end
+                    
+                end
+            end
             blockStart_idx = find(blockStart);
             
             % Create a cell, equivalent of obj.Data, but for the blocks
