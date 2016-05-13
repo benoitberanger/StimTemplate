@@ -16,11 +16,22 @@ SubjectIDDir = fullfile( dataDir , SubjectID );
 
 % ../data/(SubjectID) exists ?
 if ~isdir( SubjectIDDir )
-    warning( 'MATLAB:SubjectIDDirExists' ,  ' \n ---> SubjectID directory not found in the : %s <--- \n ' , dataDir )
+    warning( 'MATLAB:SubjectIDDirExists' ,  ' \n ---> SubjectID directory not found in : %s <--- \n ' , dataDir )
 end
 
+% Content order : older to newer
+dirContent = struct2cell( dir(SubjectIDDir) );
+[~,IX] = sort( cell2mat( dirContent(end,:) ) );
+dirContentSorted = dirContent(:,IX);
+
 % Display dir
-disp(SubjectIDDir)
+fprintf('\n\n SubjectID data dir : %s \n', SubjectIDDir)
 
 % Display content
-dir(SubjectIDDir)
+for f = 1 : size(dirContentSorted,2)
+    if regexp(dirContentSorted{1,f},'^\.$')
+    elseif regexp(dirContentSorted{1,f},'^\.\.$')
+    else
+        fprintf('  %s \n', dirContentSorted{1,f})
+    end
+end
