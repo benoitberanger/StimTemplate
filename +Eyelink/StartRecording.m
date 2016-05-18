@@ -8,50 +8,45 @@ try
         
         case 'On'
             
-            % Eyelink toolbox avalable ?
-            if DataStruct.EyelinkToolboxAvailable
+            % Acquisition ?
+            switch DataStruct.OperationMode
                 
-                % Acquisition ?
-                switch DataStruct.OperationMode
+                case 'Acquisition'
                     
-                    case 'Acquisition'
-                        
-                        % Check if connected (assume the Eyelink is calibrated)
-                        status = Eyelink('IsConnected');
-                        switch status
-                            case 1
-                                disp('Eyelink connected')
-                            case -1
-                                disp('Eyelink dummy-connected')
-                            case 2
-                                disp('Eyelink broadcast-connected')
-                            case 0
-                                error('Eyelink is not connected')
-                        end
-                        
-                        % Check EyelinkFile
-                        if ~ischar(DataStruct.EyelinkFile) || length(DataStruct.EyelinkFile) > 8
-                            error('DataStruct.EyelinkFile must be string : 8 characters maximum')
-                        end
-                        
-                        % Open file
-                        status = Eyelink('OpenFile',DataStruct.EyelinkFile);
-                        if status ~= 0
-                            error('OpenFile error, status : %d ',status)
-                        end
-                        
-                        % Start recording
-                        startrecording_error = Eyelink('StartRecording');
-                        if startrecording_error ~= 0
-                            error('StartRecording error, startrecording_error : %d ',startrecording_error)
-                        end
-                        
-                    otherwise
-                        
-                        error('StartRecordingEyelink:EyelinkModeOnWithoutAcquisition','\n Eyelink mode should be ''Off'' if not in Acquisition mode \n')
-                        
-                end
-                
+                    % Check if connected (assume the Eyelink is calibrated)
+                    status = Eyelink('IsConnected');
+                    switch status
+                        case 1
+                            disp('Eyelink connected')
+                        case -1
+                            disp('Eyelink dummy-connected')
+                        case 2
+                            disp('Eyelink broadcast-connected')
+                        case 0
+                            error('Eyelink is not connected')
+                    end
+                    
+                    % Check EyelinkFile
+                    if ~ischar(DataStruct.EyelinkFile) || length(DataStruct.EyelinkFile) > 8
+                        error('DataStruct.EyelinkFile must be string : 8 characters maximum')
+                    end
+                    
+                    % Open file
+                    status = Eyelink('OpenFile',DataStruct.EyelinkFile);
+                    if status ~= 0
+                        error('OpenFile error, status : %d ',status)
+                    end
+                    
+                    % Start recording
+                    startrecording_error = Eyelink('StartRecording');
+                    if startrecording_error ~= 0
+                        error('StartRecording error, startrecording_error : %d ',startrecording_error)
+                    end
+                    
+                otherwise
+                    
+                    error('StartRecordingEyelink:EyelinkModeOnWithoutAcquisition','\n Eyelink mode should be ''Off'' if not in Acquisition mode \n')
+                    
             end
             
         case 'Off'
