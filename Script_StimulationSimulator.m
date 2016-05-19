@@ -8,9 +8,15 @@ clear
 
 KbName('UnifyKeyNames');
 
-keys = {'5%' 'space' 'escape'};
+if ~IsLinux
+    keys = {'5%' 'space' 'escape'};
+    KL = KbLogger(KbName(keys) , keys);
+else
+    keys = {'parenleft' 'space' 'escape'};
+    KL = KbLogger( [15 66 10 ] , keys);
+end
 
-KL = KbLogger(KbName(keys) , keys);
+
 
 KL.GenerateMRITrigger(2.140,10);
 
