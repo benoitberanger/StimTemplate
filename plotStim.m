@@ -135,36 +135,40 @@ for er = 1 : size(eventrecorder.GraphData,1)
         ER(er).object = 'ER';
         ER(er).index = idx_ep_in_er;
         ER(er).color = EP(er).color;
-        ER(er).linestyle = ':';
+        ER(er).linestyle = '--';
     end
     
 end
 
 if exist('kblogger','var') && ~isempty(kblogger.Data)
     
+    % Prepare MRI trigger curve
+    MRI_trigger_kb_input = '5%'; % fORP in USB mode
+    MRI_trigger_reference = regexp( kblogger.GraphData(:,1) , [ '^' MRI_trigger_kb_input '$' ] );
+    MRI_trigger_reference = ~cellfun( @isempty , MRI_trigger_reference );
+    MRI_trigger_reference = find( MRI_trigger_reference );
+    
     for kb = 1 : size(kblogger.GraphData,1)
         
-        % Prepare MRI trigger curve
-        MRI_trigger_kb_input = '5%'; % fORP in USB mode
-        MRI_trigger_reference = regexp( kblogger.GraphData(:,1) , [ '^' MRI_trigger_kb_input '$' ] );
-        MRI_trigger_reference = ~cellfun( @isempty , MRI_trigger_reference );
-        MRI_trigger_reference = find( MRI_trigger_reference );
-        
-        if kb == MRI_trigger_reference
+        if ~isempty(kblogger.GraphData{kb,2})
             
-            color_count = color_count + 1;
-            KL(kb).object = 'KL';
-            KL(kb).index = MRI_trigger_reference;
-            KL(kb).color = Colors(color_count,:);
-            KL(kb).linestyle = '-';
-            
-        else
-            
-            color_count = color_count + 1;
-            KL(kb).object = 'KL';
-            KL(kb).index = kb;
-            KL(kb).color = Colors(color_count,:);
-            KL(kb).linestyle = '-.';
+            if kb == MRI_trigger_reference
+                
+                color_count = color_count + 1;
+                KL(kb).object = 'KL';
+                KL(kb).index = MRI_trigger_reference;
+                KL(kb).color = Colors(color_count,:);
+                KL(kb).linestyle = ':';
+                
+            else
+                
+                color_count = color_count + 1;
+                KL(kb).object = 'KL';
+                KL(kb).index = kb;
+                KL(kb).color = Colors(color_count,:);
+                KL(kb).linestyle = '-';
+                
+            end
             
         end
         
@@ -242,7 +246,7 @@ for pdf = 1:length(PlotDataFields)
             case 'EP'
                 
                 plot(eventplanning.GraphData{current_curve_data.index,3}(:,1) ,...
-                    eventplanning.GraphData{current_curve_data.index,3}(:,2)*0.9 + current_curve_data.index ,...
+                    eventplanning.GraphData{current_curve_data.index,3}(:,2)*0.9 + current_curve_data.index - 1 ,...
                     'Color' , current_curve_data.color ,...
                     'LineStyle' , current_curve_data.linestyle )
                 
@@ -251,7 +255,7 @@ for pdf = 1:length(PlotDataFields)
             case 'ER'
                 
                 plot(eventrecorder.GraphData{current_curve_data.index,3}(:,1) ,...
-                    eventrecorder.GraphData{current_curve_data.index,3}(:,2) + current_curve_data.index ,...
+                    eventrecorder.GraphData{current_curve_data.index,3}(:,2) + current_curve_data.index - 1 ,...
                     'Color' , current_curve_data.color ,...
                     'LineStyle' , current_curve_data.linestyle )
                 
@@ -269,7 +273,7 @@ for pdf = 1:length(PlotDataFields)
                 else
                     
                     plot( kblogger.GraphData{current_curve_data.index,3}(:,1) ,...
-                        kblogger.GraphData{current_curve_data.index,3}(:,2) * color_count ,...
+                        kblogger.GraphData{current_curve_data.index,3}(:,2) * length(PlotData.EP) ,...
                         'Color' , current_curve_data.color ,...
                         'LineStyle' , current_curve_data.linestyle )
                     
@@ -306,10 +310,10 @@ ScaleAxisLimits( gca , 1.1 )
 %% Change YTick and YTickLabel
 
 % Put 1 tick in the middle of each event
-set( gca , 'YTick' , (1:size( CurvesNames , 1 ))+0.5 )
+set( gca , 'YTick' , (1:length(PlotData.EP)) - 0.5 )
 
 % Set the tick label to the event name
-set( gca , 'YTickLabel' , CurvesNames )
+set( gca , 'YTickLabel' , CurvesNames(1:length(PlotData.EP)) )
 
 
 end
