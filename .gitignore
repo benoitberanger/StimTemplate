@@ -1,2 +1,20 @@
+# MATLAB
 *.asv
 *.m~
+*.fig
+*.mat
+
+# Octave
+octave-workspace
+
+# Other
+*.wav
+
+# OS generated files
+Thumbs.db
+desktop.ini
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
