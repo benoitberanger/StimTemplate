@@ -5,9 +5,6 @@ function BuildGraph( obj )
 
 % ================= Build curves for each Kb ==================
 
-% Check if not empty
-obj.IsEmptyProperty('Data')
-
 for k = 1:size( obj.KbEvents , 1 ) % For each KeyBinds
     
     if ~isempty( obj.KbEvents{k,2} ) % Except for null (usually the last one)

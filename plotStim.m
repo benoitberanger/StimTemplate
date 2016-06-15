@@ -148,25 +148,28 @@ if exist('kblogger','var') && ~isempty(kblogger.Data)
     MRI_trigger_reference = ~cellfun( @isempty , MRI_trigger_reference );
     MRI_trigger_reference = find( MRI_trigger_reference );
     
+    kb_count = 0;
     for kb = 1 : size(kblogger.GraphData,1)
         
         if ~isempty(kblogger.GraphData{kb,2})
             
+            kb_count = kb_count + 1;
+            
             if kb == MRI_trigger_reference
                 
                 color_count = color_count + 1;
-                KL(kb).object = 'KL';
-                KL(kb).index = MRI_trigger_reference;
-                KL(kb).color = Colors(color_count,:);
-                KL(kb).linestyle = ':';
+                KL(kb_count).object = 'KL';
+                KL(kb_count).index = MRI_trigger_reference;
+                KL(kb_count).color = Colors(color_count,:);
+                KL(kb_count).linestyle = ':';
                 
             else
                 
                 color_count = color_count + 1;
-                KL(kb).object = 'KL';
-                KL(kb).index = kb;
-                KL(kb).color = Colors(color_count,:);
-                KL(kb).linestyle = '-';
+                KL(kb_count).object = 'KL';
+                KL(kb_count).index = kb;
+                KL(kb_count).color = Colors(color_count,:);
+                KL(kb_count).linestyle = '-';
                 
             end
             
