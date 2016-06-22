@@ -1,30 +1,19 @@
-function ScaleTime( obj , StartTime )
+function ScaleTime( obj )
 % obj.ScaleTime()
 %
 % Scale the time origin to the first entry in obj.Data
 
-if nargin < 2
-    
-    
-else
-    
-    % --- StartTime ----
-    if ~( isnumeric(StartTime) && StartTime > 0 )
-        error('StartTime must be positive')
-    end
-    
-    % Add StartTime at the top of obj.Data
-    obj.Data = [ ...
-        { obj.Header{1} StartTime       1 NaN } ; ...
-        { obj.Header{1} StartTime+0.001 0 NaN } ; ...
-        obj.Data...
-        ];
-    obj.IncreaseEventCount;
-    obj.IncreaseEventCount;
-    
-end
+% Onsets of events
+oldOnsets = cell2mat( obj.Data(:,2) );
 
-% Apply upper class method
-ScaleTime@EventRecorder(obj);
+% Shift all onsets by the minimum
+newOnsets = oldOnsets - min(oldOnsets);
+
+% Write scaled time
+if ~isempty( time )
+    obj.Data( : , 4 ) = num2cell( newOnsets );
+else
+    warning( 'KbLogger:ScaleTime' , 'No data in %s.Data (%s)' , inputname(1) , name )
+end
 
 end

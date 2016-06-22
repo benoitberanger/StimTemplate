@@ -2,12 +2,10 @@ clc
 close all
 clear
 
-%% Load an already prepared keybind logger
+%% Keybind logger
 
-% load KL.mat
-
+% Prepare
 KbName('UnifyKeyNames');
-
 if ~IsLinux
     keys = {'5%' 'space' 'escape'};
     KL = KbLogger(KbName(keys) , keys);
@@ -15,28 +13,28 @@ else
     keys = {'parenleft' 'space' 'escape'};
     KL = KbLogger( [15 66 10 ] , keys);
 end
+KL.Start;
 
+% Stim
+% [...] => any code you want
 
-
-KL.GenerateMRITrigger(2.140,10);
-
+% Post stim
+KL.GetQueue;
+KL.Stop;
+KL.GenerateMRITrigger( 2.140 , 10 , 0 ); % => in debug mode
 KL.ScaleTime;
 KL.ComputeDurations;
-
-% KL.KbEvents{2,2} = KL.KbEvents{1,2};
-% KL.KbEvents{2,2}(:,1) = cellfun( @(x) {x + 0.5} , KL.KbEvents{2,2}(:,1) );
 
 KL.BuildGraph;
 % KL.Plot
 
-%% Prepare a planning
+%% Planning
 
+% Prepare
 header = {'event_name','onset(s)','duration(s)'};
+EP = EventPlanning(header); % Create the planning object
 
-% Create the planning object
-EP = EventPlanning(header);
-
-% Define a planing
+% Stim paradigm : what you want
 EP.AddPlanning({...
     'StartTime' 0 0
     'C0' 0 2
@@ -50,13 +48,19 @@ EP.AddPlanning({...
     'Cross' 16 2
     'StopTime' 18 0
     });
+
+% Post stim
 EP.BuildGraph;
 % EP.Plot
 
-%% Prepare an event recorder
 
+%% Recorder
+
+% Prepare
 ER = EventRecorder(header,100);
 ER.AddStartTime('StartTime',0);
+
+% Stim : what you recored during the stimulation
 for k = 0:8
     switch mod(k,3)
         case 1
@@ -69,15 +73,18 @@ for k = 0:8
     ER.AddEvent({ev (2*k+rand) []});
 end
 ER.AddStopTime('StopTime',(2*(k+1)+rand));
+
+% Post stim
 ER.ClearEmptyEvents;
-
 ER.ComputeDurations
-
 ER.BuildGraph;
 % ER.Plot
 
 
 %% Fusion
 
+% Planning vs. Recorded  ( + Key logger )
 plotStim(EP,ER,KL)
+
+% Planning - Recorded = delay
 plotDelay(EP,ER)

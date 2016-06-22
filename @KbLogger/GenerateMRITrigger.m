@@ -1,32 +1,32 @@
-function GenerateMRITrigger( obj , tr, volumes )
-% obj.GenerateMRITrigger( TR = positive number , Volumes = positive integer )
+function GenerateMRITrigger( obj , tr, volumes, starttime )
+% obj.GenerateMRITrigger( TR = positive number , Volumes = positive integer, StartTime = onset of the first volume )
 %
 % Generate MRI trigger according to he given number of Volumes
 % and the TR.
 
 % ================ Check input argument =======================
 
-if nargin > 0
-    
-    % --- tr ----
-    if ~( isnumeric(tr) && tr > 0 )
-        error('TR must be positive')
-    end
-    
-    % --- volumes ----
-    if ~( isnumeric(volumes) && volumes > 0 && volumes == round(volumes) )
-        error('Volumes must be a positive integer')
-    end
-    
-else
-    
-    % narginchk(3,3)
-    % narginchk introduced in R2011b
-    if nargin ~=3
-        error('%s uses 3 input argument(s)','GenerateMRITrigger')
-    end
-    
+% narginchk(3,3)
+% narginchk introduced in R2011b
+if nargin ~= 4
+    error('%s uses 4 input argument(s)','GenerateMRITrigger')
 end
+
+% --- tr ----
+if ~( isnumeric(tr) && tr > 0 )
+    error('TR must be positive')
+end
+
+% --- volumes ----
+if ~( isnumeric(volumes) && volumes > 0 && volumes == round(volumes) )
+    error('Volumes must be a positive integer')
+end
+
+% --- starttime ----
+if ~( isnumeric(starttime) && starttime >= 0 )
+    error('StartTime must be positive or null')
+end
+
 
 % ======================= Callback ============================
 
@@ -43,8 +43,8 @@ end
 
 for v = 1 : volumes
     
-    obj.AddEvent({ MRI_trigger_tag (v-1)*tr                1 (v-1)*tr                 })
-    obj.AddEvent({ MRI_trigger_tag (v-1)*tr+pulse_duration 0 (v-1)*tr+pulse_duration  })
+    obj.AddEvent({ MRI_trigger_tag starttime+(v-1)*tr                1 starttime+(v-1)*tr                 })
+    obj.AddEvent({ MRI_trigger_tag starttime+(v-1)*tr+pulse_duration 0 starttime+(v-1)*tr+pulse_duration  })
     
 end
 
