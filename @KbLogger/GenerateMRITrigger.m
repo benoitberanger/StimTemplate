@@ -8,8 +8,12 @@ function GenerateMRITrigger( obj , tr, volumes, starttime )
 
 % narginchk(3,3)
 % narginchk introduced in R2011b
-if nargin ~= 4
-    error('%s uses 4 input argument(s)','GenerateMRITrigger')
+if nargin > 4 || nargin < 3
+    error('%s uses 3 or 4 input argument(s)','GenerateMRITrigger')
+end
+
+if nargin == 3
+    starttime = 0;
 end
 
 % --- tr ----
@@ -21,7 +25,7 @@ end
 if ~( isnumeric(volumes) && volumes > 0 && volumes == round(volumes) )
     error('Volumes must be a positive integer')
 end
-
+    
 % --- starttime ----
 if ~( isnumeric(starttime) && starttime >= 0 )
     error('StartTime must be positive or null')
