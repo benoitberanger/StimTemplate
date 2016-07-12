@@ -1,3 +1,5 @@
+function Pushbutton_Check_SubjectID_data_Callback( hObject , eventdata )
+
 % ../
 upperDir = fullfile( fileparts( pwd ) );
 
@@ -9,7 +11,7 @@ if ~isdir( dataDir )
     error( 'MATLAB:DataDirExists' , ' \n ---> data directory not found in the upper dir : %s <--- \n ' , upperDir )
 end
 
-SubjectID = get(handles.edit_SubjectID,'String');
+SubjectID = get(hObject,'String');
 
 % ../data/(SubjectID)
 SubjectIDDir = fullfile( dataDir , SubjectID );
@@ -35,3 +37,5 @@ for f = 1 : size(dirContentSorted,2)
         fprintf('  %s \n', dirContentSorted{1,f})
     end
 end
+
+end % function

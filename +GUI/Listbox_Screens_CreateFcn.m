@@ -1,4 +1,4 @@
-set(hObject,'TooltipString',sprintf('Select the display mode \n PTB : 0 for extended display (over all screens) , 1 for screen 1 , 2 for screen 2 , etc.'))
+function Listbox_Screens_CreateFcn( hObject , eventdata )
 
 AvailableDisplays = Screen('Screens');
 
@@ -11,3 +11,5 @@ else
 end
 
 set(hObject,'String',ListOfScreens)
+
+end % function
