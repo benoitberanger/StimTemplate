@@ -4,7 +4,7 @@ catch err1
 end
 
 try
-    status = Eyelink('CloseFile')
+    status = Eyelink('CloseFile');
 catch err2
 end
 
