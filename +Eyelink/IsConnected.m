@@ -1,3 +1,5 @@
+function IsConnected
+
 status = Eyelink('IsConnected');
 fprintf('\n Eyelink connection status : \n')
 switch status
@@ -11,3 +13,5 @@ switch status
         fprintf('NOT CONNECTED \n')
         error('Eyelink:Connection','Eyelink not connected')
 end
+
+end % function

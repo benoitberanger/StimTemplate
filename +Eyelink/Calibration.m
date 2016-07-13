@@ -1,9 +1,12 @@
-function [ TaskData ] = Calibration( DataStruct )
+function Calibration( wPtr )
+%CALIBRATION Start the Eyelink calibration onto the psychtoolbox window
+%pointer (wPtr)
+% Syntax : Calibration( wPtr )
 
 try
     %% Assign wich window the eyelink will use
     
-    TaskData.el = EyelinkInitDefaults(DataStruct.PTB.Window);
+    el = EyelinkInitDefaults(wPtr);
     
     
     %% Initialize Eyelink connection:
@@ -18,9 +21,9 @@ try
         case 1
             disp('EyelinkInit successful')
         case 0
-            error('EyelinkCalibrationNPI:EyelinkInit','EyelinkInit error')
-            
+            error('EyelinkCalibration:EyelinkInit','EyelinkInit error')
     end
+    
     if dummy
         disp('Dummy mode')
     end
@@ -66,22 +69,14 @@ try
     
     %% Calivration & validation
     
-    EyelinkDoTrackerSetup(TaskData.el);
+    EyelinkDoTrackerSetup(el);
     
-    
-    %% End of 'task'
-    
-    TaskData.ER.Data = {};
-    
-    TaskData.IsEyelinkRreadyToRecord = 1;
     
 catch err
     
-    WaitSecs(0.200);
     sca
-    WaitSecs(0.200);
     rethrow(err)
     
 end
 
-end
+end % function

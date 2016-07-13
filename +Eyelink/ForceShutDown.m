@@ -1,3 +1,5 @@
+function ForceShutDown
+
 try
     Eyelink('StopRecording')
 catch err1
@@ -12,3 +14,5 @@ try
     Eyelink('Shutdown')
 catch err3
 end
+
+end % function

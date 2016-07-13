@@ -1,3 +1,5 @@
+function Initialize
+
 fprintf('\n Try to connect with the Eyelink ... \n')
 
 status = Eyelink('Initialize');
@@ -9,3 +11,5 @@ switch status
         fprintf(' error %d \n',status)
         error('Eyelink:Connection','Eyelink not connected')
 end
+
+end % function
