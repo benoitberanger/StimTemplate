@@ -10,10 +10,10 @@ oldOnsets = cell2mat( obj.Data(:,2) );
 newOnsets = oldOnsets - min(oldOnsets);
 
 % Write scaled time
-if ~isempty( time )
+if ~isempty( newOnsets )
     obj.Data( : , 4 ) = num2cell( newOnsets );
 else
-    warning( 'KbLogger:ScaleTime' , 'No data in %s.Data (%s)' , inputname(1) , name )
+    warning( 'KbLogger:ScaleTime' , 'No data in %s.Data' , inputname(1) )
 end
 
 end
