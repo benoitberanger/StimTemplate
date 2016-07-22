@@ -20,8 +20,7 @@ data = obj.Data( ~( T_start_idx + T_stop_idx ) , : );
 input_found = nan(size(unique_kb));
 for c = 1:length(unique_kb)
     
-    input_idx  = regexp(obj.Header,unique_kb(c));
-    input_idx  = ~cellfun(@isempty,input_idx);
+    input_idx  = strcmp(obj.Header,unique_kb(c));
     input_idx  = find(input_idx);
     
     input_found(c) = input_idx;
