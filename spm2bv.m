@@ -2,6 +2,9 @@ function spm2bv( names , onsets , durations , filename )
 %SPM2BV transform  'names', 'onsets', 'durations' cells (for SPM) to
 %BrainVoyager *.prt text file
 
+% benoit.beranger@icm-institute.org
+% CENIR-ICM , 2015
+
 
 %% Open file in write mod
 
@@ -18,9 +21,9 @@ for n = 1 : length(names)
     fprintf( fileID , '%s\r\n' , names{n} );
     fprintf( fileID , '%d\r\n' , length(onsets{n}) );
     
-    for e = 1 : length(onsets{n})
+    for o = 1 : length(onsets{n})
         
-        fprintf( fileID , '%f\t%f\r\n' , onsets{n}(e) , onsets{n}(e) + durations{n}(e) );
+        fprintf( fileID , '%f\t%f\r\n' , onsets{n}(o) , onsets{n}(o) + durations{n}(o) );
         
     end
     

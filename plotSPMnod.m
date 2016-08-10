@@ -7,7 +7,7 @@ function plotSPMnod( Names , Onsets , Durations )
 %
 %  INPUTS
 %  1. Names : defined for SPM
-%  2. Onsets : : defined for SPM
+%  2. Onsets : defined for SPM
 %  3. Durations : defined for SPM
 %
 %  NOTES
@@ -18,6 +18,7 @@ function plotSPMnod( Names , Onsets , Durations )
 
 % benoit.beranger@icm-institute.org
 % CENIR-ICM , 2015
+
 
 %% Check input arguments
 
@@ -31,8 +32,12 @@ nb_Args = length(Arguments);
 % Must be 3 input arguments, or try with the base workspace
 if nargin > 0
     
-    narginchk(nb_Args,nb_Args)
-    
+    % narginchk(nb_Args,nb_Args)
+    % narginchk introduced in R2011b
+    if nargin ~= nb_Args
+        error('%s uses %d input argument(s)',mfilename,nb_Args)
+    end
+   
 else
     
     % Import variables from base workspace

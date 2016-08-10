@@ -1,10 +1,11 @@
-% Clear everything
+%% This script need to be executed cell by cell
 
 clc
 close all
 clear
 
-%% Initialization
+
+%% Initialization : do it before start of the scanner
 
 KbName('UnifyKeyNames');
 
@@ -14,7 +15,17 @@ KL = KbLogger(KbName(keys) , keys);
 
 KL.Start;
 
-%% Stop logger and display results
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Scanner running : do nothing
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%% Scanner stopped : Stop logger and display results
 
 KL.GetQueue;
 

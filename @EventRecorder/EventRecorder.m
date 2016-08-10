@@ -1,6 +1,9 @@
 classdef EventRecorder < handle
-    
     %EVENTRECORDER Class to record any stimulation events
+    
+    % benoit.beranger@icm-institute.org
+    % CENIR-ICM , 2015
+    
     
     %% Properties
     
@@ -18,6 +21,7 @@ classdef EventRecorder < handle
         BlockGraphData = cell(0)                 % cell( ? , Columns )
         
     end % properties
+    
     
     %% Methods
     

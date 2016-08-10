@@ -18,6 +18,7 @@ function ScaleAxisLimits( axis_handle , ScaleFactor )
 % benoit.beranger@icm-institute.org
 % CENIR-ICM , 2015
 
+
 %% Check input arguments
 
 % narginchk(0,2)

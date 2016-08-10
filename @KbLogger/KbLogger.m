@@ -1,7 +1,11 @@
 classdef KbLogger < EventRecorder
     
     %KBLOGGER Class to handle the the Keybinds Queue from Psychtoolbox
-    %(ex : record MRI triggers while other code is executing)
+    %  (ex : record MRI triggers while other code is executing)
+    
+    % benoit.beranger@icm-institute.org
+    % CENIR-ICM , 2015
+    
     
     %% Properties
     
@@ -11,6 +15,7 @@ classdef KbLogger < EventRecorder
         KbEvents = cell(0) % cell( Columns , 2 )
         
     end % properties
+    
     
     %% Methods
     
@@ -64,10 +69,12 @@ classdef KbLogger < EventRecorder
         
     end % methods
     
+    
     methods ( Static )
         
         Stop
         
     end % methods ( Static )
+    
     
 end % class

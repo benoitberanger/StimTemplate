@@ -2,11 +2,16 @@ classdef EventPlanning < EventRecorder
     
     %EVENTPLANNING Class to schedul any stimulation events
     
+    % benoit.beranger@icm-institute.org
+    % CENIR-ICM , 2015
+    
+    
     %% Properties
     
     properties
         
     end % properties
+    
     
     %% Methods
     
@@ -50,5 +55,6 @@ classdef EventPlanning < EventRecorder
         end
         
     end % methods
+    
     
 end % class

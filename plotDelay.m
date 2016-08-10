@@ -15,6 +15,7 @@ function plotDelay( eventplanning , eventrecorder )
 %  2. Without input arguments, the function will try to use ER, EP from the
 %  base workspace
 %
+%
 % See also EventRecorder, EventPlanning, plotStim
 
 % benoit.beranger@icm-institute.org
