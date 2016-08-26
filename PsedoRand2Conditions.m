@@ -7,7 +7,7 @@ function [ Sequence ] = PsedoRand2Conditions( C0 , C1 , nodisplay )
 %   nodisplay is 0 or 1 (flag)
 %
 %   WARNING : the method is adapted for C0|C1 not too big (<500|250) and
-%   for C1/C2~0.5.
+%   for C1/C0~0.5.
 
 % benoit.beranger@icm-institute.org
 % CENIR-ICM , 2016
