@@ -16,7 +16,7 @@ if nargin < 3
     nodisplay = 0;
 end
 
-maxiteration = 10000;
+maxiteration = 100000;
 
 L = C0 + C1; % length of the sequence
 
@@ -31,13 +31,7 @@ while ~exit_randomization
         StreamRand(end) = 0; % change the new 1 into 0
     end
     
-    if length(StreamRand) > L % enouth stream
-        
-        iteration = iteration + 1;
-        
-        if ~nodisplay
-            fprintf('iteration = %d \n',iteration)
-        end
+    if length(StreamRand) == L
         
         for idx = 1:(length(StreamRand)-L)
             
@@ -46,9 +40,23 @@ while ~exit_randomization
             
             if res == C1 % "le compte est bon"
                 exit_randomization = 1;
-                break
             end
             
+        end
+        
+    elseif length(StreamRand) > L % enouth stream
+        
+        iteration = iteration + 1;
+        
+        if ~nodisplay
+            fprintf('iteration = %d \n',iteration)
+        end
+        
+        window = StreamRand(iteration+1:iteration+L); % sliding window inside the stream
+        res = sum(window); % sum of 1
+        
+        if res == C1 % "le compte est bon"
+            exit_randomization = 1;
         end
         
     end
