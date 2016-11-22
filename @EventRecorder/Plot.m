@@ -50,20 +50,18 @@ end
 [~, name, ~] = fileparts(obj.Description);
 
 % Depending on the object calling the method, the display changes.
-switch name
+if strfind(name,'EventRecorder')
+    display_method = '+';
     
-    case 'EventRecorder'
-        display_method = '+';
-        
-    case 'KbLogger'
-        display_method = '*';
-        
-    case 'EventPlanning'
-        display_method = '+';
-        
-    otherwise
-        error('Unknown object caller')
-        
+elseif  strfind(name,'KbLogger')
+    display_method = '*';
+    
+elseif strfind(name,'EventPlanning')
+    display_method = '+';
+    
+else
+    error('Unknown object caller')
+    
 end
 
 % Figure
