@@ -105,6 +105,27 @@ for arg_  = 1 : Length(1)
     
 end
 
+% Change each column vector into row, just for convenience
+
+for arg = 1 : nb_Args
+    if isrow(eval(Arguments{arg}))
+        eval([Arguments{arg} '=' Arguments{arg} ''';'])
+    end
+end
+
+for o = 1 : length(Onsets)
+    if isrow(Onsets{o})
+        Onsets{o} = Onsets{o}';
+    end
+end
+
+for d = 1 : length(Durations)
+    if isrow(Durations{d})
+        Durations{d} = Durations{d}';
+    end
+end
+
+
 
 %% Prepare curves
 
