@@ -30,9 +30,11 @@ for k = 1 : size(obj.KbEvents,1)
         subplot(2,2,3)
         hist(KeyIsDown_spacing)
         
-        subplot(2,2,4)
-        boxplot(KeyIsDown_spacing)
-        grid on
+        if ~isempty(which('boxplot'))
+            subplot(2,2,4)
+            boxplot(KeyIsDown_spacing)
+            grid on
+        end
         
     end
     

@@ -39,6 +39,8 @@ KL.BuildGraph;
 
 KL.Plot;
 
+KL.ComputePulseSpacing;
+
 disp(KL)
 disp(KL.Data)
 disp(KL.KbEvents)
