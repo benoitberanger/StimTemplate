@@ -10,7 +10,20 @@ function ShowStructTree(run,toprint)
 %to do this already.  It explores the tree with a simple depth-first
 %method.  
 
+% -------------------------------------------------------------------------
+% modif not from the author
+
+if nargin<1
+    error('Not enough input arguments.')
+end
+
 a = whos;
+
+if nargin<2
+    toprint = inputname(1);
+end
+
+% -------------------------------------------------------------------------
 
 dots = find(toprint=='.');
 if numel(dots)>0
