@@ -84,7 +84,7 @@ end
 if exist('kblogger','var')
     
     if ~ isa ( kblogger , 'KbLogger' )
-        error( 'First argument kblogger must be an object of class KbLogger ' )
+        error( 'Last argument kblogger must be an object of class KbLogger ' )
     end
     
     if ~isprop( kblogger , 'GraphData' ) || isempty( kblogger.GraphData )
