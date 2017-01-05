@@ -17,6 +17,9 @@ for k = 1 : size(obj.KbEvents,1)
         KeyIsDown_onset = data(KeyIsDown_idx,1);
         KeyIsDown_spacing = diff(KeyIsDown_onset);
         
+        fprintf('mean = %f ms \n',mean(KeyIsDown_spacing)*1000);
+        fprintf('std = %f ms \n',std(KeyIsDown_spacing)*1000);
+        
         figure( ...
             'Name'        , [mfilename ' : ' obj.KbEvents{k,1} ] , ...
             'NumberTitle' , 'off'                       , ...
