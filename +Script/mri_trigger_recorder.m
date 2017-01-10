@@ -9,7 +9,11 @@ clear
 
 KbName('UnifyKeyNames');
 
-keys = {'space' '5%' 'escape' 't'};
+if IsLinux
+    keys = {'space' 'escape' 't'};
+else
+    keys = {'space' '5%' 'escape' 't'};
+end
 
 KL = KbLogger(KbName(keys) , keys);
 
@@ -39,7 +43,7 @@ KL.BuildGraph;
 
 KL.Plot;
 
-KL.ComputePulseSpacing;
+KL.ComputePulseSpacing(1);
 
 disp(KL)
 disp(KL.Data)
