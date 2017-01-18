@@ -23,10 +23,12 @@ function [ names, onsets, durations ] = plotOptseq2( filename )
 %% Check input arguments
 
 if nargin < 1
-    filename = uigetfile('*.par','Select the *.par optseq2 file');
-    if filename==0
+    [file,pathname,~] = uigetfile('*.par','Select the *.par optseq2 file');
+    if file==0
         fprintf('%s : No file selected \n',mfilename)
         return
+    else
+        filename = [pathname file];
     end
 else
     if ~ischar(filename)
