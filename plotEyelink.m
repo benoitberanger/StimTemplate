@@ -156,13 +156,20 @@ timestamps.diff = diff(timestamps.raw);
 timestamps.new = find(timestamps.diff>0);
 
 
+if exist('SamplingRate','var')
+    
+    t = find(Numeric_events(:,Numeric_row_number.TIME)>0);
+    Numeric_events(:,Numeric_row_number.TIME) = Numeric_events(:,Numeric_row_number.TIME) - Numeric_events(t(1),Numeric_row_number.TIME);
+    Numeric_events(:,Numeric_row_number.TIME) = Numeric_events(:,Numeric_row_number.TIME)/SamplingRate;
+    
+end
+
+
 %% Plot
 
 figure( ...
     'Name'        , ASCFile                     , ...
-    'NumberTitle' , 'off'                       , ...
-    'Units'       , 'Normalized'                , ...
-    'Position'    , [0.05, 0.05, 0.90, 0.80]      ...
+    'NumberTitle' , 'off'                         ...
     )
 
 %%%%%%%%%%%%%%%
@@ -251,7 +258,9 @@ if xor(SAMPLES_LEFT_flag,SAMPLES_RIGHT_flag)
     
     legend(lgd,'Location','Best')
     
-    %     xlabel('time (s)')
+    if exist('SamplingRate','var')
+        xlabel('time (s)')
+    end
     
     axis tight
     
@@ -378,7 +387,9 @@ elseif SAMPLES_LEFT_flag && SAMPLES_RIGHT_flag
     
     legend(lgd,'Location','Best')
     
-    %     xlabel('time (s)')
+    if exist('SamplingRate','var')
+        xlabel('time (s)')
+    end
     
     axis tight
     

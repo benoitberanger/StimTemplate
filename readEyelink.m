@@ -114,6 +114,10 @@ while ~feof(file_ID)
         if strfind( line_content , 'SAMPLES' ) == 1
             SAMPLES_line_content = line_content;
             SAMPLES_flag = 1;
+            token = regexp(line_content,'RATE\t(\w+)','tokens');
+            if ~isempty(token)
+                varargout{1}.SamplingRate = str2double(token{1});
+            end
         end
     end
     line_count = line_count + 1;
