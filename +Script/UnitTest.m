@@ -8,11 +8,10 @@ clear
 KbName('UnifyKeyNames');
 if ~IsLinux
     keys = {'5%' 'space' 'escape'};
-    KL = KbLogger(KbName(keys) , keys);
 else
-    keys = {'parenleft' 'space' 'escape'};
-    KL = KbLogger( [15 66 10 ] , keys);
+    keys = {'t' 'space' 'escape'};
 end
+KL = KbLogger(KbName(keys) , keys);
 KL.Start;
 
 % Stim
@@ -76,7 +75,8 @@ ER.AddStopTime('StopTime',(2*(k+1)+rand));
 
 % Post stim
 ER.ClearEmptyEvents;
-ER.ComputeDurations
+ER.MakeBlocks; % not used in this exemple script
+ER.ComputeDurations;
 ER.BuildGraph;
 % ER.Plot
 
@@ -88,3 +88,19 @@ plotStim(EP,ER,KL)
 
 % Planning - Recorded = delay
 plotDelay(EP,ER)
+
+KL.ComputePulseSpacing(1)
+
+close all
+
+%% Other functions
+
+ER2 = ER.CopyObject;
+assert(ER ~= ER2,'Problem with method CopyObject')
+
+Struct = ER.ExportToStructure;
+
+
+%% DONE
+
+fprintf('All tests passed \n')
