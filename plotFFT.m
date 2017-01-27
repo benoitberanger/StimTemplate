@@ -10,10 +10,7 @@ end
  
 L = length(signal);
 
-figure( ...
-    'Units'       , 'Normalized'                , ...
-    'Position'    , [0.05, 0.05, 0.90, 0.80]      ...
-    )
+figure
 
 subplot(2,1,1)
 plot((1:L)/fs,signal)
