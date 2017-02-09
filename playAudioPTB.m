@@ -22,7 +22,7 @@ PsychPortAudio('FillBuffer', pahandle, wavedata);
 
 PsychPortAudio('Start', pahandle, repetitions, 0, 1);
 
-PsychPortAudio('Stop', pahandle, 0, 1);
+PsychPortAudio('Stop', pahandle, 1, 1);
 
 PsychPortAudio('Close',pahandle);
 
