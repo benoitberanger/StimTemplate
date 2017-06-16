@@ -56,7 +56,9 @@ else
     % Display the content of the cell (non-empty)
     if ~isempty(C)
         if ischar(C)
-            fprintf(' = %s',C)
+            for i = 1:size(C,1)
+                fprintf(' = %s',C(i,:))
+            end
         elseif isnumeric(C)
             fprintf(' = %g',C)
         else
