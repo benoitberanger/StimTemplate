@@ -66,5 +66,5 @@ WaitSecs(0.400);
 
 %% Save .wav
 
-name = sprintf('AudioBurst_%dms',Length);
-wavwrite(y,SamplingRate,24,name);
+name = sprintf('AudioBurst_%dms.wav',Length);
+psychwavwrite(y,SamplingRate,24,name);

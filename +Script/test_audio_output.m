@@ -6,9 +6,9 @@ clc
 %% Load wave file
 
 filename = 'AudioBurst_10ms.wav';
-[y, Fs] = wavread(filename);
+[y, Fs] = psychwavread(filename);
 
-%% Play
+%% Prepare audio & other config
 
 % playAudioPTB(signal,SamplingRate)
 
@@ -22,13 +22,31 @@ PsychPortAudio('Close');
 
 pahandle = PsychPortAudio('Open', [], 1, lowlatency_mode, Fs, nrchannels);
 
-PsychPortAudio('FillBuffer', pahandle, [y y]' );
+win = IsWin;
+glnx = IsLinux;
 
+if win
+    OpenParPort;
+end
+
+
+%% Play
+
+top = GetSecs;
 while ~KbCheck
     
-    PsychPortAudio('Start', pahandle, repetitions, 0, 1);
+    PsychPortAudio('FillBuffer', pahandle, [y y]' );
+    top = PsychPortAudio('Start', pahandle, repetitions, top+0.400, 1);
     
-    WaitSecs(0.400);
+    if win
+        WriteParPort(255);
+        WaitSecs(0.001);
+        WriteParPort(0);
+    elseif glnx
+        parport_dev(255);
+        WaitSecs(0.001);
+        parport_dev(0);
+    end 
     
 end
 
