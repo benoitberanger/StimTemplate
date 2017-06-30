@@ -1064,7 +1064,7 @@ while ~feof(file_ID)
                 case 1
                     LastButtonUP = [ line_number BU(2) BU(3) ]; % Store last button up
                 case 0
-                    if BU(2) == LastButtonUP(2)
+                    if exist('LastButtonUP','var') && BU(2) == LastButtonUP(2) % exist('LastButtonUP','var') is here to avoid a bug when the first button line in the file is button release
                         for k = LastButtonUP(1):line_number % Write lastbutton up during its activation
                             Numeric_events(k,Numeric_row_number.BUTTON) = 10*LastButtonUP(2) + 1*LastButtonUP(3); % WARNING : Encoding of the button [1-8] and state [0-1]
                         end
