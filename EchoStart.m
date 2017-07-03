@@ -4,5 +4,4 @@ fprintf('\n')
 fprintf('---------------------------------------------------------------------------\n')
 fprintf('# Starting: %s \n',name)
 
-end
-
+end % function
