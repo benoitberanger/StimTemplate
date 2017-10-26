@@ -6,14 +6,21 @@ clc
 
 screenNumber = 1;
 
-bgColor = [0 0 0];
+Colors = [
+    0 0 0 % black
+    127 127 127 % grey
+    255 255 255 % white
+    255 0 0 % red
+    0 255 0 % green
+    0 0 255 % blue
+    ];
 
 
 %% Open screen
 
 Screen('Preference','VisualDebugLevel',1);
 
-[windowPtr, windowRect] = Screen('OpenWindow', screenNumber,bgColor);
+[windowPtr, windowRect] = Screen('OpenWindow', screenNumber,[0 0 0]);
 
 
 %% Coords
@@ -64,25 +71,33 @@ Vlines(1,2) = Vlines(1,2) + 1;
 
 KbName('UnifyKeyNames')
 
-next   = KbName('RightArrow');
-prev   = KbName('LeftArrow');
-escape = KbName('Escape');
+nextLine = KbName('RightArrow');
+prevLine = KbName('LeftArrow');
 
-Colors = [
-    255 255 255 % white
-    255 0 0 % red
-    0 255 0 % green
-    0 0 255 % blue
-    ];
+nextBG = KbName('UpArrow');
+prevBG = KbName('DownArrow');
+
+plusThick  = KbName('+');
+minusThick = KbName('-');
+
+escape   = KbName('Escape');
+
+lineColors = Colors;
+bgColors = Colors;
 
 
 %% Draw
 
+% Init
+thickness = 1;
+HideCursor
+lineColors = circshift(lineColors,1,1);
+
 % Draw white first
-Screen('DrawLines', windowPtr, l1 , 1 , Colors(1,:));
-Screen('DrawLines', windowPtr, l2 , 1 , Colors(1,:));
-Screen('DrawLines', windowPtr, Hlines , 1 , Colors(1,:));
-Screen('DrawLines', windowPtr, Vlines , 1 , Colors(1,:));
+Screen('DrawLines', windowPtr, l1 , 1 , lineColors(1,:));
+Screen('DrawLines', windowPtr, l2 , 1 , lineColors(1,:));
+Screen('DrawLines', windowPtr, Hlines , 1 , lineColors(1,:));
+Screen('DrawLines', windowPtr, Vlines , 1 , lineColors(1,:));
 Screen('Flip', windowPtr);
 
 while 1
@@ -95,23 +110,39 @@ while 1
             sca
             break
             
-        elseif  keyCode(next) || keyCode(prev)
+        elseif  keyCode(nextLine)
+            lineColors = circshift(lineColors,1,1);
+        elseif keyCode(prevLine)
+            lineColors = circshift(lineColors,-1,1);
             
-            if  keyCode(next)
-                Colors = circshift(Colors,1,1);
-            elseif keyCode(prev)
-                Colors = circshift(Colors,-1,1);
+        elseif  keyCode(nextBG)
+            bgColors = circshift(bgColors,1,1);
+        elseif  keyCode(prevBG)
+            bgColors = circshift(bgColors,-1,1);
+            
+        elseif keyCode(plusThick)
+            thickness = thickness + 1;
+            if thickness > 10
+                thickness = 10;
             end
-            
-            Screen('DrawLines', windowPtr, l1 , 1 , Colors(1,:));
-            Screen('DrawLines', windowPtr, l2 , 1 , Colors(1,:));
-            Screen('DrawLines', windowPtr, Hlines , 1 , Colors(1,:));
-            Screen('DrawLines', windowPtr, Vlines , 1 , Colors(1,:));
-            Screen('Flip', windowPtr);
-            
-            WaitSecs(0.100); % don't want epilepsy
-            
+        elseif keyCode(minusThick)
+            thickness = thickness - 1;
+            if thickness < 1
+                thickness = 1;
+            end
         end
+        
+        Screen('FillRect' , windowPtr, bgColors(1,:));
+        
+        Screen('DrawLines', windowPtr, l1     , thickness , lineColors(1,:));
+        Screen('DrawLines', windowPtr, l2     , thickness , lineColors(1,:));
+        Screen('DrawLines', windowPtr, Hlines , thickness , lineColors(1,:));
+        Screen('DrawLines', windowPtr, Vlines , thickness , lineColors(1,:));
+        
+        Screen('Flip'     , windowPtr);
+        
+        WaitSecs(0.200); % don't want epilepsy
+        
         
     end
     
