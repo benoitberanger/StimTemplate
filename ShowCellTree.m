@@ -30,7 +30,7 @@ end
 
 %% Recursive print
 
-if iscell(C) && ~isempty(C),
+if iscell(C) && ~isempty(C)
     
     % Here I use linear indexing so the function can deal whith unknown
     % multidimentional cells.
@@ -82,7 +82,7 @@ else
     
 end
 
-if cell_level == 0; % Only at the first stack of this recursive function.
+if cell_level == 0 % Only at the first stack of this recursive function.
     fprintf('\n')
 end
 
@@ -103,7 +103,7 @@ end
 [v{1:end}] = ind2sub(siz,i);
 
 s = ['{' int2str(v{1})];
-for i=2:length(v),
+for i=2:length(v)
     s = [s ',' int2str(v{i})]; %#ok<AGROW>
 end
 s = [s '}'];

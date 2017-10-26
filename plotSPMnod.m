@@ -227,6 +227,8 @@ end
 lgd = legend( Names(:) );
 set(lgd,'Interpreter','none')
 
+set(gca, 'TickLabelInterpreter', 'none')
+
 
 %% Adjust window display
 % Change the limit of the graph so we can clearly see the rectangles.
