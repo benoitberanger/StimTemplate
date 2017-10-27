@@ -19,7 +19,7 @@ try
     [result dummy] = EyelinkInit(dummymode,enableCallbacks);
     switch result
         case 1
-            disp('EyelinkInit successful')
+            ffprintf('EyelinkInit successful \n')
         case 0
             error('EyelinkCalibration:EyelinkInit','EyelinkInit error')
     end

@@ -30,20 +30,20 @@ for file = 1 : size(A{1},1)
     source = A{1}{file}; % in the eyelink
     dest   = A{2}{file}; % on the display computer (stim computer)
     
-    fprintf('Eyelink file transfer IN PROGRESS \n')
-    fprintf('Transfering ''%s'' into ''%s'' \n', source, dest);
-    fprintf('It might take a few seconds... \n')
+    ffprintf('Eyelink file transfer IN PROGRESS \n')
+    ffprintf('Transfering ''%s'' into ''%s'' \n', source, dest);
+    ffprintf('It might take a few seconds... \n')
     status = Eyelink('ReceiveFile',source,[dest '.edf'],0);
     if status > 0
-        fprintf('Eyelink file transfer DONE \n')
-        fprintf('%s size is %d \n',dest,status)
+        ffprintf('Eyelink file transfer DONE \n')
+        ffprintf('%s size is %d \n',dest,status)
     elseif status == 0
-        fprintf('File transfer cancelled \n')
+        ffprintf('File transfer cancelled \n')
     elseif status < 0
         error('ReceiveFile error, status : %d ',status);
     end
     
-    fprintf('\n')
+    ffprintf('\n')
     
 end
 

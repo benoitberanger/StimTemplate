@@ -20,9 +20,9 @@ fid = fopen(listfile,'a','n','UTF-8'); % open in 'append' mode, in UTF-8 encodin
 if fid == -1
     error('eyelink_files_to_download.txt cannot be opened')
 end
-fprintf(fid,'%s %s\n',ELfilename,[where destfilename]); % write in a file
+ffprintf(fid,'%s %s\n',ELfilename,[where destfilename]); % write in a file
 fclose(fid);
 
-fprintf('In the file ''%s'' was wrote ''%s'' has to be transfered into ''%s'' \n', listfile, ELfilename, [where destfilename]);
+ffprintf('In the file ''%s'' was wrote ''%s'' has to be transfered into ''%s'' \n', listfile, ELfilename, [where destfilename]);
 
 end

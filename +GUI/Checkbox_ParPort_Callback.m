@@ -1,4 +1,4 @@
-function Checkbox_ParPort_Callback ( hObject , eventdata )
+function Checkbox_ParPort_Callback ( hObject , ~ )
 
 opp_path = which('OpenParPort.m');
 
@@ -9,7 +9,7 @@ if isempty(opp_path)
     
 else
     
-    switch get(hObject,'Value');
+    switch get(hObject,'Value')
         
         case 0
             disp('Parallel port library OFF')

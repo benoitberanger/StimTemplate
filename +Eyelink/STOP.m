@@ -20,7 +20,7 @@ if Eyelink('IsConnected') ~= 0
         
     elseif err == -1 % -1 means not recording
         
-        disp('Eyelink not recording')
+        ffprintf('Eyelink not recording \n')
         
     else
         

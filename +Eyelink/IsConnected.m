@@ -1,16 +1,16 @@
 function IsConnected
 
 status = Eyelink('IsConnected');
-fprintf('\n Eyelink connection status : \n')
+ffprintf('Eyelink connection status : \n')
 switch status
     case 1
-        fprintf('connected \n')
+        ffprintf('connected \n')
     case -1
-        fprintf('dummy-connected \n')
+        ffprintf('dummy-connected \n')
     case 2
-        fprintf('broadcast-connected \n')
+        ffprintf('broadcast-connected \n')
     case 0
-        fprintf('NOT CONNECTED \n')
+        ffprintf('NOT CONNECTED \n')
         error('Eyelink:Connection','Eyelink not connected')
 end
 

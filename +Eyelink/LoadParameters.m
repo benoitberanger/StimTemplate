@@ -38,7 +38,6 @@ Eyelink('Command','autothreshold_repeat = YES');
 Eyelink('Command','enable_search_limits = YES');
 Eyelink('Command','track_search_limits = NO');
 
-fprintf('\n')
-fprintf('Eyelink parameters loaded \n')
+ffprintf('Eyelink parameters loaded \n')
 
 end
