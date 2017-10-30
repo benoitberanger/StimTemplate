@@ -5,7 +5,7 @@ function downloadELfiles( where )
 
 assert(ischar(where) && isvector(where), 'where is not a valid char(1,n)')
 
-% The last character must bu a file separator
+% The last character must be a file separator
 if ~( strcmp(where(end),'\') || strcmp(where(end),'/') )
     where = [where filesep];
 end
@@ -17,7 +17,7 @@ listfile = [where 'eyelink_files_to_download.txt'];
 
 fid = fopen(listfile,'r','n','UTF-8'); % open in 'read' mode, in UTF-8 encoding
 if fid == -1
-    error('eyelink_files_to_download.txt cannot be opened')
+    error('eyelink_files_to_download.txt cannot be opened. Directory exists ?')
 end
 A = textscan(fid,'%s %s');
 fclose(fid);
