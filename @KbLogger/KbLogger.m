@@ -1,4 +1,4 @@
-classdef KbLogger < EventRecorder
+classdef KbLogger < Recorder
     
     %KBLOGGER Class to handle the the Keybinds Queue from Psychtoolbox
     %  (ex : record MRI triggers while other code is executing)

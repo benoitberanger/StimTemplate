@@ -1,4 +1,4 @@
-classdef EventPlanning < EventRecorder
+classdef EventPlanning < Recorder
     
     %EVENTPLANNING Class to schedul any stimulation events
     

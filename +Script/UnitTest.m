@@ -6,11 +6,7 @@ clear
 
 % Prepare
 KbName('UnifyKeyNames');
-if ~IsLinux
-    keys = {'5%' 'space' 'escape'};
-else
-    keys = {'t' 'space' 'escape'};
-end
+keys = {'t' 'space' 'escape'};
 KL = KbLogger(KbName(keys) , keys);
 KL.Start;
 
@@ -103,4 +99,4 @@ Struct = ER.ExportToStructure;
 
 %% DONE
 
-fprintf('All tests passed \n')
+ffprintf('All tests passed \n')
