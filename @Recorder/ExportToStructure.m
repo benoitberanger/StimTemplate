@@ -1,12 +1,15 @@
-function savestruct = ExportToStructure( obj )
-% StructureToSave = obj.ExportToStructure()
+function savestruct = ExportToStructure( self )
+% StructureToSave = self.ExportToStructure()
 %
 % Export all proporties of the object into a structure, so it
 % can be saved.
 % WARNING : it does not save the methods, just transform the
 % object into a common structure.
-ListProperties = properties(obj);
+
+ListProperties = properties(self);
+
 for prop_number = 1:length(ListProperties)
-    savestruct.(ListProperties{prop_number}) = obj.(ListProperties{prop_number});
+    savestruct.(ListProperties{prop_number}) = self.(ListProperties{prop_number});
 end
-end
+
+end % function

@@ -1,12 +1,12 @@
-function Start(obj)
-% obj.Start()
+function Start(self)
+% self.Start()
 %
 % Initialise the KeyBind Queue and start collecting the inputs
 
 kbVect = zeros(1,256);
-kbVect(obj.KbList) = 1;
+kbVect(self.KbList) = 1;
 
 KbQueueCreate([],kbVect)
 KbQueueStart
 
-end
+end % function

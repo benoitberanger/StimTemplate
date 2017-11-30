@@ -1,13 +1,13 @@
-function IsEmptyProperty( obj , propertyname )
-% obj.IsEmptyProperty( PropertyName )
+function IsEmptyProperty( self , propertyname )
+% self.IsEmptyProperty( PropertyName )
 %
-% Raise an error if obj.'PropertyName' is empty
+% Raise an error if self.'PropertyName' is empty
 
 % Fetch caller object
-[~, objName, ~] = fileparts(obj.Description);
+[~, objName, ~] = fileparts(self.Description);
 
-if isempty(obj.(propertyname))
-    error( 'EventRecorder:ScaleTime' , 'No data in %s.%s' , objName , propertyname )
+if isempty(self.(propertyname))
+    error( 'Recorder:ScaleTime' , 'No data in %s.%s' , objName , propertyname )
 end
 
-end
+end % function

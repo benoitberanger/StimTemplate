@@ -1,15 +1,15 @@
-function BuildGraph( obj )
-% obj.BuildGraph()
+function BuildGraph( self )
+% self.BuildGraph()
 %
 % Build curves for each events, ready to be plotted.
 
 % ================= Build curves for each Kb ==================
 
-for k = 1:size( obj.KbEvents , 1 ) % For each KeyBinds
+for k = 1:size( self.KbEvents , 1 ) % For each KeyBinds
     
-    if ~isempty( obj.KbEvents{k,2} ) % Except for null (usually the last one)
+    if ~isempty( self.KbEvents{k,2} ) % Except for null (usually the last one)
         
-        data = cell2mat( obj.KbEvents{k,2}(:,1:2) ); % Catch data for this Keybind
+        data = cell2mat( self.KbEvents{k,2}(:,1:2) ); % Catch data for this Keybind
         
         N  = size( data , 1 ); % Number of data = UP(0) + DOWN(1)
         
@@ -68,13 +68,13 @@ for k = 1:size( obj.KbEvents , 1 ) % For each KeyBinds
         end
         
         % Store curves
-        obj.KbEvents{k,3} = data;
+        self.KbEvents{k,3} = data;
         
     end
     
 end
 
 % Store curves
-obj.GraphData = obj.KbEvents;
+self.GraphData = self.KbEvents;
 
-end
+end % function

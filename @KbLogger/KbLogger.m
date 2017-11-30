@@ -24,8 +24,8 @@ classdef KbLogger < Recorder
         % -----------------------------------------------------------------
         %                           Constructor
         % -----------------------------------------------------------------
-        function obj = KbLogger( kblist , header )
-            % obj = KbLogger( KbList = [ KbName( 'space' ) KbName( '5%' ) ] , Header = cell( 1 , Columns ) )
+        function self = KbLogger( kblist , header )
+            % self = KbLogger( KbList = [ KbName( 'space' ) KbName( '5%' ) ] , Header = cell( 1 , Columns ) )
             
             % ================ Check input argument =======================
             
@@ -34,7 +34,7 @@ classdef KbLogger < Recorder
                 
                 % --- kblist ----
                 if isvector( kblist ) && isnumeric( kblist ) % Check input argument
-                    obj.KbList = kblist;
+                    self.KbList = kblist;
                 else
                     error( 'KbList should be a line vector of positive integers' )
                 end
@@ -44,7 +44,7 @@ classdef KbLogger < Recorder
                         iscell( header ) && ...
                         length( kblist ) == length( header ) % Check input argument
                     if all( cellfun( @isstr , header ) )
-                        obj.Header = header;
+                        self.Header = header;
                     else
                         error( 'Header should be a line cell of strings' )
                     end
@@ -52,18 +52,14 @@ classdef KbLogger < Recorder
                     error( 'Header should be a line cell of strings and same size as KbList' )
                 end
                 
-            else
-                % Create empty KbQueueLogger
             end
             
             % ======================= Callback ============================
             
-            obj.Description    = mfilename( 'fullpath' );
-            obj.TimeStamp      = datestr( now );
-            obj.Columns        = 4;
-            obj.Data           = cell( obj.NumberOfEvents , obj.Columns );
-            obj.KbEvents       = cell( obj.Columns , 2 );
-            obj.NumberOfEvents = NaN;
+            self.Description    = mfilename( 'fullpath' );
+            self.Columns        = 4;
+            self.Data           = cell( self.NumberOfEvents , self.Columns );
+            self.KbEvents       = cell( self.Columns , 2 );
             
         end
         

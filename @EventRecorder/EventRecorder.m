@@ -9,6 +9,8 @@ classdef EventRecorder < Recorder
     
     properties
         
+        % See Recorder
+        
     end % properties
     
     
@@ -19,8 +21,8 @@ classdef EventRecorder < Recorder
         % -----------------------------------------------------------------
         %                           Constructor
         % -----------------------------------------------------------------
-        function obj = EventRecorder( header , numberofevents )
-            % obj = EventRecorder( Header = cell( 1 , Columns ) , NumberOfEvents = double(positive integer) )
+        function self = EventRecorder( header , numberofevents )
+            % self = EventRecorder( Header = cell( 1 , Columns ) , NumberOfEvents = double(positive integer) )
             
             % Usually, first column is the event name, and second column is
             % it's onset.
@@ -35,7 +37,7 @@ classdef EventRecorder < Recorder
                         iscell( header ) && ...
                         ~isempty( header ) % Check input argument
                     if all( cellfun( @isstr , header ) )
-                        obj.Header =  header ;
+                        self.Header =  header ;
                     else
                         error( 'Header should be a line cell of strings' )
                     end
@@ -47,19 +49,18 @@ classdef EventRecorder < Recorder
                 if isnumeric( numberofevents ) && ...
                         numberofevents == round( numberofevents ) && ...
                         numberofevents > 0 % Check input argument
-                    obj.NumberOfEvents = numberofevents;
+                    self.NumberOfEvents = numberofevents;
                 else
                     error( 'NumberOfEvents must be a positive integer' )
                 end
                 
-                % ================== Callback =============================
-                
-                obj.Columns = length( header );
-                obj.Data    = cell( numberofevents , obj.Columns );
-                
-            else
-                % Create empty StimEvents
             end
+            
+            % ================== Callback =============================
+            
+            self.Columns     = length( self.Header );
+            self.Data        = cell( self.NumberOfEvents , self.Columns );
+            self.Description = mfilename( 'fullpath' );
             
         end
         
@@ -67,12 +68,12 @@ classdef EventRecorder < Recorder
         %         % -----------------------------------------------------------------
         %         %                             saveobj
         %         % -----------------------------------------------------------------
-        %         function s = saveobj(obj)
+        %         function s = saveobj(self)
         %
         %             s = struct; % Create a sctructure
-        %             props = properties(obj);
+        %             props = properties(self);
         %             for p = 1:numel(props)
-        %                 s.(props{p})=obj.(props{p}); % Fill the structer with the object properties
+        %                 s.(props{p})=self.(props{p}); % Fill the structer with the object properties
         %             end
         %
         %         end
@@ -84,7 +85,7 @@ classdef EventRecorder < Recorder
     %         % -----------------------------------------------------------------
     %         %                             loadobj
     %         % -----------------------------------------------------------------
-    %         function obj = loadobj(s)
+    %         function self = loadobj(s)
     %
     %             if isstruct(s) % if the object was saved as a structure
     %
@@ -100,11 +101,11 @@ classdef EventRecorder < Recorder
     %                         warning(err.message)
     %                     end
     %                 end
-    %                 obj = newObj; % Assign the pointer
+    %                 self = newObj; % Assign the pointer
     %
     %             else % if the object was saved as an object
     %
-    %                 obj = s;
+    %                 self = s;
     %
     %             end
     %

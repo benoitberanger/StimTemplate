@@ -21,7 +21,7 @@ KL.ScaleTime;
 KL.ComputeDurations;
 
 KL.BuildGraph;
-% KL.Plot
+KL.Plot
 
 %% Planning
 
@@ -46,7 +46,7 @@ EP.AddPlanning({...
 
 % Post stim
 EP.BuildGraph;
-% EP.Plot
+EP.Plot
 
 
 %% Recorder
@@ -71,10 +71,10 @@ ER.AddStopTime('StopTime',(2*(k+1)+rand));
 
 % Post stim
 ER.ClearEmptyEvents;
-ER.MakeBlocks; % not used in this exemple script
+ER.MakeBlocks; % not revlevant in this exemple
 ER.ComputeDurations;
 ER.BuildGraph;
-% ER.Plot
+ER.Plot
 
 
 %% Fusion
@@ -87,7 +87,6 @@ plotDelay(EP,ER)
 
 KL.ComputePulseSpacing(1)
 
-close all
 
 %% Other functions
 
@@ -98,5 +97,7 @@ Struct = ER.ExportToStructure;
 
 
 %% DONE
+
+close all
 
 ffprintf('All tests passed \n')

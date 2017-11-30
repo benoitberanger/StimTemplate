@@ -1,5 +1,5 @@
-function AddStopTime( obj, stoptime_name , starttime )
-% obj.AddStartTime( StopTime_name = str , StartTime = double )
+function AddStopTime( self, stoptime_name , starttime )
+% self.AddStartTime( StopTime_name = str , StartTime = double )
 %
 % Add special event { StopTime_name starttime }
 
@@ -11,8 +11,8 @@ if ~isnumeric( starttime )
     error( 'StopTime must be numeric' )
 end
 
-obj.IncreaseEventCount;
-obj.Data( obj.EventCount , 1:2 ) = { stoptime_name starttime };
+self.IncreaseEventCount;
+self.Data( self.EventCount , 1:2 ) = { stoptime_name starttime };
 % ex : Add T_stop = 0 on the next line (usually last line)
 
-end
+end % function

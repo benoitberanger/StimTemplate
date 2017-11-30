@@ -1,5 +1,5 @@
-function BuildGraph( obj , method )
-% obj.BuildGraph( [method] )
+function BuildGraph( self , method )
+% self.BuildGraph( [method] )
 %
 % Build curves for each events, ready to be plotted.
 % method = 'normal' , 'block'
@@ -27,25 +27,25 @@ end
 % ===================== Regroup each event ====================
 
 % Check if not empty
-obj.IsEmptyProperty(input);
+self.IsEmptyProperty(input);
 
-[ event_name , ~ , idx_event2data ] = unique_stable(obj.(input)(:,1));
+[ event_name , ~ , idx_event2data ] = unique_stable(self.(input)(:,1));
 
 % Col 1 : event_name
-% Col 2 : obj.Data(event_name)
-%Col 3 ~= obj.Data(event_name), adapted for plot
-obj.(output) = cell(length(event_name),3);
+% Col 2 : self.Data(event_name)
+%Col 3 ~= self.Data(event_name), adapted for plot
+self.(output) = cell(length(event_name),3);
 
 for e = 1:length(event_name)
-    obj.(output){e,1} = event_name{e};
-    obj.(output){e,2} = cell2mat ( obj.(input)( idx_event2data == e , 2:3 ) );
+    self.(output){e,1} = event_name{e};
+    self.(output){e,2} = cell2mat ( self.(input)( idx_event2data == e , 2:3 ) );
 end
 
 % ================= Build curves for each Event ===============
 
-for e = 1 : size( obj.(output) , 1 ) % For each Event
+for e = 1 : size( self.(output) , 1 ) % For each Event
     
-    data = [ obj.(output){e,2} ones(size(obj.(output){e,2},1),1) ]; % Catch data for this Event
+    data = [ self.(output){e,2} ones(size(self.(output){e,2},1),1) ]; % Catch data for this Event
     
     N  = size( data , 1 ); % Number of data = UP(0) + DOWN(1)
     
@@ -99,8 +99,8 @@ for e = 1 : size( obj.(output) , 1 ) % For each Event
     data(:,2) = [];
     
     % Store curves
-    obj.(output){e,3} = data;
+    self.(output){e,3} = data;
     
 end
 
-end
+end % function

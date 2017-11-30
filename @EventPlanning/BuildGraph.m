@@ -1,30 +1,30 @@
-function BuildGraph( obj )
-% obj.BuildGraph()
+function BuildGraph( self )
+% self.BuildGraph()
 %
 % Build curves for each events, ready to be plotted.
 
 % ===================== Regroup each event ====================
 
 % Check if not empty
-obj.IsEmptyProperty('Data');
+self.IsEmptyProperty('Data');
 
-[ event_name , ~ , idx_event2data ] = unique_stable(obj.Data(:,1));
+[ event_name , ~ , idx_event2data ] = unique_stable(self.Data(:,1));
 
 % Col 1 : event_name
-% Col 2 : obj.Data(event_name)
-%Col 3 ~= obj.Data(event_name), adapted for plot
-obj.GraphData = cell(length(event_name),3);
+% Col 2 : self.Data(event_name)
+%Col 3 ~= self.Data(event_name), adapted for plot
+self.GraphData = cell(length(event_name),3);
 
 for e = 1:length(event_name)
-    obj.GraphData{e,1} = event_name{e};
-    obj.GraphData{e,2} = cell2mat ( obj.Data( idx_event2data == e , 2:3 ) );
+    self.GraphData{e,1} = event_name{e};
+    self.GraphData{e,2} = cell2mat ( self.Data( idx_event2data == e , 2:3 ) );
 end
 
 % ================= Build curves for each Event ===============
 
-for e = 1 : size( obj.GraphData , 1 ) % For each Event
+for e = 1 : size( self.GraphData , 1 ) % For each Event
     
-    data = [ obj.GraphData{e,2} ones(size(obj.GraphData{e,2},1),1) ]; % Catch data for this Event
+    data = [ self.GraphData{e,2} ones(size(self.GraphData{e,2},1),1) ]; % Catch data for this Event
     
     N  = size( data , 1 ); % Number of data = UP(0) + DOWN(1)
     
@@ -78,8 +78,8 @@ for e = 1 : size( obj.GraphData , 1 ) % For each Event
     data(:,2) = [];
     
     % Store curves
-    obj.GraphData{e,3} = data;
+    self.GraphData{e,3} = data;
     
 end
 
-end
+end % function

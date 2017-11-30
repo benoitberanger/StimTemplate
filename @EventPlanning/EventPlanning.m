@@ -10,6 +10,8 @@ classdef EventPlanning < Recorder
     
     properties
         
+        % See Recorder
+        
     end % properties
     
     
@@ -20,8 +22,8 @@ classdef EventPlanning < Recorder
         % -----------------------------------------------------------------
         %                           Constructor
         % -----------------------------------------------------------------
-        function obj = EventPlanning( header )
-            % obj = EventRecorder( Header = cell( 1 , Columns ) )
+        function self = EventPlanning( header )
+            % self = EventRecorder( Header = cell( 1 , Columns ) )
             
             % ================ Check input argument =======================
             
@@ -33,7 +35,7 @@ classdef EventPlanning < Recorder
                         iscell( header ) && ...
                         ~isempty( header ) % Check input argument
                     if all( cellfun( @isstr , header ) )
-                        obj.Header =  header ;
+                        self.Header =  header ;
                     else
                         error( 'Header should be a line cell of strings' )
                     end
@@ -41,16 +43,13 @@ classdef EventPlanning < Recorder
                     error( 'Header should be a line cell of strings' )
                 end
                 
-            else % Create empty StimEvents
-                obj.Header = {};
             end
             
             % ================== Callback =============================
             
-            obj.Description = mfilename( 'fullpath' );
-            obj.TimeStamp   = datestr( now );
-            obj.Columns     = length( obj.Header );
-            obj.Data        = cell( 0 , obj.Columns );
+            self.Description = mfilename( 'fullpath' );
+            self.Columns     = length( self.Header );
+            self.Data        = cell( self.NumberOfEvents , self.Columns );
             
         end
         

@@ -1,33 +1,33 @@
-function ComputeDurations( obj )
-% obj.ComputeDurations()
+function ComputeDurations( self )
+% self.ComputeDurations()
 %
 % Compute durations for each keybinds
 
-kbevents = cell( length(obj.Header) , 2 );
+kbevents = cell( length(self.Header) , 2 );
 
 % Take out T_start and T_stop from Data
 
-T_start_idx = strcmp( obj.Data(:,1) , 'StartTime' );
-T_stop_idx = strcmp( obj.Data(:,1) , 'StopTime' );
+T_start_idx = strcmp( self.Data(:,1) , 'StartTime' );
+T_stop_idx = strcmp( self.Data(:,1) , 'StopTime' );
 
-data = obj.Data( ~( T_start_idx + T_stop_idx ) , : );
+data = self.Data( ~( T_start_idx + T_stop_idx ) , : );
 
 % Create list for each KeyBind
 
-[ unique_kb , ~ ,  idx ] = unique_stable(obj.Data(:,1)); % Filter each Kb
+[ unique_kb , ~ ,  idx ] = unique_stable(self.Data(:,1)); % Filter each Kb
 
 % Re-order each input to be coherent with Header order
 input_found = nan(size(unique_kb));
 for c = 1:length(unique_kb)
     
-    input_idx  = strcmp(obj.Header,unique_kb(c));
+    input_idx  = strcmp(self.Header,unique_kb(c));
     input_idx  = find(input_idx);
     
     input_found(c) = input_idx;
     
 end
 
-kbevents(:,1) = obj.Header; % Name of KeyBind
+kbevents(:,1) = self.Header; % Name of KeyBind
 
 count = 0;
 
@@ -51,6 +51,6 @@ for e = 1 : size( kbevents , 1 )
     
 end
 
-obj.KbEvents = kbevents;
+self.KbEvents = kbevents;
 
-end
+end % function

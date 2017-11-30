@@ -1,5 +1,5 @@
-function AddStartTime( obj, starttime_name , starttime )
-% obj.AddStartTime( StartTime_name = str , StartTime = double )
+function AddStartTime( self, starttime_name , starttime )
+% self.AddStartTime( StartTime_name = str , StartTime = double )
 %
 % Add special event { StartTime_name starttime }
 
@@ -11,8 +11,8 @@ if ~isnumeric( starttime )
     error( 'StartTime must be numeric' )
 end
 
-obj.IncreaseEventCount;
-obj.Data( obj.EventCount , 1:2 ) = { starttime_name starttime };
+self.IncreaseEventCount;
+self.Data( self.EventCount , 1:2 ) = { starttime_name starttime };
 % ex : Add T_start = 0 on the next line (usually first line)
 
-end
+end % function

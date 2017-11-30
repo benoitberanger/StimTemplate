@@ -1,5 +1,5 @@
-function GenerateMRITrigger( obj , tr, volumes, starttime )
-% obj.GenerateMRITrigger( TR = positive number , Volumes = positive integer, StartTime = onset of the first volume )
+function GenerateMRITrigger( self , tr, volumes, starttime )
+% self.GenerateMRITrigger( TR = positive number , Volumes = positive integer, StartTime = onset of the first volume )
 %
 % Generate MRI trigger according to he given number of Volumes
 % and the TR.
@@ -35,7 +35,7 @@ end
 % ======================= Callback ============================
 
 % MRI_trigger_tag = '5%'; % fORP in USB
-MRI_trigger_tag = obj.Header{1};
+MRI_trigger_tag = self.Header{1};
 pulse_duration = 0.020; % seconds
 
 % Check if TR is compatible with the pulse duration
@@ -47,9 +47,9 @@ end
 
 for v = 1 : volumes
     
-    obj.AddEvent({ MRI_trigger_tag starttime+(v-1)*tr                1 starttime+(v-1)*tr                 })
-    obj.AddEvent({ MRI_trigger_tag starttime+(v-1)*tr+pulse_duration 0 starttime+(v-1)*tr+pulse_duration  })
+    self.AddEvent({ MRI_trigger_tag starttime+(v-1)*tr                1 starttime+(v-1)*tr                 })
+    self.AddEvent({ MRI_trigger_tag starttime+(v-1)*tr+pulse_duration 0 starttime+(v-1)*tr+pulse_duration  })
     
 end
 
-end
+end % function

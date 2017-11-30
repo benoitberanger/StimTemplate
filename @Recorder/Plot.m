@@ -1,5 +1,5 @@
-function Plot( obj , method )
-% obj.Plot( [method] )
+function Plot( self , method )
+% self.Plot( [method] )
 %
 % Plot events over the time.
 % method = 'normal' , 'block'
@@ -30,15 +30,15 @@ end
 
 if nargin < 2 % no input argument
     
-    if ~isempty(obj.BlockData) && isempty(obj.BlockGraphData) % BlockData exists ?
-        obj.BuildGraph('block')
+    if ~isempty(self.BlockData) && isempty(self.BlockGraphData) % BlockData exists ?
+        self.BuildGraph('block')
         input  = 'BlockGraphData';
         
-    elseif ~isempty(obj.BlockData)
+    elseif ~isempty(self.BlockData)
         input  = 'BlockGraphData';
         
-    elseif  isempty(obj.GraphData)
-        obj.BuildGraph;
+    elseif  isempty(self.GraphData)
+        self.BuildGraph;
         
     end
     
@@ -46,43 +46,40 @@ end
 
 % ======================== Plot ===============================
 
-% Catch caller object
-[~, name, ~] = fileparts(obj.Description);
+
+className = class(self);
 
 % Depending on the object calling the method, the display changes.
-if strfind(name,'EventRecorder')
-    display_method = '+';
-    
-elseif  strfind(name,'KbLogger')
-    display_method = '*';
-    
-elseif strfind(name,'EventPlanning')
-    display_method = '+';
-    
-else
-    error('Unknown object caller')
-    
+switch className
+    case 'EventRecorder'
+        display_method = '+';
+    case 'KbLogger'
+        display_method = '*';
+    case 'EventPlanning'
+        display_method = '+';
+    otherwise
+        error('Unknown object caller. Check self.Description')
 end
 
 % Figure
 figure( ...
-    'Name'        , [ inputname(1) ' : ' name ] , ...
+    'Name'        , [ inputname(1) ' : ' className ] , ...
     'NumberTitle' , 'off'                         ...
     )
 hold all
 
 % For each Event, plot the curve
-for e = 1 : size( obj.(input) , 1 )
+for e = 1 : size( self.(input) , 1 )
     
-    if ~isempty(obj.(input){e,2})
+    if ~isempty(self.(input){e,2})
         
         switch display_method
             
             case '+'
-                plot( obj.(input){e,3}(:,1) , obj.(input){e,3}(:,2) + e )
+                plot( self.(input){e,3}(:,1) , self.(input){e,3}(:,2) + e )
                 
             case '*'
-                plot( obj.(input){e,3}(:,1) , obj.(input){e,3}(:,2) * e )
+                plot( self.(input){e,3}(:,1) , self.(input){e,3}(:,2) * e )
                 
             otherwise
                 error('Unknown display_method')
@@ -97,7 +94,7 @@ for e = 1 : size( obj.(input) , 1 )
 end
 
 % Legend
-lgd = legend( obj.(input)(:,1) );
+lgd = legend( self.(input)(:,1) );
 set(lgd,'Interpreter','none','Location','Best')
 
 % ================ Adapt the graph axes limits ================
@@ -112,12 +109,12 @@ ScaleAxisLimits( gca , 1.1 )
 % Put 1 tick in the middle of each event
 switch display_method
     case '+'
-        set( gca , 'YTick' , (1:size( obj.(input) , 1 ))+0.5 )
+        set( gca , 'YTick' , (1:size( self.(input) , 1 ))+0.5 )
     case '*'
-        set( gca , 'YTick' , (1:size( obj.(input) , 1 )) )
+        set( gca , 'YTick' , (1:size( self.(input) , 1 )) )
 end
 
 % Set the tick label to the event name
-set( gca , 'YTickLabel' , obj.(input)(:,1) )
+set( gca , 'YTickLabel' , self.(input)(:,1) )
 
-end
+end % function
