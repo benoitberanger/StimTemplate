@@ -71,10 +71,11 @@ ER.AddStopTime('StopTime',(2*(k+1)+rand));
 
 % Post stim
 ER.ClearEmptyEvents;
-ER.MakeBlocks; % not revlevant in this exemple
 ER.ComputeDurations;
 ER.BuildGraph;
 ER.Plot
+
+ER.MakeBlocks; % not revlevant in this exemple, but check if it passes
 
 
 %% Fusion
@@ -95,6 +96,19 @@ assert(ER ~= ER2,'Problem with method CopyObject')
 
 Struct = ER.ExportToStructure;
 
+%% SampleRecorder
+
+SR = SampleRecorder(...
+    {'time (s)', 'ECG (mV)', 'Cursor X (pixel)', 'Cursor Y (pixel)'},...
+    1e6);
+
+for i = 1 : 1e5
+    SR.AddSample([GetSecs rand(1,3)])
+end
+
+SR.ClearEmptySamples
+SR.ScaleTime
+SR.Plot
 
 %% DONE
 
