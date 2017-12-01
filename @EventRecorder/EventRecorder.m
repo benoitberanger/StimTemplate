@@ -1,4 +1,4 @@
-classdef EventRecorder < Recorder
+classdef EventRecorder < OmniRecorder
     %EVENTRECORDER Class to record any stimulation events
     
     % benoit.beranger@icm-institute.org
@@ -9,7 +9,8 @@ classdef EventRecorder < Recorder
     
     properties
         
-        % See Recorder
+        BlockData      = cell(0) % cell( ? , Columns )
+        BlockGraphData = cell(0) % cell( ? , Columns )
         
     end % properties
     
@@ -58,9 +59,9 @@ classdef EventRecorder < Recorder
             
             % ================== Callback =============================
             
+            self.Description = mfilename( 'fullpath' );
             self.Columns     = length( self.Header );
             self.Data        = cell( self.NumberOfEvents , self.Columns );
-            self.Description = mfilename( 'fullpath' );
             
         end
         

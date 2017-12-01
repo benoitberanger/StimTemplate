@@ -1,4 +1,4 @@
-classdef SampleRecorder < Recorder
+classdef SampleRecorder < BasicObject
     %SAMPLERECORDER This class is optimized to store numerical samples.
     % Samples will be stored in a double array, not a cell array (like EventRecorder)
     
@@ -10,7 +10,10 @@ classdef SampleRecorder < Recorder
     
     properties
         
-        % See Recorder
+        Data            = zeros(0) % zeros( NumberOfSamples , Columns )
+        Columns         = 0        % double(positive integer)
+        NumberOfSamples = 0        % double(positive integer)
+        SampleCount     = 0        % double(positive integer)
         
     end % properties
     
@@ -22,8 +25,8 @@ classdef SampleRecorder < Recorder
         % -----------------------------------------------------------------
         %                           Constructor
         % -----------------------------------------------------------------
-        function self = SampleRecorder( header , numberofevents )
-            % self = EventRecorder( Header = cell( 1 , Columns ) , NumberOfEvents = double(positive integer) )
+        function self = SampleRecorder( header , numberofsamples )
+            % self = EventRecorder( Header = cell( 1 , Columns ) , NumberOfSamples = double(positive integer) )
             
             % Usually, first column is the time, and other columns are samples type
             
@@ -46,10 +49,10 @@ classdef SampleRecorder < Recorder
                 end
                 
                 % --- numberofevents ---
-                if isnumeric( numberofevents ) && ...
-                        numberofevents == round( numberofevents ) && ...
-                        numberofevents > 0 % Check input argument
-                    self.NumberOfEvents = numberofevents;
+                if isnumeric( numberofsamples ) && ...
+                        numberofsamples == round( numberofsamples ) && ...
+                        numberofsamples > 0 % Check input argument
+                    self.NumberOfSamples = numberofsamples;
                 else
                     error( 'NumberOfEvents must be a positive integer' )
                 end
@@ -58,9 +61,9 @@ classdef SampleRecorder < Recorder
             
             % ================== Callback =============================
             
-            self.Columns     = length( self.Header );
-            self.Data        = zeros( self.NumberOfEvents , self.Columns );
             self.Description = mfilename( 'fullpath' );
+            self.Columns     = length( self.Header );
+            self.Data        = zeros( self.NumberOfSamples , self.Columns );
             
         end % ctor
         

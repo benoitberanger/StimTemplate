@@ -7,8 +7,8 @@ if length( sample ) == self.Columns % Check input arguments
     if size( sample , 1 ) > 0 && size( sample , 2 ) == 1 % if iscolumn( event )
         sample = sample';
     end
-    self.IncreaseEventCount;
-    self.Data( self.EventCount , : ) = sample;
+    self.IncreaseSampleCount;
+    self.Data( self.SampleCount , : ) = sample;
 else
     error( 'Wrong number of arguments' )
 end

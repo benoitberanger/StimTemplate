@@ -30,11 +30,11 @@ end
 
 if nargin < 2 % no input argument
     
-    if ~isempty(self.BlockData) && isempty(self.BlockGraphData) % BlockData exists ?
+    if isprop(self,'BlockData') && ~isempty(self.BlockData) && isempty(self.BlockGraphData) % BlockData exists ?
         self.BuildGraph('block')
         input  = 'BlockGraphData';
         
-    elseif ~isempty(self.BlockData)
+    elseif isprop(self,'BlockData') && ~isempty(self.BlockData)
         input  = 'BlockGraphData';
         
     elseif  isempty(self.GraphData)

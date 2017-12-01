@@ -1,4 +1,4 @@
-classdef EventPlanning < Recorder
+classdef EventPlanning < OmniRecorder
     
     %EVENTPLANNING Class to schedul any stimulation events
     
@@ -9,9 +9,7 @@ classdef EventPlanning < Recorder
     %% Properties
     
     properties
-        
-        % See Recorder
-        
+                
     end % properties
     
     

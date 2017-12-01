@@ -1,5 +1,5 @@
 function ClearEmptySamples( self )
 
-self.Data(self.EventCount:end,:) = [];
+self.Data(self.SampleCount:end,:) = [];
 
 end % function
