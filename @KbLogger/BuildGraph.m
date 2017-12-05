@@ -3,6 +3,9 @@ function BuildGraph( self )
 %
 % Build curves for each events, ready to be plotted.
 
+% Check if not empty
+self.IsEmptyProperty(input);
+
 % ================= Build curves for each Kb ==================
 
 for k = 1:size( self.KbEvents , 1 ) % For each KeyBinds

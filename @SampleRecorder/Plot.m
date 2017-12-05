@@ -3,6 +3,9 @@ function Plot( self )
 %
 % Plot samples over the time.
 
+% Check if not empty
+self.IsEmptyProperty(input);
+
 % Figure
 figure( ...
     'Name'        , [ inputname(1) ' : ' class(self) ] , ...
