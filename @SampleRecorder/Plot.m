@@ -4,7 +4,7 @@ function Plot( self )
 % Plot samples over the time.
 
 % Check if not empty
-self.IsEmptyProperty(input);
+self.IsEmptyProperty('Data');
 
 % Figure
 figure( ...
