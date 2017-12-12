@@ -5,6 +5,6 @@ if self.SampleCount == 0
     return
 end
 
-self.Data(self.SampleCount:end,:) = [];
+self.Data(self.SampleCount+1:end,:) = [];
 
 end % function
