@@ -12,7 +12,7 @@ if ~isnumeric( starttime )
 end
 
 self.IncreaseEventCount;
-self.Data( self.EventCount , 1:2 ) = { starttime_name starttime };
+self.Data( self.EventCount , 1:3 ) = { starttime_name starttime 0 };
 % ex : Add T_start = 0 on the next line (usually first line)
 
 end % function
