@@ -1,7 +1,7 @@
-function Plot( self )
-% self.Plot()
+function PlotDiffTime( self )
+% self.PlotDiffTime()
 %
-% Plot samples over the time.
+% Plot diff(time).
 
 % Check if not empty
 self.IsEmptyProperty('Data');
@@ -13,13 +13,12 @@ figure( ...
     )
 hold all
 
-% For each Event, plot the curve
-for signal = 2 : size( self.Data , 2 )
-    plot(self.Data(:,1),self.Data(:,signal));    
-end
+
+plot(self.Data(1:end-1,1),diff(self.Data(:,1)));
+
 
 % Legend
-lgd = legend( self.Header(2:end) );
+lgd = legend( 'diff(time)' );
 set(lgd,'Interpreter','none','Location','Best')
 
 xlabel(self.Header{1})

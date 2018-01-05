@@ -109,6 +109,8 @@ end
 SR.ClearEmptySamples
 SR.ScaleTime
 SR.Plot
+SR.PlotDiffTime
+
 
 %% DONE
 

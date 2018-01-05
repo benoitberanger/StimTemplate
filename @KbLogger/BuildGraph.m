@@ -3,6 +3,7 @@ function BuildGraph( self )
 %
 % Build curves for each events, ready to be plotted.
 
+
 % ================= Build curves for each Kb ==================
 
 for k = 1:size( self.KbEvents , 1 ) % For each KeyBinds

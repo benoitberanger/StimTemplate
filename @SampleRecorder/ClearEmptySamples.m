@@ -1,5 +1,10 @@
 function ClearEmptySamples( self )
 
-self.Data(self.SampleCount:end,:) = [];
+if self.SampleCount == 0
+    self.Data = [];
+    return
+end
+
+self.Data(self.SampleCount+1:end,:) = [];
 
 end % function
