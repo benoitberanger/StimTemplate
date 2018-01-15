@@ -10,7 +10,7 @@ clear
 KbName('UnifyKeyNames');
 
 if IsLinux
-    keys = {'space' 'escape' 't'};
+    keys = {'space' 'escape' 't' 'b' 'y'};
 else
     keys = {'space' '5%' 'escape' 't'};
 end
