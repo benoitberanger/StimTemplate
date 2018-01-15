@@ -227,7 +227,11 @@ end
 lgd = legend( Names(:) );
 set(lgd,'Interpreter','none')
 
-set(gca, 'TickLabelInterpreter', 'none')
+% Not all versions of MATLAB have this option
+try
+    set(gca, 'TickLabelInterpreter', 'none')
+catch %#ok<CTCH>
+end
 
 
 %% Adjust window display
