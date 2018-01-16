@@ -13,6 +13,7 @@ classdef KbLogger < OmniRecorder
         
         KbList   = []      % double = [ KbName( 'space' ) KbName( '5%' ) ]
         KbEvents = cell(0) % cell( Columns , 2 )
+        Keyboard = struct  % structure
         
     end % properties
     
@@ -61,16 +62,15 @@ classdef KbLogger < OmniRecorder
             self.Data           = cell( self.NumberOfEvents , self.Columns );
             self.KbEvents       = cell( self.Columns , 2 );
             
+            [keyboardIndices, productNames, allInfos]= GetKeyboardIndices;
+            
+            self.Keyboard.keyboardIndices = keyboardIndices;
+            self.Keyboard.productNames    = productNames;
+            self.Keyboard.allInfos        = allInfos;
+            
         end
         
     end % methods
-    
-    
-    methods ( Static )
-        
-        Stop
-        
-    end % methods ( Static )
     
     
 end % class
