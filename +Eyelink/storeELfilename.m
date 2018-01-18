@@ -17,7 +17,7 @@ end
 listfile = [where 'eyelink_files_to_download.txt'];
 
 fid = fopen(listfile,'a','n','UTF-8'); % open in 'append' mode, in UTF-8 encoding
-if fid == -1
+if fid < 0
     error('eyelink_files_to_download.txt cannot be opened')
 end
 ffprintf(fid,'%s %s\n',ELfilename,[where destfilename]); % write in a file

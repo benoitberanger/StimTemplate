@@ -40,7 +40,6 @@ end
 %% Read & parse file
 
 fid = fopen(filename,'r');
-
 if fid < 0
     error('file cannot be opened : %s',filename)
 end

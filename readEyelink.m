@@ -75,6 +75,9 @@ end
 
 % Open the file
 file_ID = fopen( file, 'r' ) ;
+if file_ID < 0
+    error('%d cannot be opened', file)
+end
 
 
 %% Preparation of the Output

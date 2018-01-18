@@ -9,6 +9,9 @@ function spm2bv( names , onsets , durations , filename )
 %% Open file in write mod
 
 fileID = fopen( [ filename '.prt' ] , 'w' , 'n' , 'UTF-8' );
+if fileID < 0
+    error('%d cannot be opened', filename)
+end
 
 
 %% Fill the file
