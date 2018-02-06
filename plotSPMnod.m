@@ -37,7 +37,7 @@ if nargin > 0
     if nargin ~= nb_Args
         error('%s uses %d input argument(s)',mfilename,nb_Args)
     end
-   
+    
 else
     
     % Import variables from base workspace
@@ -227,12 +227,6 @@ end
 lgd = legend( Names(:) );
 set(lgd,'Interpreter','none')
 
-% Not all versions of MATLAB have this option
-try
-    set(gca, 'TickLabelInterpreter', 'none')
-catch %#ok<CTCH>
-end
-
 
 %% Adjust window display
 % Change the limit of the graph so we can clearly see the rectangles.
@@ -260,6 +254,12 @@ set( gca , 'YTick' , (1:size( Names , 1 ))+0.5 )
 
 % Set the tick label to the event name
 set( gca , 'YTickLabel' , Names )
+
+% Not all versions of MATLAB have this option
+try
+    set(gca, 'TickLabelInterpreter', 'none')
+catch %#ok<CTCH>
+end
 
 
 end

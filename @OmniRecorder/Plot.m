@@ -97,6 +97,7 @@ end
 lgd = legend( self.(input)(:,1) );
 set(lgd,'Interpreter','none','Location','Best')
 
+
 % ================ Adapt the graph axes limits ================
 
 % Change the limit of the graph so we can clearly see the
@@ -116,5 +117,11 @@ end
 
 % Set the tick label to the event name
 set( gca , 'YTickLabel' , self.(input)(:,1) )
+
+% Not all versions of MATLAB have this option
+try
+    set(gca, 'TickLabelInterpreter', 'none')
+catch %#ok<CTCH>
+end
 
 end % function

@@ -316,5 +316,11 @@ set( gca , 'YTick' , (1:length(PlotData.EP)) - 0.5 )
 % Set the tick label to the event name
 set( gca , 'YTickLabel' , CurvesNames(1:length(PlotData.EP)) )
 
+% Not all versions of MATLAB have this option
+try
+    set(gca, 'TickLabelInterpreter', 'none')
+catch %#ok<CTCH>
+end
+
 
 end
