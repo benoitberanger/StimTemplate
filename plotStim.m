@@ -126,10 +126,10 @@ end
 
 % Is EventRecorder entry in EventPlanning ?
 for er = 1 : size(eventrecorder.GraphData,1)
-    idx_ep_in_er = regexp( eventrecorder.GraphData(:,1) , [ '^' eventplanning.GraphData{er,1} '$' ] );
-    idx_ep_in_er = ~cellfun( @isempty , idx_ep_in_er );
-    idx_ep_in_er = find( idx_ep_in_er );
-    
+    %     idx_ep_in_er = regexp( eventrecorder.GraphData(:,1) , [ '^' eventplanning.GraphData{er,1} '$' ] );
+    %     idx_ep_in_er = ~cellfun( @isempty , idx_ep_in_er );
+    %     idx_ep_in_er = find( idx_ep_in_er );
+    idx_ep_in_er = find( strcmp( eventrecorder.GraphData(:,1) , eventplanning.GraphData{er,1} ) );
     % Yes, so add it into PlotData
     if idx_ep_in_er
         ER(er).object = 'ER';
@@ -143,7 +143,7 @@ end
 if exist('kblogger','var') && ~isempty(kblogger.Data)
     
     % Prepare MRI trigger curve
-    MRI_trigger_kb_input = '5%'; % fORP in USB mode
+    MRI_trigger_kb_input = kblogger.Header{1}; % fORP in USB mode
     MRI_trigger_reference = regexp( kblogger.GraphData(:,1) , [ '^' MRI_trigger_kb_input '$' ] );
     MRI_trigger_reference = ~cellfun( @isempty , MRI_trigger_reference );
     MRI_trigger_reference = find( MRI_trigger_reference );
