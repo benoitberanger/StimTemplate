@@ -77,6 +77,13 @@ ER.Plot
 
 ER.MakeBlocks; % not revlevant in this exemple, but check if it passes
 
+ER.Get('name');
+ER.Get('name',1);
+ER.Get('name',1:3);
+ER.Get('name',[]);
+
+ER.Fetch('C0',ER.Get('name'));
+
 
 %% Fusion
 
