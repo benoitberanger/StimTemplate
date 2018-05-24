@@ -45,7 +45,8 @@ multicond.names     = names;
 multicond.onsets    = onsets;
 multicond.durations = durations;
 
-SPM.xBF.name = ''; % it means cannonical HRF
+SPM.xBF.name = 'hrf'; % it means cannonical HRF
+SPM.xBF.UNITS = 'secs';
 
 
 %% SPM : part 1
@@ -241,7 +242,7 @@ SPM.xBF.Volterra = 1;
 %-Resample regressors at acquisition times (32 bin offset)
 %----------------------------------------------------------------------
 if ~isempty(X)
-    X = X((0:(k - 1))*fMRI_T + fMRI_T0 + 32,:);
+    X_reg = X((0:(k - 1))*fMRI_T + fMRI_T0 + 32,:);
 end
 
 %% Plot
@@ -257,7 +258,7 @@ t = (0 : nrVolumes-1) * TR;
 
 for n = 1 : length(names)
     
-    plot( t, X(:,n), 'DisplayName',names{n} )
+    plot( t, X_reg(:,n), 'DisplayName',names{n} )
     
 end
 
