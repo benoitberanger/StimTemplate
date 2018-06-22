@@ -13,6 +13,10 @@ if Eyelink('IsConnected')
         Eyelink('Stoprecording')
         ffprintf('Eyelink stopped recording \n')
         
+        if nargin < 1
+            EyelinkFile = '...';
+        end
+        
         % Close file
         status = Eyelink('CloseFile');
         if status ~= 0
@@ -21,17 +25,21 @@ if Eyelink('IsConnected')
             ffprintf(['Eyelink closed file : ' EyelinkFile '\n' ])
         end
         
-        % Receive file
-        ffprintf('Eyelink file transfer IN PROGRESS \n')
-        ffprintf('It might take a few seconds... \n')
-        status = Eyelink('ReceiveFile', EyelinkFile, pathToSave, 1);
-        if status > 0
-            ffprintf('Eyelink file transfer DONE \n')
-            ffprintf([ EyelinkFile ' size is ' num2str(status) '\n' ])
-        elseif status == 0
-            ffprintf('File transfer cancelled \n')
-        elseif status < 0
-            error('ReceiveFile error, status : %d ',status);
+        if nargin > 1
+            
+            % Receive file
+            ffprintf('Eyelink file transfer IN PROGRESS \n')
+            ffprintf('It might take a few seconds... \n')
+            status = Eyelink('ReceiveFile', EyelinkFile, pathToSave, 1);
+            if status > 0
+                ffprintf('Eyelink file transfer DONE \n')
+                ffprintf([ EyelinkFile ' size is ' num2str(status) '\n' ])
+            elseif status == 0
+                ffprintf('File transfer cancelled \n')
+            elseif status < 0
+                error('ReceiveFile error, status : %d ',status);
+            end
+            
         end
         
     elseif err == -1 % -1 means not recording
