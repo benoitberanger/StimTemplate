@@ -35,7 +35,7 @@ l2 = [windowRect(3) windowRect(1) ; windowRect(2) windowRect(4)];
 
 % Horizontal
 
-nHlines = windowRect(4)/2^6;
+nHlines = windowRect(4)/20;
 Hlines = zeros(2,2*nHlines+1);
 for lineH = 1 : nHlines+1
     
@@ -52,7 +52,7 @@ Hlines(2,end)   = Hlines(2,end  ) - 1;
 
 % Vertical
 
-nVlines = windowRect(3)/2^6;
+nVlines = windowRect(3)/20;
 Vlines = zeros(2,2*nVlines+1);
 for lineV = 1 : nVlines+1
     
