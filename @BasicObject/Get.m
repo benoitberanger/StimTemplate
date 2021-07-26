@@ -27,7 +27,14 @@ if isempty(evt)
 end
 
 if isscalar(evt)
-    output = self.Data{evt,column};
+    switch class(self.Data)
+        case 'cell'
+            output = self.Data{evt,column};
+        case 'double'
+            output = self.Data(evt,column);
+        otherwise
+            output = self.Data{evt,column};
+    end
     return
 end
 
