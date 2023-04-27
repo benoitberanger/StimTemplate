@@ -29,7 +29,7 @@ Eyelink('Command','heuristic_filter 1 2');
 Eyelink('Command','aux_mouse_simulation = NO');
 Eyelink('Command','corneal_mode = YES');
 Eyelink('Command','use_high_speed = YES');
-Eyelink('Command','file_sample_data = LEFT,RIGHT,,GAZE,GAZERES,AREA,STATUS,INPUT,BUTTON,');
+Eyelink('Command','file_sample_data = LEFT,RIGHT,GAZE,GAZERES,AREA,STATUS,INPUT,BUTTON,');
 Eyelink('Command','recording_parse_type = GAZE');
 Eyelink('Command','analog_out_data_type = GAZE');
 
