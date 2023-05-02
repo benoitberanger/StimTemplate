@@ -1,7 +1,7 @@
 function LoadParameters
 
 % Check connection
-Eyelink.IsConnected
+Eyelink.IsConnected()
 
 % Error and warnings
 Eyelink('Verbosity' , 4);
@@ -29,9 +29,14 @@ Eyelink('Command','heuristic_filter 1 2');
 Eyelink('Command','aux_mouse_simulation = NO');
 Eyelink('Command','corneal_mode = YES');
 Eyelink('Command','use_high_speed = YES');
-Eyelink('Command','file_sample_data = LEFT,RIGHT,GAZE,GAZERES,AREA,STATUS,INPUT,BUTTON,');
 Eyelink('Command','recording_parse_type = GAZE');
 Eyelink('Command','analog_out_data_type = GAZE');
+
+% include everything
+Eyelink('Command', 'file_event_filter = LEFT,RIGHT,FIXATION,SACCADE,BLINK,MESSAGE,BUTTON,INPUT');
+Eyelink('Command', 'link_event_filter = LEFT,RIGHT,FIXATION,SACCADE,BLINK,BUTTON,FIXUPDATE,INPUT');
+Eyelink('Command', 'file_sample_data  = LEFT,RIGHT,GAZE,HREF,RAW,AREA,GAZERES,BUTTON,STATUS,INPUT');
+Eyelink('Command', 'link_sample_data  = LEFT,RIGHT,GAZE,GAZERES,AREA,STATUS,INPUT');
 
 Eyelink('Command','autothreshold_click = YES');
 Eyelink('Command','autothreshold_repeat = YES');
